@@ -611,7 +611,7 @@ class cls_tb_location{
 	public function set_address_country($p_address_country_id){
         global $db;
 
-        $cls_country = new cls_tb_conutry($db);
+        $cls_country = new cls_tb_country($db);
         $p_address_country_name = $cls_country->get_country_name_by_id((int) $p_address_country_id);
         $this->v_address_country = array('address_id'=>$p_address_country_id,'address_country'=>$p_address_country_name);
 	}
@@ -619,7 +619,7 @@ class cls_tb_location{
     public function set_shipped_address_country($p_shipped_address_country_id){
         global $db;
 
-        $cls_country = new cls_tb_conutry($db);
+        $cls_country = new cls_tb_country($db);
         $p_address_country_name = $cls_country->get_country_name_by_id((int)$p_shipped_address_country_id);
         $this->v_shipped_address_country = array('address_id'=>$p_shipped_address_country_id,'address_country'=>$p_address_country_name);
     }

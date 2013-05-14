@@ -1,0 +1,50 @@
+@charset "utf-8";
+@import url("../kendo/css/kendo.highcontrast.min.css");
+#div_wrapper #div_footer{
+	border-top: 1px outset #664E62;
+}
+table.list_table {
+	border-collapse: collapse;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	-webkit-margin-start: auto;
+	-webkit-margin-end: auto;
+	width: 100%;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-spacing: 0px;
+	border-color: #664E62;
+}
+table.list_table th, table.list_table td{
+	border-color: #664E62;
+	border-collapse:collapse;
+}
+
+table.list_table tr:hover{
+	/*background-color:#98FB98;*/
+}
+a{
+	text-decoration:none;
+    color: inherit;
+}
+a:hover {
+	
+}
+.k-tooltip{
+	text-align:left !important;
+}
+.madatory {
+	font-size: 14px;
+	color: #990000;
+}
+span.k-dropdown, span.k-combobox {
+    border-radius: 13px 13px 13px 13px;
+}
+a.a-link{
+    color:#0CF;
+}
+a.a-link:hover{
+    color: #F39;
+}

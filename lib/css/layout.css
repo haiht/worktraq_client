@@ -1,0 +1,82 @@
+@charset "utf-8";
+/* CSS Document */
+#div_wrapper {
+	height: auto;
+	width: 100%;
+}
+#div_wrapper #div_header {
+	height: 100px;
+	position:relative;
+}
+#div_wrapper #div_header #div_header_top{
+	height:70px;
+	text-align:left !important;
+}
+#div_wrapper #div_header #div_logo {
+	text-align: left;
+	vertical-align: middle;
+	float: left;
+	height: 60px;
+	width: 250px;
+	padding-top: 5px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 5px;
+	background-image:url(../../images/logo.png);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+#div_wrapper #div_header #div_info {
+	margin-left: 262px;
+	height: 65px;
+}
+#div_wrapper #div_header #div_info #div_account {
+	text-align: right;
+	height: 30px;
+	padding-right: 20px;
+	margin:0;
+}
+#div_wrapper #div_header #div_info #div_icon {
+	text-align: right;
+	height: 40px;
+	margin:0;
+	padding-top:0px;
+	padding-right: 20px;
+}
+
+#div_wrapper #div_header #div_header_menu{
+	height:25px;
+	position:absolute;
+	left:0;
+	top:70px;
+	width:100%;
+	margin-bottom:5px;
+}
+#div_wrapper #div_body {
+	height: auto;
+	min-height:500px;
+	text-align:left;
+}
+#div_wrapper #div_body #div_splitter_content{
+	margin-left:0;
+	min-height:600px;
+	border: none !important;
+	width:98%;
+	height:auto !important;
+	clear:clearfix;
+}
+#div_wrapper #div_footer{
+	height:80px;
+	padding-top:5px;
+	padding-left:20px;
+	text-align:left !important;
+	z-index:100000;
+}
+.pane-content{
+	text-align:left !important;
+	padding:10px;
+	clear:both;
+}
+ul#menu li{
+	text-align:left !important;
+}

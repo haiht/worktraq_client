@@ -1,106 +1,162 @@
 <?php if(!isset($v_sval)) die();?>
-<script type="text/javascript">
-$(document).ready(function(){
-    $("a[rel=showdetails]").fancybox({
-        'showNavArrows'           : false,
-        'width'                 : '75%',
-        'height'                : '65%',
-        'type'                  : 'iframe',
-        'transitionIn'	        :	'elastic',
-        'transitionOut'	        :	'elastic',
-        'overlayShow'	        :	true
 
-    });
-	$('select#txt_company_id').change(function(e) {
-	    var $this = $(this);
-	    var company_id = $(this).val();
-	    company_id = parseInt(company_id, 10);
-	    if(isNaN(company_id) || company_id<0) company_id = 0;
-	    $.ajax({
-	        url : '<?php echo URL;?>admin/company/location/ajax',
-	        type    : 'POST',
-	        data    :   {txt_company_id: company_id},
-	        beforeSend: function(){
-	            $this.attr('disabled', true);
-	        },
-	        success: function(data, type){
-	            var ret = $.parseJSON(data);
-	            if(ret.error==0){
-	                $('select#txt_location_id').html(ret.data);
-	            }else{
-	                alert(ret.message);
-	            }
-	            $this.attr('disabled', false);
-	        }
-	    });
-	});
-});
-
-</script>
-<p class="navTitle"><a href="<?php echo URL .'admin'; ?>"> Account  </a> &gt &gt Contact  </p>
-<p class="highlightNavTitle"><span> Contact  </span></p>
-<p class="break"></p>
-<div class="form">
-<form method="POST" >
-    <table cellpadding="3" cellspacing="3" class="list_table" width="100%" border="0px">
-        <tr>
-            <td colspan="2">
-                <b>Search Contact in database</b>
-            </td>
-        </tr>
-        <tr>
-        	<td align="right" > Company </td>
-        	<td>
-        	<select name="txt_company_id" id="txt_company_id">
-        		<option value="0" <?php echo ($v_search_company_id==0?'selected':'');?>> -- Select --</option>
-        		<?php echo $cls_tb_company->draw_option('company_id', 'company_name', $v_search_company_id); ?>
-        	</select>
-        	Location
-                <select name="txt_location_id" id="txt_location_id">
-                    <option value="0" <?php echo ($v_search_location_id==0?'selected':''); ?>> -- Select All --- </option>
-                    <?php echo $cls_tb_location->draw_option('location_id','location_name',$v_search_location_id,array('company_id'=>(int)$v_search_company_id)); ?>
-                </select>
-             Location number
-                <input type="text" name="txt_location_number" value="<?php echo ftext($v_search_location_number);?>" size="30">
+    <div id="div_body">
+        <div id="div_splitter_content" style="height: 100%; width: 100%;">
+            <div id="div_left_pane">
+                <div class="pane-content">
+                	<div id="div_treeview"></div>
+                </div>
+            </div>
+            <div id="div_right_pane">
+                <div class="pane-content">
+                    <div id="div_title" class="k-block k-widget">
+                        <h3>Contact</h3>
+                    </div>
+                    <div id="div_quick">
+                    <div id="div_quick_search">
+                    <form method="post" id="frm_quick_search">
+                    <span class="k-textbox k-space-left" id="txt_quick_search">
+                    <input type="text" name="txt_quick_search" placeholder="Search by Contact Name" value="<?php echo isset($v_quick_search)?htmlspecialchars($v_quick_search):'';?>" />
+                    <a id="a_quick_search" style="cursor: pointer" class="k-icon k-i-search"></a>
+                        <script type="text/javascript">
+                            $(document).ready(function(e){
+                                $('a#a_quick_search').click(function(e){
+                                    $('form#frm_quick_search').submit();
+                                })
+                            });
+                        </script>
+                    </span>
+                    <input type="hidden" name="txt_company_id" id="txt_company_id" value="<?php echo $v_company_id;?>" />
+                    </form>
+                    </div>
+                    <div id="div_select">
+                    <form id="frm_company_id" method="post">
+                    Company: <select id="txt_company_id" name="txt_company_id" onchange="this.form.submit();">
+                    <option value="0" selected="selected">-------</option>
+                    <?php
+					echo $v_dsp_company_option;
+					?>
+                    </select>
+                    <input type="hidden" name="txt_quick_search" id="txt_quick_search" value="<?php echo htmlspecialchars($v_quick_search);?>" />
+                    </form>
+                    </div>
+                    </div>
 
 
-        	</td>
+                    <div id="grid"></div>
+                    <div id="advanced_search_window" style="display:none">
+                    <h2>Advanced Search for Contact</h2>
+                    <form id="frm_advanced_search" method="post" action="<?php echo URL.$v_admin_key;?>">
+                    <table align="center" width="100%" border="1" class="list_table" cellpadding="3" cellspacing="0">
+                    <tr align="left" valign="middle">
+                    <td align="right">Company:</td>
+                    <td>
+                    <select id="txt_search_company_id" name="txt_search_company_id">
+                    <option value="0" selected="selected">--------</option>
+                    <?php echo $v_dsp_company_option;?>
+                    </select>
+                    </td>
+                    </tr>
+                    <tr align="center" valign="middle">
+                    <td colspan="2">
+                    <input type="submit" class="k-button k-button button_css" value="Search" name="btn_advanced_search" />
+                    <input type="submit" class="k-button k-button button_css" value="Reset" name="btn_advanced_reset" />
+                    </td>
+                    </tr>
+                    </table>
+                    </form>
+                    </div>
+				<script type="text/javascript">
+					var window_search;
+                    $(document).ready(function() {
+                        window_search = $('div#advanced_search_window');
+                        $('li#icons_advanced_search').bind("click", function() {
+                            if (!window_search.data("kendoWindow")) {
+                                window_search.kendoWindow({
+                                    width: "600px",
+                                    actions: ["Maximize", "Close"],
+                                    modal: true,
+                                    title: "Advanced Search for Contact"
+                                });
+                            }
+                            window_search.data("kendoWindow").center().open();
+                        });
 
-        </tr>
-        <tr>
-            <td  align="right" >First name </td>
-            <td ><input type="text" name="txt_contact_first_name" value="<?php echo ftext($v_search_contact_first_name);?>" size="30">
-                Last name <input type="text" name="txt_contact_last_name" value="<?php echo ftext($v_search_contact_last_name);?>" size="20">
-                Contact Type
-                <select name="txt_contact_type">
-                    <?php echo $cls_settings->draw_option_by_id('contact_type',0,$v_search_contact_type); ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td align="right" width="180px">Email</td>
-            <td ><input type="text" name="txt_contact_email" value="<?php echo ftext($v_search_contact_email);?>" size="50"> </td>
-        </tr>
-        <tr>
-            <td align="right" width="180px">Sort by</td>
-            <td >
-                <?php
-                    echo $v_dsp_sort_option;
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input name="btn_contact_search" id="btn_contact_search" type="submit" class="button" value="Search">
-                <input name="btn_contact_cancel" id="btn_contact_cancel" type="submit" class="button" value="Cancel">
-        </tr>
-    </table>
-</form>
-</div>
-<p class="break"></p>
-<p class="break"></p>
-<?php echo '<span class="paginate">Total: '.$v_total_row.' records in '.$v_total_page.' pages. Current page: '.$v_page.'</span>'; ?>
-<p class="break"></p>
-<?php echo $v_dsp_tb_contact;?>
-<?php echo $v_dsp_paginition; ?>
-
+                        var grid = $("#grid").kendoGrid({
+                            dataSource: {
+                                pageSize: 20,
+                                page: <?php echo (isset($v_page) && $v_page>0)?$v_page:1;?>,
+                                serverPaging: true,
+                                serverSorting: true,
+                                transport: {
+                                    read: {
+                                        url: "<?php echo URL.$v_admin_key;?>/json/",
+                                        type: "POST",
+                                        data: {txt_session_id:"<?php echo session_id();?>",txt_quick_search:"<?php echo isset($v_quick_search)?htmlspecialchars($v_quick_search):'';?>", txt_search_company_id: "<?php echo $v_company_id;?>", txt_search_full_name:"<?php echo isset($v_search_full_name)?htmlspecialchars($v_search_full_name):'';?>"}
+                                    }
+                                },
+                                schema: {
+                                    data: "tb_contact"
+                                    ,total: function(data){
+                                        return data.total_rows;
+                                    }
+                                },
+                                type: "json"
+                            },
+                            pageSize: 20,
+                            height: 430,
+                            scrollable: true,
+                            sortable: true,
+                            //selectable: "single",
+                            pageable: {
+                                input: true,
+                                refresh: true,
+                                pageSizes: [10, 20, 30, 40, 50],
+                                numeric: false
+                            },
+						columns: [
+							{field: "row_order", title: "&nbsp;", type:"int", width:"20px", sortable: false, template: '<span style="float:right">#= row_order #</span>'},
+							{field: "full_name", title: "Contact Name", type:"int", width:"80px", sortable: false},
+							{field: "location_name", title: "Location", type:"string", width:"100px", sortable: false},
+                            {field: "company_name", title: "Company", type:"string", width:"100px", sortable: false},
+							{field: "contact_type", title: "Contact Type", type:"string", width:"60px", sortable: true },
+							{field: "address", title: "Address", type:"string", width:"150px", sortable: false},
+							{field: "direct_phone", title: "Direct Phone", type:"string", width:"80px", sortable: true },
+							{field: "email", title: "Email", type:"string", width:"100px", sortable: true },
+							{ command:  [
+								{ name: "View", text:'', click: view_row, imageClass: 'k-grid-View' }
+								<?php if($v_edit_right || $v_is_admin){?>
+								,{ name: "Edit", text:'', click: edit_row, imageClass: 'k-grid-Edit' }
+								<?php }?>
+								<?php if($v_delete_right || $v_is_admin){?>
+								,{ name: "Delete", text:'', click: delete_row, imageClass: 'k-grid-Delete' }
+								<?php }?>
+								],
+								title: " ", width: "70px" }
+						 ]
+					 }).data("kendoGrid");
+				});
+              function view_row(e) {
+                    e.preventDefault();
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    document.location = "<?php echo URL.$v_admin_key.'/';?>"+dataItem.contact_id+"/view";
+                }
+                function edit_row(e) {
+                    e.preventDefault();
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    if(confirm('Do you want to edit contact with ID: '+dataItem.contact_id+'?')){
+                        document.location = "<?php echo URL.$v_admin_key.'/';?>"+dataItem.contact_id+"/edit";
+                    }
+                }
+                function delete_row(e) {
+                    e.preventDefault();
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    if(confirm('Do you want to delete contact with ID: '+dataItem.contact_id+'?')){
+                        document.location = "<?php echo URL.$v_admin_key.'/';?>"+dataItem.contact_id+"/delete";
+                    }
+                }
+            </script>
+                </div>
+            </div>
+        </div>
+  </div>

@@ -1,209 +1,229 @@
 <?php if(!isset($v_sval)) die();?>
-<?php echo js_tooltip(); ?>
-<?php echo js_tabas();?>
-<?php echo js_color();?>
-
 <script type="text/javascript">
 $(document).ready(function(){
-    $('.color_code').simpleColor({
-        cellWidth: 20,
-        cellHeight: 20,
-        border: '1px solid #660033',
-        buttonClass: 'button',
-        displayColorCode: true,
-        livePreview: true
-    });
-    $(".with-tooltip").simpletooltip();
-    $('#tab-container').easytabs();
-	
-	$("form#frm_tb_company").submit(function(){
-        if($("#txt_company_name").val()=="")
-        {
-            alert("<?php echo $cls_tb_message->select_value('invalid_select_company'); ?>");
-            $("#txt_company_name").addClass('invalid');
-            $("#txt_company_name").focus();
+	$("input#btn_submit_tb_company").click(function(e){
+        if(!validator.validate()){
+            e.preventDefault();
             return false;
         }
-        if($("#txt_company_code").val()=="")
-        {
-            alert("<?php echo $cls_tb_message->select_value('invalid_input_company_code'); ?>");
-            $("#txt_company_code").addClass('invalid');
-            $("#txt_company_code").focus();
-            return false;
-        }
-        return true;
+		return true;
 	});
+    var contact_data = <?php echo json_encode($arr_all_contact);?>;
+    var combo_csr = $('select#txt_csr_id').width(200).kendoComboBox({
+        filter:"startswith",
+        dataSource: contact_data,
+        dataTextField: "contact_name",
+        dataValueField: "contact_id",
+        template: '<h3>#= contact_name #</h3>' +
+            '<p>#= contact_info #</p>'
+    }).data("kendoComboBox");
+    var combo_sales_rep_id = $('select#txt_sales_rep_id').width(200).kendoComboBox({
+        filter:"startswith",
+        dataSource: contact_data,
+        dataTextField: "contact_name",
+        dataValueField: "contact_id",
+        template: '<h3>#= contact_name #</h3>' +
+            '<p>#= contact_info #</p>'
+    }).data("kendoComboBox");
+
+    combo_csr.value(<?php echo $v_csr_id;?>);
+    combo_sales_rep_id.value(<?php echo $v_sales_rep_id;?>);
+
+    $('input#txt_logo_file').kendoUpload({
+        multiple: false
+    });
+    $('input#txt_company_code').focusout(function(e){
+        var val = $.trim($(this).val());
+        if(val==''){
+            $(this).val('');
+            $('input#txt_hidden_company_code').val('N');
+            return false;
+        }
+        var company_id = $('input#txt_company_id').val();
+        $.ajax({
+            url : '<?php echo URL.$v_admin_key;?>/ajax',
+            type: 'POST',
+            data:   {txt_session_id:'<?php echo session_id();?>', txt_company_id: company_id, txt_company_code: val, txt_ajax_type: 'check_company_code'},
+            beforeSend: function(){
+                $('span#sp_company_code').html('Checking...');
+            },
+            success: function(data, status){
+                var ret = $.parseJSON(data);
+                $('span#sp_company_code').html('');
+                $('input#txt_hidden_company_code').val(ret.error==0?'Y':'');
+                validator.validate();
+            }
+        });
+    });
+    $('select#txt_relationship').width(150).kendoDropDownList();
+    $('select#txt_industry').width(150).kendoDropDownList();
+    $('select#txt_business_type').width(150).kendoDropDownList();
+    $('select#txt_status').width(100).kendoDropDownList();
+    var tab_strip = $("#data_single_tab").kendoTabStrip({
+		animation:  {
+			open: {
+				effects: "fadeIn"
+			}
+		}
+	}).data("kendoTabStrip");
+	var tooltip = $("span.tooltips").kendoTooltip({
+        filter:"a",
+		width: 120,
+		position: "top"
+	}).data("kendoTooltip");
+	var validator = $("div.information").kendoValidator().data("kendoValidator");
 });
 </script>
-<p class="navTitle"><a href="<?php echo URL .'admin'; ?>"> Account  </a> &gt&gt<a href="<?php echo URL .'admin/company'; ?>">  Companys  </a> &gt&gt Insert - Update Company</p>
-<p class="highlightNavTitle"><span> Insert - Update Company  </span></p>
-<p class="break"></p>
-<?php if(isset($_REQUEST['txt_error'])){ ?>
-    <div class="msgbox_error">
-        <?php echo (isset($_SESSION['error_company']) ? $_SESSION['error_company'] : '' );  ?>
-    </div>
-<?php } ?>
-<p class="break"></p>
-<form id="frm_tb_company"  action="<?php echo URL.'admin/company/'.$v_company_id.'/update'; ?>" method="POST" enctype="multipart/form-data">
-    <input type="hidden" id="txt_mongo_id" name="txt_mongo_id" value="<?php echo $v_mongo_id;?>">
-    <input type="hidden" id="txt_company_id" name="txt_company_id" value="<?php echo $v_company_id;?>">
-    <input type="hidden" id="txt_template_id" name="txt_template_id" value="<?php echo $v_company_template_id;?>">
-<div id="tab-container" class='tab-container'>
-    <ul class='etabs'>
-        <li class='tab'><a href="#tab_company">Company </a></li>
-        <li class='tab'><a href="#tab_template">Template </a></li>
-    </ul>
-    <div class='panel-container'>
-        <div id="tab_company">
+    <div id="div_body">
+        <div id="div_splitter_content" style="height: 100%; width: 100%;">
+            <div id="div_left_pane">
+                <div class="pane-content">
+                	<div id="div_treeview"></div>
+                </div>
+            </div>
+            <div id="div_right_pane">
+                <div class="pane-content">
+                    <div id="div_title" class="k-block k-widget">
+                        <h3>Company<?php echo $v_company_id>0?': '.$v_company_name:'';?></h3>
+                    </div>
+                    <div id="div_quick">
+                        <div id="div_quick_search">
+                        &nbsp;
+                        </div>
+                        <div id="div_select"><!--
+                            <form id="frm_company_id" method="post">
+                        Company: <select id="txt_company_id" name="txt_company_id">
+                                    <option value="0" selected="selected">-------</option>
+                                    <?php
+                                    //echo $v_dsp_company_option;
+                                    ?>
+                                </select>
+                            </form>
+                        --></div>
+                    </div>
 
-                <table align="center" width="100%" border="1" class="list_table" cellpadding="3" cellspacing="0">
-                    <tr  valign="top">
-                        <td align="right" width="180px">Company Name </td>
-                        <td align="left">
-                            <input  size="50" type="text" id="txt_company_name" name="txt_company_name" value="<?php echo $v_company_name;?>" />
-                            <a class="with-tooltip" title="Input Company Name">  <img src="<? echo URL .'images/icons/question_icon.gif'; ?>"> </a>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Company Code </td>
-                        <td align="left">
-                            <?php if($v_company_id ==0) { ?>
-                                <input  size="5" maxlength="3" type="text" id="txt_company_code"<?php echo $v_company_id>0?' readonly="readonly"':''?> name="txt_company_code" value="<?php echo $v_company_code;?>" title="Must be at least 3 characters."/ />
-                <a class="with-tooltip" title="Input Company Code, 3 chars & Remember that, company's code is only edited by adding new!!!, not change after submit.">  <img src="<? echo URL .'images/icons/question_icon.gif'; ?>"> </a>
-            <?php }else{ ?>
-                                <input  size="5" maxlength="3" type="hidden" id="txt_company_code"<?php echo $v_company_id>0?' readonly="readonly"':''?> name="txt_company_code" value="<?php echo $v_company_code;?>" title="Must be at least 3 characters."/ />
-                <b><?php echo $v_company_code;?></b>
-            <?php } ?>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Relationship</td>
-                        <td align="left">
-                            <select name="txt_relationship">
-                                <?php echo $cls_settings->draw_option_by_id('relationship',0,$v_relationship); ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Bussines Type</td>
-                        <td align="left">
-                            <select name="txt_bussines_type">
-                                <?php echo $cls_settings->draw_option_by_id('bussiness_type',0,$v_bussines_type); ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Industry</td>
-                        <td align="left">
-                            <select name="txt_industry">
-                                <?php echo $cls_settings->draw_option_by_id('industry',0,$v_industry); ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Website</td>
-                        <td align="left">
-                            <input  size="50" type="text" id="txt_website" name="txt_website" value="<?php echo $v_website;?>" />
-                            <a class="with-tooltip" title="Input Website ,http://? ">  <img src="<? echo URL .'images/icons/question_icon.gif'; ?>"> </a>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Sales Rep</td>
-                        <td align="left">
-                            <select name="txt_sales_rep" id="txt_sales_rep">
-                                <option value="0" <?php  echo ($v_sales_rep==0?'selected':''); ?>>-- Select --</option>
-                                <?php echo $cls_tb_contact->draw_option_contact($v_sales_rep, array('location_id'=>(int)10000)); ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>CSR</td>
-                        <td align="left">
-                            <select name="txt_csr" id="txt_csr">
-                                <option value="0" <?php echo ($v_csr==0?'selected':''); ?>>-- Select --</option>
-                                <?php echo $cls_tb_contact->draw_option_contact($v_csr, array('location_id'=>(int)10000)); ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Email </td>
-                        <td align="left">
-                            <input type="text" size="50" name="txt_email_head_office" id="txt_email_head_office" value="<?php echo $v_head_office_email; ?>">
-                            <a class="with-tooltip" title="All order will send to email by CC"> <img src="<? echo URL .'images/icons/question_icon.gif'; ?>"> </a>
-                        </td>
+<form id="frm_tb_company" action="<?php echo URL.$v_admin_key;?>/<?php echo is_null($v_mongo_id)?'add':$v_company_id.'/edit';?>" method="POST">
+<input type="hidden" id="txt_mongo_id" name="txt_mongo_id" value="<?php echo $v_mongo_id;?>" />
+<input type="hidden" id="txt_company_id" name="txt_company_id" value="<?php echo $v_company_id;?>" />
+                    <div id="data_single_tab">
+                    <ul>
+                        <li class="k-state-active">Information</li>
+                    </ul>
 
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Status</td>
-                        <td align="left">
-                            <select name="txt_status">
-                                <?php echo $cls_settings->draw_option_by_id('status',0,$v_status); ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
-                        <td>Logo File </td>
-                        <td align="left">
-                            <input  size="50" type="file" id="txt_logo_file" name="txt_logo_file" value="<?php echo $v_logo_file;?>" />
-                            <a class="with-tooltip" title="Logo File : PNG, JPEG ...">  <img src="<? echo URL .'images/icons/question_icon.gif'; ?>"> </a>
-                        </td>
-                    </tr>
-                    <tr align="right" valign="top">
+                    <div class="information div_details">
+<table align="center" width="100%" border="1" class="list_table" cellpadding="3" cellspacing="0">
+<tr align="right" valign="top">
+		<td style="width: 200px">Company Name</td>
+		<td style="width: 1px">&nbsp;</td>
+		<td align="left"><input class="text_css k-textbox" size="50" type="text" id="txt_company_name" name="txt_company_name" value="<?php echo $v_company_name;?>" required data-required-msg="Please input Company Name" /> <label id="lbl_company_name" class="k-required">(*)</label></td>
+	</tr>
+<tr align="right" valign="top">
+		<td>Company Code</td>
+		<td>&nbsp;</td>
+		<td align="left">
+            <?php if($v_company_id<=0){?>
+            <input class="k-textbox" type="text" id="txt_company_code" name="txt_company_code" value="<?php echo $v_company_code;?>" required data-required-msg="Please input Company Code" pattern="\w+" validationMessage="Only normal character allowed" />
+                <input type="hidden" id="txt_hidden_company_code" name="txt_hidden_company_code" value="<?php echo $v_company_code!=''?'Y':'N';?>" required data-required-msg="Duplicate Company Code" />
+                <span id="sp_company_code"></span>
+                <span class="tooltips"><a title="Company Code is unique">&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
+                <label id="lbl_company_code" class="k-required">(*)</label>
+            <?php }else{?>
+                <span><?php echo $v_company_code;?></span>
+                <input type="hidden" value="<?php echo $v_company_code;?>" id="txt_company_code" name="txt_company_code" />
+            <?php }?>
+        </td>
+	</tr>
+<tr align="right" valign="top">
+		<td>Relationship</td>
+		<td>&nbsp;</td>
+		<td align="left">
+            <select id="txt_relationship" name="txt_relationship">
+                <?php echo $cls_settings->draw_option_by_id('relationship', 0, $v_relationship);?>
+            </select>
+        </td>
+	</tr>
+    <tr align="right" valign="top">
+        <td>Industry</td>
+        <td>&nbsp;</td>
+        <td align="left">
+            <select id="txt_industry" name="txt_industry">
+                <?php echo $cls_settings->draw_option_by_id('industry', 0, $v_industry);?>
+            </select>
+        </td>
+    </tr>
+    <tr align="right" valign="top">
+        <td>Business Type</td>
+        <td>&nbsp;</td>
+        <td align="left">
+            <select id="txt_business_type" name="txt_business_type">
+                <?php echo $cls_settings->draw_option_by_id('bussiness_type', 0, $v_bussines_type);?>
+            </select>
+        </td>
+    </tr>
+<tr align="right" valign="top">
+		<td>CSR</td>
+		<td>&nbsp;</td>
+		<td align="left">
+            <select id="txt_csr_id" name="txt_csr_id">
 
-                    </tr>
-                    <?php if(file_exists('resources/'.$v_company_code.'/'.$v_logo_file)){ ?>
-                        <tr valign="top">
-                            <td align="right">Resources File </td>
-                            <td align="left">
-                                <img src="<?php echo URL.'resources/'.$v_company_code.'/'.$v_logo_file; ?>" alt="">
-                            </td>
-                        </tr>
-                    <?php } ?>
-                    <tr align="center" valign="middle">
-                        <td colspan="3"></td>
-                    </tr>
-                </table>
+            </select></td>
+	</tr>
+<tr align="right" valign="top">
+		<td>Sales Rep</td>
+		<td>&nbsp;</td>
+		<td align="left">
+            <select id="txt_sales_rep_id" name="txt_sales_rep_id">
 
-        </div>
-        <div id="tab_template">
-            <input type="hidden" id="txt_mongo_id" name="txt_mongo_id" value="<?php echo $v_mongo_id;?>">
-            <input type="hidden" id="txt_company_id" name="txt_company_id" value="<?php echo $v_company_id;?>">
-            <table align="center" width="100%" border="1" class="list_table" cellpadding="3" cellspacing="0">
-                <td align="right" width="250px">Company Template</td>
-                <td align="left">
-                    <select id="txt_template_company_id" name = "txt_template_company_id">
-                        <option value="0" <?php  echo ($v_company_template_id==0?'selected':'');?> > --  Select --  </option>
-                        <?php echo $cls_tb_template->draw_option('template_id','template_name',$v_company_template_id); ?>
-                    </select>
-                </td>
-                <?php if(isset($v_company_template_id) && $v_company_template_id!=''){ ?>
-                <?php
-                    $v_total= count($arr_company_log);
-                    $v_selected = 0;
-                    for($i=0;$i<$v_total;$i++){
-                        $v_temp_template_id = isset($arr_company_log[$i]['template_id']) ? $arr_company_log[$i]['template_id'] : 0;
-                        if($v_company_template_id ==$v_temp_template_id ){
-                            $v_selected= $i;
-                            $i==$v_total;
-                        }
-                    }
-                    if(is_array($arr_company_log[$v_selected]['element'])){
-                        foreach($arr_company_log[$v_selected]['element'] as $v_key=>$v_value){
-                            echo ' <tr  valign="top">
-                                        <td align="right" >'. str_format($v_key) .'</td>
-                                        <td align="left">
-                                            <input size="7" class="color_code" type="text" value="'. $v_value .'" id="txt_element_'.$v_key.'" name="txt_element_'.$v_key.'"  />
-                                       </td>
-                                </tr>';
-                        }
-                    }
-                ?>
-                <?php }?>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="toolbar">
-    <input type="submit" id="btn_submit_tb_company" name="btn_submit_tb_company" value="Save" class="button" />
-</div>
+            </select>
+            </td>
+	</tr>
+<tr align="right" valign="top">
+		<td>Website</td>
+		<td>&nbsp;</td>
+		<td align="left"><input class="text_css k-textbox" size="50" type="url" id="txt_website" name="txt_website" value="<?php echo $v_website;?>" data-url-msg="Invalid URL" /></td>
+	</tr>
+    <tr align="right" valign="top">
+        <td>Email</td>
+        <td>&nbsp;</td>
+        <td align="left"><input class="text_css k-textbox" size="50" type="email" id="txt_sales_rep_email" name="txt_sales_rep_email" value="<?php echo $v_sales_rep_email;?>" data-email-msg="Invalid Email" /></td>
+    </tr>
+<tr align="right" valign="top">
+		<td>Status</td>
+		<td>&nbsp;</td>
+		<td align="left">
+            <select name="txt_status" id="txt_status">
+                <?php echo $cls_settings->draw_option_by_id('status',0,$v_status); ?>
+            </select>
+        </td>
+	</tr>
+    <tr align="right" valign="top">
+        <td>Logo File</td>
+        <td>&nbsp;</td>
+        <td align="left"><input type="file" id="txt_logo_file" name="txt_logo_file" accept="image/*" />
+        <input type="hidden" name="txt_hidden_logo_file" value="<?php echo $v_logo_file;?>" />
+        </td>
+    </tr>
+    <tr align="right" valign="top">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td align="left"><?php if($v_logo_url!='') echo $v_logo_url;?>&nbsp;</td>
+    </tr>
+</table>
+                    </div>
+                   </div>
+                   <?php if(isset($v_act) && in_array($v_act, array('E', 'N'))){?>
+                   <?php if($v_error_message!=''){?>
+                    <div class="k-block k-widget k-error-colored div_errors">
+                    <?php echo $v_error_message;?>
+                    </div>
+                    <?php }?>
+                    <div class="k-block k-widget div_buttons">
+                    <input type="submit" id="btn_submit_tb_company" name="btn_submit_tb_company" value="Submit" class="k-button button_css" />
+                    </div>
+                    <?php }?>
+
 </form>
+                </div>
+            </div>
+        </div>
+  </div>

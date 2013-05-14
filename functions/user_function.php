@@ -40,4 +40,8 @@ function get_unserialize_user($p_filter)
     if(!isset($arr[$p_filter])) return "......";
     return $arr[$p_filter];
 }
+function is_admin_by_user($p_user_name){
+    $arr_admin = array('admin');
+    return in_array($p_user_name, $arr_admin);
+}
 ?>

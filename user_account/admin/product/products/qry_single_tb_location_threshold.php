@@ -14,6 +14,7 @@ if($v_product_id==0){
     $v_company_id = $cls_tb_product->select_scalar('company_id', array('product_id'=>$v_product_id));
     if(is_null($v_company_id)) $v_company_id = 0;
 }
+$arr_data = array();
 if($v_company_id > 0){
     add_class('cls_tb_location_threshold');
     $cls_threshold = new cls_tb_location_threshold($db, LOG_DIR);
@@ -34,14 +35,8 @@ if($v_company_id > 0){
         $v_location_number = $cls_tb_location->select_scalar('location_number', array('location_id'=>$v_tmp_location_id));
         if(is_null($v_location_name)) $v_location_name = '';
         if($v_location_name!=''){
-            $v_dsp_location_threshold .= '<tr align="center" valign="middle" id="tr_row">';
-            $v_dsp_location_threshold .= '<td align="right">'.($v_order++).' <input type="checkbox" id="txt_status" checked="checked" value="'.$v_tmp_location_id.'" /></td>';
-            $v_dsp_location_threshold .= '<td align="left">'.$v_location_name.'</td>';
-            $v_dsp_location_threshold .= '<td align="right">'.$v_location_number.'</td>';
-            $v_dsp_location_threshold .= '<td align="left"><input type="text" id="txt_threshold" value="'.$v_tmp_product_threshold.'" size="10" /><input type="hidden" id="txt_hidden_threshold" value="'.$v_tmp_product_threshold.'" /><input type="hidden" id="txt_hidden_location" value="'.$v_location_name.'" /></td>';
-            $v_dsp_location_threshold .= '<td><input type="checkbox" id="txt_overflow"'.($v_tmp_is_overflow==1?' checked="checked"':'').' /></td>';
-            $v_dsp_location_threshold .= '</tr>';
             $arr_exclude[] = $v_tmp_location_id;
+            $arr_data[] = array('enable'=>1,'location_id'=>$v_tmp_location_id, 'location_name'=>$v_location_name, 'location_number'=>$v_location_number,'threshold'=>$v_tmp_product_threshold, 'overflow'=>$v_tmp_is_overflow);
         }
     }
     if(count($arr_exclude)>0)
@@ -53,22 +48,8 @@ if($v_company_id > 0){
         $v_location_name = $arr['location_name'];
         $v_location_number = $arr['location_number'];
         $v_tmp_location_id = $arr['location_id'];
-        $v_dsp_location_threshold .= '<tr align="center" valign="middle" id="tr_row">';
-        $v_dsp_location_threshold .= '<td align="right">'.($v_order++).' <input type="checkbox" id="txt_status" value="'.$v_tmp_location_id.'" /></td>';
-        $v_dsp_location_threshold .= '<td align="left">'.$v_location_name.'</td>';
-        $v_dsp_location_threshold .= '<td align="right">'.$v_location_number.'</td>';
-        $v_dsp_location_threshold .= '<td align="left"><input type="text" id="txt_threshold" value="" size="10" disabled="disabled" /><input type="hidden" id="txt_hidden_threshold" value="" /><input type="hidden" id="txt_hidden_location" value="'.$v_location_name.'" /></td>';
-        $v_dsp_location_threshold .= '<td><input type="checkbox" id="txt_overflow" /></td>';
-        $v_dsp_location_threshold .= '</tr>';
-
+        $arr_data[] = array('enable'=>0,'location_id'=>$v_tmp_location_id, 'location_name'=>$v_location_name, 'location_number'=>$v_location_number,'threshold'=>0, 'overflow'=>0);
     }
-}
-if($v_dsp_location_threshold!=''){
-    $v_dsp_location_threshold = '<table id="tbl_location_threshold" width="100%" align="center" cellpadding="3" cellspacing="0" border="1">
-    <tr align="center" valign="middle">
-    <th>Ord.</th><th>Location\'s Name</th><th>Location\'s Number</th><th>Location Threshold</th><th>Overflow?</th>
-    </tr>
-    '.$v_dsp_location_threshold.'</table>';
 }
 $v_dsp_company = $cls_tb_company->draw_option('company_id', 'company_name', $v_company_id);
 ?>

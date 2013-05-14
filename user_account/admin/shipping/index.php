@@ -1,89 +1,100 @@
 <?php if(!isset($v_sval)) die();?>
 <?php
 $v_act = isset($_GET['act'])?$_GET['act']:'';
-add_class('cls_tb_order');
-add_class('cls_tb_order_items');
-add_class('cls_tb_allocation');
-$cls_tb_settings = new cls_settings($db);
-$cls_tb_order_items  = new cls_tb_order_items($db,LOG_DIR);
-$cls_tb_order = new cls_tb_order($db,LOG_DIR);
-$cls_tb_allocation = new cls_tb_allocation($db,LOG_DIR);
+$v_shipping_id = isset($_GET['id'])?$_GET['id']:'0';
+settype($v_shipping_id, 'int');
+add_class('cls_tb_shipping', 'cls_tb_shipping.php');
+$cls_tb_shipping = new cls_tb_shipping($db, LOG_DIR);
+
+add_class('cls_tb_allocation', 'cls_tb_allocation.php');
+$cls_tb_allocation = new cls_tb_allocation($db, LOG_DIR);
+add_class('cls_tb_order', 'cls_tb_order.php');
+$cls_tb_order = new cls_tb_order($db, LOG_DIR);
+add_class('cls_tb_order_items', 'cls_tb_order_items.php');
+$cls_tb_order_items = new cls_tb_order_items($db, LOG_DIR);
+
+
+$v_this_module_menu = isset($v_module_menu)?$v_module_menu:''; //replace module_menu_key here
+$v_user_full_name = '';
+$v_user_name = isset($arr_user['user_name'])?$arr_user['user_name']:'';
+$arr_user_module_rule = array();
+$v_user_id = isset($arr_user['user_id'])?$arr_user['user_id']:0;
+$v_row = $cls_tb_user->select_one(array('user_id'=>$v_user_id));
+if($v_row == 1){
+	$v_contact_id = $cls_tb_user->get_contact_id();
+	$v_user_name = $cls_tb_user->get_user_name();
+	$v_user_full_name = $cls_tb_contact->get_full_name_contact($v_contact_id);
+	$arr_user_module_rule = $cls_tb_user->get_all_permission($db);
+}
+$v_view_right = isset($arr_user_module_rule[$v_this_module_menu]['view']);
+$v_edit_right = isset($arr_user_module_rule[$v_this_module_menu]['edit']);
+$v_create_right = isset($arr_user_module_rule[$v_this_module_menu]['create']);
+$v_delete_right = isset($arr_user_module_rule[$v_this_module_menu]['delete']);
+$v_report_right = isset($arr_user_module_rule[$v_this_module_menu]['report']);
+$v_search_right = true;
+$v_view_all_right = false;
+$v_is_admin = is_admin_by_user($v_user_name) || is_admin();
+$v_dsp_menu = $cls_tb_module->draw_kendo_menu($v_module_key, URL.'admin/', $v_is_admin, $arr_user_module_rule);
+$v_dsp_horizontal_menu = $cls_tb_module->draw_kendo_horizontal_menu_from($v_dsp_menu);
+$v_dsp_tree_menu = $cls_tb_module->draw_kendo_tree_menu_from('ANVY', URL, $v_dsp_menu, 'images/icons/logos.png');
+//Show hide icon
+$v_show_report_icon = false;
+$v_show_view_icon = false;
+$v_show_create_icon = false;
+$v_show_search_icon = $v_search_right || $v_is_admin;
 
 switch($v_act){
-    case 'SH';
-        include 'qry_details_shipping.php';
-        include 'user_account/admin/header.php';
-        include 'dsp_details_shipping.php';
-        include 'user_account/admin/footer.php';
-        break;
-    default:
-        create_shipping();
-        include 'qry_shipping.php';
-        include 'user_account/admin/admin_header.php';
-        include 'dsp_shipping.php';
-        include 'user_account/admin/admin_footer.php';
-        break;
-}
-function create_shipping()
-{
-    global $cls_tb_order_items;
-    global $cls_tb_order;
-    global $cls_tb_allocation;
-
-    $cls_tmp_order = $cls_tb_order;
-    $cls_tmp_order_items = $cls_tb_order_items;
-    $cls_tb_allocation = $cls_tb_allocation;
-
-    $arr_where_clause = array('dispatch'=>0,'status'=>array('$gt'=>3));
-    $arr_order = $cls_tmp_order->select($arr_where_clause);
-
-    foreach($arr_order as $arr)
-    {
-        $v_order_id = isset($arr['order_id'])?$arr['order_id']:0;
-        $arr_where_clause = array('order_id'=>(int) $v_order_id);
-        $arr_order_items = $cls_tmp_order_items->select($arr_where_clause);
-
-        foreach($arr_order_items as $arr_temp)
-        {
-            $v_quantity = isset($arr_temp['quantity'])?$arr_temp['quantity']:0;
-
-            $arr_allocation = isset($arr_temp['allocation'])?$arr_temp['allocation']:array();
-            $v_order_item_id = isset($arr_temp['order_item_id'])?$arr_temp['order_item_id']:0;
-
-            $v_total = sizeof($arr_allocation);
-            for($i=0;$i<$v_total;$i++)
-            {
-                $v_location_id = isset($arr_allocation[$i]['location_id'])?$arr_allocation[$i]['location_id']:'';
-                $v_location_name = isset($arr_allocation[$i]['location_name'])?$arr_allocation[$i]['location_name']:'';
-                $v_location_address = isset($arr_allocation[$i]['location_address'])?$arr_allocation[$i]['location_address']:'';
-                $v_tracking_url = isset($arr_allocation[$i]['tracking_url'])?$arr_allocation[$i]['tracking_url']:'';
-                $v_tracking_number = isset($arr_allocation[$i]['tracking_number'])?$arr_allocation[$i]['tracking_number']:'';
-                $v_tracking_company = isset($arr_allocation[$i]['tracking_company'])?$arr_allocation[$i]['tracking_company']:'';
-                $v_date_shipping = isset($arr_allocation[$i]['date_shipping'])?$arr_allocation[$i]['date_shipping']:NULL;;
-                $v_ship_status = isset($arr_allocation[$i]['ship_status'])?$arr_allocation[$i]['ship_status']:0;;
-
-                $arr_temp_where = array('order_items_id'=>(int)$v_order_item_id,
-                                            'location_id'=>(int) $v_location_id,
-                                            'order_id'=>(int) $v_order_id);
-                if($cls_tb_allocation->count($arr_temp_where)==0)
-                {
-                    $v_allocation_id  = $cls_tb_allocation->select_next('allocation_id');
-                    $cls_tb_allocation->set_allocation_id($v_allocation_id);
-                    $cls_tb_allocation->set_location_id((int)$v_location_id);
-                    $cls_tb_allocation->set_location_name($v_location_name);
-                    $cls_tb_allocation->set_location_address($v_location_address);
-                    $cls_tb_allocation->set_order_id((int)$v_order_id);
-                    $cls_tb_allocation->set_quantity((int)$v_quantity);
-                    $cls_tb_allocation->set_order_items_id((int)$v_order_item_id);
-                    $cls_tb_allocation->set_tracking_number($v_tracking_number);
-                    $cls_tb_allocation->set_shipper($v_tracking_company);
-                    $cls_tb_allocation->set_tracking_url($v_tracking_url);
-                    $cls_tb_allocation->set_date_shipping($v_date_shipping);
-                    $cls_tb_allocation->set_ship_status($v_ship_status);
-                    $cls_tb_allocation->insert();
-                }
-            }
-        }
-    }
+	case 'N':
+		redir(URL.'admin/error/');
+		break;
+	case 'V':
+		redir(URL.'admin/error/');
+		break;
+	case 'E':
+		redir(URL.'admin/error/');
+		break;
+	case 'D':
+		redir(URL.'admin/error/');
+		break;
+	case 'J':
+        $v_json_type = isset($_POST['txt_json_type'])?$_POST['txt_json_type']:'';
+        if($v_json_type=='main_grid')
+		    include 'qry_json_tb_shipping.php';
+        else if($v_json_type=='sub_grid')
+            include 'qry_sub_json_tb_shipping.php';
+		break;
+	case 'X':
+		if($v_report_right || $v_is_admin){
+			include 'qry_export_tb_shipping.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
+		break;
+	case 'AJ':
+		$v_ajax_type = isset($_POST['txt_ajax_type'])?$_POST['txt_ajax_type']:'';
+		break;
+	case 'P':
+		if($v_report_right || $v_is_admin){
+			include 'qry_print_tb_shipping.php';
+			include 'user_account/admin/print_header.php';
+			include 'dsp_print_tb_shipping.php';
+			include 'user_account/admin/print_footer.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
+		break;
+	case 'A':
+	default:
+		if($v_view_right || $v_is_admin){
+			$v_act = 'A';
+            $cls_tb_allocation->create_shipping($cls_tb_order, $cls_tb_order_items, array('$gte'=>30));
+			include 'qry_all_tb_shipping.php';
+			include 'user_account/admin/admin_header.php';
+			include 'dsp_all_tb_shipping.php';
+			include 'user_account/admin/admin_footer.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
+		break;
 }
 ?>

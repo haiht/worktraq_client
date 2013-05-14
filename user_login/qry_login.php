@@ -9,7 +9,8 @@ $v_support_email = $cls_settings->get_option_name_by_key('email','support_email'
 if(isset($_POST['btn_login_submit'])){
 	include 'act_check_login.php';
 	if($v_error==0)
-		redir(URL.'account/');
+		//redir(URL.'account/');
+        redir(URL);
 	else
 		$v_message = $v_error_message;
 }

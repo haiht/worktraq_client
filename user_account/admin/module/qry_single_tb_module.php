@@ -10,6 +10,7 @@ $v_module_type = 0;
 $v_module_root = 'admin';
 $v_module_dir = '';
 $v_module_menu = '';
+$v_module_icon = '';
 $v_module_order = 0;
 $v_module_role = 0;
 $v_module_index = 'index.php';
@@ -17,7 +18,7 @@ $v_module_locked = 0;
 $v_module_category = 0;
 $arr_modules_rules = array();
 $v_module_time = date('Y-m-d H:i:s', time());
-
+$v_icon_url = 'images/icons/';
 $arr_setting_rules = $cls_settings->select_scalar('option', array('setting_name'=>'rule_action'));
 
 if(isset($_POST['btn_submit_tb_module'])){
@@ -70,7 +71,7 @@ if(isset($_POST['btn_submit_tb_module'])){
 	$cls_tb_module->set_module_root($v_module_root);
 	$v_module_dir = isset($_POST['txt_module_dir'])?$_POST['txt_module_dir']:$v_module_dir;
 	$v_module_dir = trim($v_module_dir);
-	if($v_module_dir=='') $v_error_message .= '[module_dir] is empty!<br />';
+	if($v_module_dir=='') $v_error_message .= '[Module Dir] is empty!<br />';
 	$cls_tb_module->set_module_dir($v_module_dir);
 	$v_module_order = isset($_POST['txt_module_order'])?$_POST['txt_module_order']:$v_module_order;
 	$v_module_order = (int) $v_module_order;
@@ -88,9 +89,18 @@ if(isset($_POST['btn_submit_tb_module'])){
 	$cls_tb_module->set_module_role($v_module_role);
 
     $v_module_menu = isset($_POST['txt_module_menu'])?$_POST['txt_module_menu']:$v_module_menu;
-    $v_module_menu = trim($v_module_menu);
+    $v_module_menu = strtolower(trim($v_module_menu));
     $cls_tb_module->set_module_menu($v_module_menu);
+    if($v_module_menu=='')
+        $v_error_message .= '+ [Module Key] is empty.<br />';
+    else{
+        if($cls_tb_module->count(array('module_menu'=>$v_module_menu, 'module_id'=>array('$ne'=>$v_module_id)))>0) $v_error_message .= '+ Duplicate [Module Key]<br />';
+    }
 
+    $v_module_icon = isset($_POST['txt_module_icon'])?$_POST['txt_module_icon']:$v_module_icon;
+    $v_module_icon = trim($v_module_icon);
+    $cls_tb_module->set_module_icon($v_icon_url. $v_module_icon);
+    $v_module_icon = $v_icon_url.$v_module_icon;
 	$v_module_category = isset($_POST['txt_module_category'])?$_POST['txt_module_category']:'0';
 	settype($v_module_category, 'int');
 	$cls_tb_module->set_module_category($v_module_category);
@@ -119,7 +129,7 @@ if(isset($_POST['btn_submit_tb_module'])){
 			$v_result = $cls_tb_module->update(array('_id' => $v_mongo_id));
 		}
 		
-		redir(URL.'admin/module/list/');
+		redir(URL.$v_admin_key);
 	}
 }else{
 	$v_module_id = isset($_GET['id'])?$_GET['id']:0;
@@ -143,6 +153,7 @@ if(isset($_POST['btn_submit_tb_module'])){
 			$v_module_category = $cls_tb_module->get_module_category();
 			$arr_modules_rules = $cls_tb_module->get_module_rules();
             $v_module_menu = $cls_tb_module->get_module_menu();
+            $v_module_icon = $cls_tb_module->get_module_icon();
 			$v_module_time = date('Y-m-d H:i:s',$cls_tb_module->get_module_time());
 		}
 	}
@@ -164,10 +175,10 @@ for($i=0; $i<count($arr_setting_rules); $i++){
     if($v_rule_action_status==0){
         $arr_one_rule = get_rule($arr_modules_rules, $v_rule_action_key);
         if(is_array($arr_one_rule)){
-            $v_module_rules .= '<div style="margin:2px; clear:both; height:30px;"><div style="float:left; width:200px;"><input type="checkbox" id="txt_rule_key" name="txt_rule_key" value="'.$v_rule_action_key.'" checked="checked" />'.$v_rule_action_name.'</div><div style="float:left"> Description: <input type="text" id="txt_rule_description" name="txt_rule_description" size="60" value="'.$arr_one_rule['description'].'" /></div></div>';
-            $v_dsp_rule_variables.="\r\nrule[".($j++)."] = new Rule('{$v_rule_action_key}','".htmlentities($arr_one_rule['description'],ENT_QUOTES)."');";
+            $v_module_rules .= '<div style="margin:2px; clear:both; height:30px;"><div style="float:left; width:200px;"><label style="cursor:pointer"><input type="checkbox" id="txt_rule_key" name="txt_rule_key" value="'.$v_rule_action_key.'" checked="checked" />'.$v_rule_action_name.'</label></div><div style="float:left"> Description: <input class="text_css k-textbox" type="text" id="txt_rule_description" name="txt_rule_description" size="60" value="'.htmlspecialchars($arr_one_rule['description']).'" /></div></div>';
+            $v_dsp_rule_variables.="\r\nrule[".($j++)."] = new Rule('{$v_rule_action_key}','". addslashes($arr_one_rule['description'])."');";
         }else{
-            $v_module_rules .= '<div style="margin:2px; clear:both; height:30px;"><div style="float:left; width:200px;"><input type="checkbox" id="txt_rule_key" name="txt_rule_key" value="'.$v_rule_action_key.'" />'.$v_rule_action_name.'</div><div style="float:left"> Description: <input type="text" id="txt_rule_description" name="txt_rule_description" size="60" value="" /></div></div>';
+            $v_module_rules .= '<div style="margin:2px; clear:both; height:30px;"><div style="float:left; width:200px;"><label style="cursor:pointer"><input type="checkbox" id="txt_rule_key" name="txt_rule_key" value="'.$v_rule_action_key.'" />'.$v_rule_action_name.'</label></div><div style="float:left"> Description: <input class="text_css k-textbox" type="text" id="txt_rule_description" name="txt_rule_description" size="60" value="" /></div></div>';
         }
     }
 }
@@ -181,4 +192,92 @@ function get_rule($arr_rules, $p_key){
     }
     return $found?$arr_rules[$i-1]:NULL;
 }
+
+$v_icon_dir = ROOT_DIR.'/images/icons';
+$arr_extension = array('.png', '.jpg', '.gif');
+$arr_icons = array();
+$arr_icons[] = array(
+    'file'=>'',
+    'text'=>'--------',
+    'url'=>''
+);
+$v_selected_icon = '';
+if(file_exists($v_icon_dir) && is_dir($v_icon_dir)){
+    $v_handle = @opendir($v_icon_dir);
+    if($v_handle){
+        while(($file = readdir($v_handle))!==false){
+            if($file!='.' && $file!='..'){
+                list($width, $height, $type) = getimagesize($v_icon_dir.'/'.$file);
+                //echo $width.' --- '.$height.' --- '.$type.' --- '.$file.'<br>';
+                if(isset($type) && in_array($type, array(1,2,3))){
+                    if($width==16 && $height==16){
+                        $v_one_url = $v_icon_url.$file;
+                        $arr_icons[] = array('file'=>$file, 'text'=>$file, 'url'=>$v_one_url);
+                        if($v_one_url==$v_module_icon) $v_selected_icon = $file;
+                    }
+                }
+            }
+        }
+        @closedir($v_handle);
+    }
+}
+$v_module_icon = $v_selected_icon;
+
+
+$v_dsp_module_root = '';
+$v_root_dir = ROOT_DIR.DS.'user_account';
+if(file_exists($v_root_dir)){
+    $v_handle = opendir($v_root_dir);
+    if($v_handle){
+        while(($dir = readdir($v_handle))!==false){
+            if($dir!='.' && $dir!='..'){
+                if(is_dir($v_root_dir.DS.$dir)){
+                    $v_dsp_module_root.='<option value="'.$dir.'"'.($dir==$v_module_root?' selected="selected"':'').'>'.$dir.'</option>';
+                }
+            }
+        }
+        closedir($v_handle);
+    }
+}
+$v_dsp_module_dir = '';
+$arr_module_dir = array();
+$arr_module_index = array();
+$arr_module_dir[] = array(
+    'folder_value'=>'',
+    'folder_text'=>'--------'
+);
+
+$arr_module_index[] = array(
+    'file_value'=>'',
+    'file_text'=>'--------'
+);
+if($v_module_id>0 || $v_module_root!=''){
+    add_class("ManageFile", 'cls_file.php');
+    $cls_file = new ManageFile(ROOT_DIR,DS);
+    $v_dir = $v_root_dir.DS.$v_module_root;
+    if(file_exists($v_dir)) $arr_module_dir = $cls_file->list_folder($v_dir, $v_dir.DS,$arr_module_dir);
+
+    $v_dir .= DS.$v_module_dir;
+    if(file_exists($v_dir)){
+        $v_handle = opendir($v_dir);
+        if($v_handle){
+            while(($file = readdir($v_handle))!==false){
+                if($file!='.' && $file!='..'){
+                    if(strlen($file)>4){
+                        if(is_file($v_dir.DS.$file)){
+                            if(strtolower(substr($file, strlen($file)-4))=='.php'){
+                                $arr_module_index[] = array(
+                                    'file_value'=>$file,
+                                    'file_text'=>$file
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 ?>

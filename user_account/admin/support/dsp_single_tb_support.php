@@ -1,114 +1,194 @@
 <?php if(!isset($v_sval)) die();?>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("form#frm_tb_support").submit(function(){
-		var css = '';
-
-		var support_id = $("input#txt_support_id").val();
-		support_id = parseInt(support_id, 10);
-		css = isNaN(support_id)?'':'none';
-		$("label#lbl_support_id").css("display",css);
-		if(css == '') return false;
-		var support_title = $("input#txt_support_title").val();
-		support_title = $.trim(support_title);
-		css = support_title==''?'':'none';
-		$("label#lbl_support_title").css("display",css);
-		if(css == '') return false;
-		var support_description = $("input#txt_support_description").val();
-		support_description = $.trim(support_description);
-		css = support_description==''?'':'none';
-		$("label#lbl_support_description").css("display",css);
-		if(css == '') return false;
-		var company_id = $("input#txt_company_id").val();
-		company_id = parseInt(company_id, 10);
-		css = isNaN(company_id)?'':'none';
-		$("label#lbl_company_id").css("display",css);
-		if(css == '') return false;
-		var location_id = $("input#txt_location_id").val();
-		location_id = parseInt(location_id, 10);
-		css = isNaN(location_id)?'':'none';
-		$("label#lbl_location_id").css("display",css);
-		if(css == '') return false;
-		var contact_id = $("input#txt_contact_id").val();
-		contact_id = parseInt(contact_id, 10);
-		css = isNaN(contact_id)?'':'none';
-		$("label#lbl_contact_id").css("display",css);
-		if(css == '') return false;
-		var date_created = $("input#txt_date_created").val();
-		css = check_date(date_created)?'':'none';
-		$("label#lbl_date_created").css("display",css);
-		if(css == '') return false;
-		var username = $("input#txt_username").val();
-		username = $.trim(username);
-		css = username==''?'':'none';
-		$("label#lbl_username").css("display",css);
-		if(css == '') return false;
-		var image_file = $("input#txt_image_file").val();
-		image_file = $.trim(image_file);
-		css = image_file==''?'':'none';
-		$("label#lbl_image_file").css("display",css);
-		if(css == '') return false;
+	$("input#btn_submit_tb_support").click(function(e){
 		return true;
 	});
-	$('input#txt_date_created').datetimepicker({});
+	$('input#txt_date_created').kendoDatePicker({format:"dd-MMM-yyyy"});
+    var combo_location = $('select#txt_location_id').width(200).kendoComboBox({
+        filter:"startswith",
+        dataTextField: "location_name",
+        dataValueField: "location_id",
+        dataSource: {
+            transport: {
+                read: {
+                    url: "<?php echo URL.$v_admin_key;?>/json",
+                    type:"POST",
+                    data:{txt_json_type:'load_location', txt_company_id: <?php echo $v_company_id;?>}
+                },
+                type: "json"
+            }
+        }
+    }).data("kendoComboBox");
+    combo_location.value(<?php echo $v_location_id;?>);
+	var tab_strip = $("#data_single_tab").kendoTabStrip({
+		animation:  {
+			open: {
+				effects: "fadeIn"
+			}
+		}
+	}).data("kendoTabStrip");
+    $('select#txt_location_id').change(function(e){
+        var val = $(this).val();
+        val = parseInt(val, 10);
+        if(isNaN(val) || val<0) val=0;
+        $('input#txt_hidden_location_id').val(val>0?'Y':'');
+        validator.validate();
+    });
+    var combo_contact = $("select#txt_contact_id").width(300).kendoComboBox({
+        filter:"startswith",
+        dataTextField: "contact_name",
+        dataValueField: "contact_id",
+        template: '<h3>#= contact_name #</h3>' +
+            '<p>#= contact_info #</p>',
+        dataSource: {
+            transport: {
+                read: {
+                    url: "<?php echo URL.$v_admin_key;?>/json",
+                    type:"POST",
+                    data:{txt_json_type:'load_contact', txt_company_id: <?php echo $v_company_id;?>}
+                },
+                type: "json"
+            }
+        }
+    }).data("kendoComboBox");
+    combo_contact.value(<?php echo $v_contact_id;?>);
+    $("select#txt_contact_id").change(function(e){
+        var val = $(this).val();
+        val = parseInt(val, 10);
+        if(isNaN(val) || val<0) val=0;
+        $('input#txt_hidden_contact_id').val(val>0?'Y':'');
+        validator.validate();
+    });
+    var tooltip = $("#tooltip").kendoTooltip({
+		width: 120,
+		position: "top"
+	}).data("kendoTooltip");
+	if(tooltip) tooltip.show();
+	var validator = $("div.information").kendoValidator().data("kendoValidator");
+	var combo_company = $('select#txt_company_id').data('kendoComboBox');
+	<?php if($v_company_id <= 0){;?>
+	$('select#txt_company_id').change(function(e){
+		var company_id = $(this).val();
+		company_id = parseInt(company_id, 10);
+		if(isNaN(company_id) || company_id <0) company_id = 0;
+        var $this = $(this);
+        $.ajax({
+            url     : '<?php echo URL.$v_admin_key;?>/ajax',
+            type    : "POST",
+            data    : {txt_session_id: '<?php echo session_id();?>', txt_ajax_type: 'load_location_contact', txt_company_id: company_id},
+            beforeSend: function(){
+                combo_company.enable(false);
+                $this.prop("disabled", true);
+            },
+            success: function(data, status){
+                var ret = $.parseJSON(data);
+                if(ret.error==0){
+                    var location_data = ret.location;
+                    var contact_data = ret.contact;
+                    combo_location.setDataSource(location_data);
+                    combo_location.value(0);
+                    combo_contact.setDataSource(contact_data);
+                    combo_contact.value(0);
+                    $('form#frm_tb_support').find('#txt_company_id').val(company_id);
+                }else{
+                    alert('Cannot load data!');
+                }
+            }
+        });
+
+	});
+	<?php }else{;?>
+		combo_company.enable(false);
+	<?php };?>
 });
 </script>
-<form id="frm_tb_support" action="?a=ACC&acc=ACT" method="POST">
+    <div id="div_body">
+        <div id="div_splitter_content" style="height: 100%; width: 100%;">
+            <div id="div_left_pane">
+                <div class="pane-content">
+                	<div id="div_treeview"></div>
+                </div>
+            </div>
+            <div id="div_right_pane">
+                <div class="pane-content">
+                    <div id="div_title" class="k-block k-widget">
+                        <h3>Support</h3>
+                    </div>
+                    <div id="div_quick">
+                        <div id="div_quick_search">
+                        &nbsp;
+                        </div>
+                        <div id="div_select">
+                            <form id="frm_company_id" method="post">
+                        Company: <select id="txt_company_id" name="txt_company_id">
+                                    <option value="0" selected="selected">-------</option>
+                                    <?php
+                                    echo $v_dsp_company_option;
+                                    ?>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+
+<form id="frm_tb_support" action="<?php echo URL.$v_admin_key;?>/<?php echo is_null($v_mongo_id)?'add':$v_support_id.'/edit';?>" method="POST">
 <input type="hidden" id="txt_mongo_id" name="txt_mongo_id" value="<?php echo $v_mongo_id;?>" />
+<input type="hidden" id="txt_support_id" name="txt_support_id" value="<?php echo $v_support_id;?>" />
+<input type="hidden" id="txt_company_id" name="txt_company_id" value="<?php echo $v_company_id;?>" />
+                    <div id="data_single_tab">
+                    <ul>
+                        <li class="k-state-active">Information</li>
+                    </ul>
+
+                    <div class="information div_details">
 <table align="center" width="100%" border="1" class="list_table" cellpadding="3" cellspacing="0">
-<cation>Support [<?php echo $v_support_id>0?'Edit':'New';?>]</caption>
-<?php if($v_error_message!=''){?>
-	<tr align="left" valign="top">
-		<td colspan="3"><?php echo $v_error_message;?>&nbsp;</td>
-	</tr>
-<?php }?>
-<tr align="right" valign="top">
-		<td width="30%">Support Id</td>
-		<td width="1%">&nbsp;</td>
-		<td align="left" width="69%"><input class="" size="50" type="text" id="txt_support_id" name="txt_support_id" value="<?php echo $v_support_id;?>" /> <label id="lbl_support_id" style="color:red;display:none;">(*)</label></td>
-	</tr>
+    <tr align="right" valign="top">
+        <td style="width:200px">Location</td>
+        <td style="width:1px">&nbsp;</td>
+        <td align="left">
+            <select id="txt_location_id" name="txt_location_id">
+
+            </select>
+            <input type="hidden" id="txt_hidden_location_id" name="txt_hidden_location_id" value="<?php echo $v_location_id>0?'Y':'';?>" required data-required-msg="Please select Location" />
+            <label id="lbl_location_id" class="k-required">(*)</label>
+        </td>
+    </tr>
 <tr align="right" valign="top">
 		<td>Support Title</td>
 		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_support_title" name="txt_support_title" value="<?php echo $v_support_title;?>" /> <label id="lbl_support_title" style="color:red;display:none;">(*)</label></td>
+		<td align="left"><input class="text_css k-textbox" size="50" type="text" id="txt_support_title" name="txt_support_title" value="<?php echo $v_support_title;?>" required data-required-msg="Please input Support Title" /> <label id="lbl_support_title" class="k-required">(*)</label></td>
 	</tr>
 <tr align="right" valign="top">
 		<td>Support Description</td>
 		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_support_description" name="txt_support_description" value="<?php echo $v_support_description;?>" /> <label id="lbl_support_description" style="color:red;display:none;">(*)</label></td>
+		<td align="left"><input class="text_css k-textbox" size="50" type="text" id="txt_support_description" name="txt_support_description" value="<?php echo $v_support_description;?>" /></td>
 	</tr>
 <tr align="right" valign="top">
-		<td>Company Id</td>
+		<td>Contact</td>
 		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_company_id" name="txt_company_id" value="<?php echo $v_company_id;?>" /> <label id="lbl_company_id" style="color:red;display:none;">(*)</label></td>
-	</tr>
-<tr align="right" valign="top">
-		<td>Location Id</td>
-		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_location_id" name="txt_location_id" value="<?php echo $v_location_id;?>" /> <label id="lbl_location_id" style="color:red;display:none;">(*)</label></td>
-	</tr>
-<tr align="right" valign="top">
-		<td>Contact Id</td>
-		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_contact_id" name="txt_contact_id" value="<?php echo $v_contact_id;?>" /> <label id="lbl_contact_id" style="color:red;display:none;">(*)</label></td>
-	</tr>
-<tr align="right" valign="top">
-		<td>Date Created</td>
-		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_date_created" name="txt_date_created" value="<?php echo $v_date_created;?>" /> <label id="lbl_date_created" style="color:red;display:none;">(*)</label></td>
-	</tr>
-<tr align="right" valign="top">
-		<td>Username</td>
-		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_username" name="txt_username" value="<?php echo $v_username;?>" /> <label id="lbl_username" style="color:red;display:none;">(*)</label></td>
-	</tr>
-<tr align="right" valign="top">
-		<td>Image File</td>
-		<td>&nbsp;</td>
-		<td align="left"><input class="" size="50" type="text" id="txt_image_file" name="txt_image_file" value="<?php echo $v_image_file;?>" /> <label id="lbl_image_file" style="color:red;display:none;">(*)</label></td>
-	</tr>
-	<tr align="center" valign="middle">
-		<td colspan="3"><input type="submit" id="btn_submit_tb_support" name="btn_submit_tb_support" value="Submit" class="button" /></td>
+		<td align="left">
+            <select id="txt_contact_id" name="txt_contact_id">
+
+            </select>
+            <input type="hidden" id="txt_hidden_contact_id" name="txt_hidden_contact_id" value="<?php echo $v_contact_id>0?'Y':'';?>" required data-required-msg="Please select Contact" /> <label id="lbl_contact_id" class="k-required">(*)</label>
+        </td>
 	</tr>
 </table>
+                    </div>
+                   </div>
+                   <?php if(isset($v_act) && in_array($v_act, array('E', 'N'))){?>
+                   <?php if($v_error_message!=''){?>
+                    <div class="k-block k-widget k-error-colored div_errors">
+                    <?php echo $v_error_message;?>
+                    </div>
+                    <?php }?>
+                    <div class="k-block k-widget div_buttons">
+                    <input type="submit" id="btn_submit_tb_support" name="btn_submit_tb_support" value="Submit" class="k-button button_css" />
+                    </div>
+                    <?php }?>
+
 </form>
+                </div>
+            </div>
+        </div>
+  </div>

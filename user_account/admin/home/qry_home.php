@@ -5,10 +5,7 @@ $cls_tb_order  = new cls_tb_order($db);
 $arr_where = array('status'=>array('$gt' => 1));
 $arr_order = array('date_created'=>1);
 $arr_order = $cls_tb_order->select_limit(0,5,$arr_where,$arr_order);
-$v_list_order = '<table cellpadding="2" cellspacing="2" border="1" width="100%"  class="list_table">
-                <tr>
-                    <th colspan="3"> Order list!.... </th>
-                </tr>';
+$v_list_order = '<table cellpadding="2" cellspacing="2" border="1" width="100%"  class="list_table">';
 foreach ($arr_order as $arr) {
     $v_order_id  = isset($arr['order_id'])?$arr['order_id']:0;
     $v_order_ref = isset($arr['order_ref'])?$arr['order_ref']:'';
@@ -37,10 +34,7 @@ $cls_tb_allocation = new cls_tb_allocation($db);
 $arr_where_clause = array();
 $arr_sort = array('tracking_number'=>'','date_shipping'=>-1,'location_id');
 $arr_tb_allocation = $cls_tb_allocation->select_limit(0,5,$arr_where_clause,$arr_sort);
-$v_list_shipping = '<table cellpadding="2" cellspacing="2" border="1" width="100%"  class="list_table">
-                <tr>
-                    <th colspan="5"> Shipping list!.... </th>
-                </tr>';
+$v_list_shipping = '<table cellpadding="2" cellspacing="2" border="1" width="100%"  class="list_table">';
 foreach($arr_tb_allocation as $arr){
     $v_allocation_id = isset($arr['allocation_id'])?$arr['allocation_id']:0;
     $v_order_items_id = isset($arr['order_items_id'])?$arr['order_items_id']:0;
