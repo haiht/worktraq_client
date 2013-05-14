@@ -28,7 +28,6 @@ function select_distinct(MongoDB $db, $p_table_name, $p_field_name){
     return $db->command(array("distinct" => $p_table_name, "key" => $p_field_name));
 }
 
-
 function get_array_data($cls, $p_field_value, $p_field_display, & $p_selected_value, array $arr_placeholder = array(), array $arr_where = array(), array $arr_order = array()){
     $arr_data = $cls->select_limit_fields(0, 0, array($p_field_value, $p_field_display), $arr_where, $arr_order);
     $arr_return_data = array();
