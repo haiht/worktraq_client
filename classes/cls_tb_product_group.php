@@ -643,5 +643,16 @@ class cls_tb_product_group{
         return $v_dsp_option;
 
     }
+
+    public function get_tree_product_group($p_company_id, $p_root,  $p_glue = '', $arr_group=NULL){
+        if(is_null($arr_group)) $arr_group = array();
+        $arr = $this->select(array('product_group_parent'=>$p_root, 'company_id'=>$p_company_id));
+
+        foreach($arr as $a){
+            $arr_group[] = array('product_group_id'=>$a['product_group_id'], 'product_group_name'=>$p_glue. $a['product_group_name']);
+            $arr_group = $this->get_tree_product_group($p_company_id, $a['product_group_id'], $p_glue.'-- ', $arr_group);
+        }
+        return $arr_group;
+    }
 }
 ?>

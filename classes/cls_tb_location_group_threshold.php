@@ -488,7 +488,7 @@ class cls_tb_location_group_threshold{
 				$arr_where = array('_id' => $this->v_mongo_id);
 		}
 		try{
-			$this->collection->update($arr_where, array('$set' => array($p_field => $p_value)), array('safe'=>true));
+			$this->collection->update($arr_where, array('$set' => array($p_field => $p_value)), array('safe'=>true, 'multiple'=>true));
 			return true;
 		}catch(MongoCursorException $e){
 			$this->v_error_code = $e->getCode();
@@ -515,7 +515,7 @@ class cls_tb_location_group_threshold{
 		for($i=0; $i<count($arr_fields); $i++)
 			$arr[$arr_fields[$i]] = $arr_values[$i];
 		try{
-			$this->collection->update($arr_where, array('$set' => $arr));
+			$this->collection->update($arr_where, array('$set' => $arr), array('safe'=>true, 'multiple'=>true));
 			return true;
 		}catch(MongoCursorException $e){
 			$this->v_error_code = $e->getCode();
