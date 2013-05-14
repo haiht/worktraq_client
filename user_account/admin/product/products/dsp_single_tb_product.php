@@ -5,7 +5,6 @@ $(document).ready(function(){
         var company_id = $("select#txt_company_id").val();
         company_id = parseInt(company_id, 10);
         if(isNaN(company_id)||company_id<0) company_id = 0;
-        $("label#lbl_company_id").css("display",css);
         if(company_id==0){
             e.preventDefault();
             alert('Please, choose company first!');
@@ -40,7 +39,6 @@ $(document).ready(function(){
                 a_material.push(one);
             }
         }
-
         $('input#txt_product_material').val(JSON.stringify(a_material));
 
         var threshold = '';
