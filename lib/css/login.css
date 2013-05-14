@@ -1,0 +1,14 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    font-family:"Trebuchet MS", "Myriad Pro", Arial, sans-serif;
+    font-size:14px;
+    background:#f4f4f4;
+    color:#333;
+    text-shadow:1px 1px 1px #fff;
+    overflow-y:scroll;
+}
+
+

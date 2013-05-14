@@ -1,0 +1,36 @@
+@import url(style.css);
+
+#maindiv {
+	background-image: url(../pics/bg_simple.jpg);
+	background-repeat: no-repeat;
+}
+
+#div_lang A.engflag {
+	color: #FF9A38;
+}
+
+#div_menu {
+	height: 820px!important;
+	min-height: 820px!important;
+}
+
+
+.sidenote {
+	text-align: center;
+	padding: 5px 5px 5px 5px;
+	clear: left;
+	line-height: 1.3;
+}
+
+.sidenote A {
+	border-bottom: 1px dotted #afafaf;
+	color: #353736;
+}
+.sidenote A:hover {
+	border-bottom: 1px dotted black;
+	color: #FF9A38;
+}
+
+.sidenote FORM {
+	margin: 0 50%;
+}

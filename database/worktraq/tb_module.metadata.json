@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "worktraq.tb_module", "name" : "_id_" }, { "v" : 1, "key" : { "module_pid" : 1 }, "ns" : "worktraq.tb_module", "name" : "module_pid_1" }, { "v" : 1, "key" : { "module_id" : 1 }, "unique" : true, "ns" : "worktraq.tb_module", "name" : "module_id_1" } ] }

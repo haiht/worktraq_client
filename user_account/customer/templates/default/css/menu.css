@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+.anvytabs{
+	padding: 0;
+	width: 100%;
+	background: transparent;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+}
+
+.anvytabs ul{
+	font: normal 11px Arial, Verdana, sans-serif;
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+.anvytabs li{
+	display:inline;
+	margin:0 2px 0 0;
+	padding:0;
+	text-transform:uppercase;
+}
+
+
+.anvytabs a{
+	float:left;
+	/*color: white;*/
+	color:#666666;
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight:700;
+	font-size:14px;
+
+	background:  url(../images/color_tabs_left.gif) no-repeat left top;
+	margin:0 2px 0 0;
+	padding:0 0 1px 3px;
+	text-decoration:none;
+	letter-spacing: 1px;
+}
+
+.anvytabs a span{
+	float:left;
+	display:block;
+	background: transparent url(../images/color_tabs_right.gif) no-repeat right top;
+	padding: 6px 8px 3px 7px;
+	border-right:#999 1px ridge;
+}
+.anvytabs ul li:last-child span{
+	border:none !important;
+}
+.anvytabs a span{
+	float:none;
+}
+
+.anvytabs a:hover{
+	background-color: #3f94e4;
+	color:white;
+}
+
+.anvytabs a:hover span{
+	background-color: #3f94e4;
+	color:white;
+}
+
+.anvytabs a.current, #anvytabs a.current span{ /*currently selected tab*/
+	background-color: #3f94e4;
+	color:white;
+}
+.anvytabsline{
+	clear: both;
+	padding: 0;
+	width: 100%;
+	height: 8px;
+	line-height: 8px;
+	background: #3f94e4;
+	/*border-top: 1px solid #fff;*/ /*Remove this to remove border between bar and tabs*/
+}
+
+.tabcontainer{
+	clear: left;
+	width:95%; /*width of 2nd level sub menus*/
+	height:1.5em; /*height of 2nd level sub menus. Set to largest's sub menu's height to avoid jittering.*/
+}
+
+.tabcontent{
+	display:none;
+}

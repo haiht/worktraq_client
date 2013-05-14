@@ -1,0 +1,66 @@
+.spacer{clear:both; height:1px;}
+/* ----------- My Form ----------- */
+.myform{
+    margin:5px;
+    padding:14px;}
+
+/* ----------- stylized ----------- */
+#stylized{
+    border:solid 2px #b7ddf2;
+    background:#FFFFFF;
+    display: none;
+}
+#stylized h1 {
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:8px;
+    margin-top: 0px;
+}
+#stylized p{
+    font-size:11px;
+    color:#666666;
+    margin-bottom:20px;
+    border-bottom:solid 1px #b7ddf2;
+    padding-bottom:10px;
+}
+#stylized label{
+    display:block;
+    font-weight:bold;
+    text-align:right;
+    width:140px;
+    float:left;
+    display: inline;
+}
+#stylized .small{
+    color:#666666;
+    display:block;
+    font-size:11px;
+    font-weight:normal;
+    text-align:right;
+    width:140px;
+}
+#stylized input, select{
+    float:left;
+    font-size:12px;
+    padding:4px 2px;
+    border:solid 1px #aacfe4;
+    margin:2px 0 10px 5px;
+}
+
+#stylized button{
+    clear:both;
+    margin-left:150px;
+    width:125px;
+    height:31px;
+    background:#666666 url(img/button.png) no-repeat;
+    text-align:center;
+    line-height:31px;
+    color:#FFFFFF;
+    font-size:11px;
+    font-weight:bold;
+}
+#stylized p .break
+{
+    clear: both;
+    height: 2px;
+}

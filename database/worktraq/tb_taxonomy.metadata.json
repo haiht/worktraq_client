@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "worktraq.tb_taxonomy", "name" : "_id_" }, { "v" : 1, "key" : { "taxonomy_id" : 1 }, "unique" : true, "ns" : "worktraq.tb_taxonomy", "name" : "taxonomy_id_1" } ] }

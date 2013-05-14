@@ -1,0 +1,244 @@
+<!--
+    This doesn't catch everything, but it'll allow styling
+    :hover, :active, and :focus as well as dynamic class and size changes.
+    It does NOT catch [disabled], but it will catch a change to "enabled",
+    so if disabled gradients are a must, use literal SVG.
+
+    There appears to be a bug with :hover handling in IE9:
+    Set :hover to be a different gradient than normal.
+    mouseover, mousedown, mouseout -> no change of currentStyle, even if the
+    stylesheet says it should, and even after a mouseup.
+
+    To do absolute pixel color stops, this has to read the element's
+    width/height and compute a percentage. If the element has 0 content width
+    when the gradient is computed, then we don't get a gradient. For now, this
+    exits out if the background would be only padding; that can be changed if
+    needed.
+
+    <PUBLIC:COMPONENT lightweight="true"> produces weird errors.
+    Don't use it here.
+
+    Note that IE10 doesn’t use this since it has native gradient support.
+-->
+<!--[if IE 9]>
+<PUBLIC:ATTACH EVENT="oncontentready" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="ondocumentready" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="onpropertychange" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="onmouseover" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="onmouseout" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="onmousedown" ONEVENT="gradient(element); set_mouseup_listener(element)" />
+<PUBLIC:ATTACH EVENT="onmouseup" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="onfocus" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="onblur" ONEVENT="gradient(element)" />
+<PUBLIC:ATTACH EVENT="onresize" ONEVENT="gradient(element,true)" />
+<PUBLIC:ATTACH EVENT="onload" ONEVENT="gradient(element)" />
+
+<script language="JScript">
+var LINEAR_GRADIENT_REGEX = /linear-gradient\s*\(\s*([^\)]+)\s*\)/;
+var ANGLE_REGEX = /^\d+(?:\.\d+)?\s*(?:deg|rad|grad)$/;
+var PARENS_REGEX = /\([^\)]+\)/g;
+var TOP_REGEX    = /top/i;
+var RIGHT_REGEX  = /right/i;
+var BOTTOM_REGEX = /bottom/i;
+var LEFT_REGEX   = /left/i;
+var OPACITY_REGEX = /,(\d+(?:\.\d+)?)\)/;
+var RGB_CAPTURE_REGEX = /(\(\s*[^,\s]+\s*,\s*[^,\s]+\s*,\s*[^,\s])\s*,\s*[^,\s\)]+/;
+var ID_PREFIX = "__generated_svg_gradient_";
+var ID_REGEX = new RegExp( ID_PREFIX + "\\d+", "g" );
+
+//Support for pixel lengths is limited to vertical and horizontal gradients;
+//extending it to angled gradients would just need a bit of trig.
+var POSITION_REGEX = /\s+(\d+(?:\.\d+)?)\s*([^\d\s]*)\s*$/i;
+
+var ENCODE_REPLACEMENTS = { "(":"%28", ")":"%29" };
+
+if ( !window.__ie9_svg_cache ) window.__ie9_svg_cache = {};
+
+var svg_cache = window.__ie9_svg_cache;
+var uses_pixels, cur_style, run_style, bg_image, the_match, old_image, new_image, width, height, encoded;
+
+function gradient(el,is_resize) {
+    run_style = el.runtimeStyle;
+    cur_style = el.currentStyle;
+
+    bg_image = cur_style.getAttribute("-cp-background-image");
+    the_match = bg_image && bg_image.match(LINEAR_GRADIENT_REGEX);
+
+    if (!the_match) {
+        if (run_style.backgroundImage) {
+            run_style.backgroundImage = "";
+        }
+
+        return;
+    }
+
+    the_match = the_match[1];
+
+    svg = svg_cache[the_match];
+
+    if ( !svg || ( is_resize && /px/.test(the_match) ) ) {
+        var parens = the_match.match(PARENS_REGEX);
+        var replaced = the_match.replace(PARENS_REGEX,"\u0000").replace(/,/g,"\u0001");
+        var cur_paren_index;
+        while ( (cur_paren_index = replaced.indexOf("\u0000")) !== -1 ) {
+            replaced = replaced.replace(/\u0000/g, parens.shift());
+        }
+//For some reason, this sometimes errors that "map" doesn't exist (IE9).
+//            var params = the_match.split(/\u0001/).map(String.prototype.trim.call,String.prototype.trim);
+        var params = replaced.split(/\u0001/);
+
+        var first_param = params[0];
+        var coordinates;
+
+        var direction;
+
+        //TODO: Implement angle support
+        var start_angle_match = first_param.match(ANGLE_REGEX);
+        if ( start_angle_match ) {
+            coordinates = {};
+        }
+        else {
+            if ( TOP_REGEX.test(first_param) ) {
+                coordinates = { y1: "0%", y2: "100%" };
+                direction = 1;
+            }
+            else if ( BOTTOM_REGEX.test(first_param) ) {
+                coordinates = { y1: "100%", y2: "0%" };
+                direction = 1;
+            }
+
+            if ( RIGHT_REGEX.test(first_param) ) {
+                coordinates = { x1: "100%", x2: "0%" };
+                direction = direction ? undefined : 2;
+            }
+            else if ( LEFT_REGEX.test(first_param) ) {
+                coordinates = { x2: "100%" };
+                direction = direction ? undefined : 2;
+            }
+        }
+
+        if ( !coordinates ) {
+            coordinates = { x2: "0%", y2: "100%" };
+            direction = 1;
+        }
+        else {
+            params.shift();
+            if ( !coordinates.x2 ) coordinates.x2 = "0%";
+            if ( !coordinates.y2 ) coordinates.y2 = "100%";
+        }
+
+        var coords_string = "";
+        for (var key in coordinates) {
+            coords_string += key+"=\""+coordinates[key]+"\" ";
+        }
+
+        var cur_param, stop_svg, stops_svg = [];
+
+        for (var p=0; cur_param = params[p]; p++) {
+            var position = cur_param.match(POSITION_REGEX);
+            if (position) {
+                if ( position[2] === "%" ) {
+                    position = position[1] + "%";
+                }
+                else if ( position[2] === "px" && direction ) {
+                    if ( !cur_style.hasLayout ) run_style.zoom = 1;
+
+                    if ( direction === 1 ) {
+                        scale = el.clientHeight;
+                        if ( !scale ) {
+                            scale = el.offsetHeight
+
+                            //Nothing to do here...
+                            if ( !scale ) return;
+
+                            scale -=
+                                parseFloat(cur_style.borderTopWidth) || 0
+                                + parseFloat(cur_style.borderBottomWidth) || 0
+                            ;
+                        }
+                    }
+                    else {
+                        scale = el.clientWidth;
+                        if ( !scale ) {
+                            scale = el.offsetWidth
+
+                            //Nothing to do here...
+                            if ( !scale ) return;
+
+                            scale -=
+                                parseFloat(cur_style.borderLeftWidth) || 0
+                                + parseFloat(cur_style.borderRightWidth) || 0
+                            ;
+                        }
+                    }
+
+                    position = position[1] / scale;
+                }
+                else {
+                    position = position[1];
+                }
+            }
+            else {
+                position = (p / (params.length-1)) || 0;
+            }
+            var color = cur_param.replace(POSITION_REGEX,"");
+
+            stop_svg = "<stop offset=\""+position+"\"";
+
+            if ( color.indexOf(/rgba/i) !== -1 ) {
+                var opacity = color.match(OPACITY_REGEX);
+                if (opacity) {
+                    stop_svg += " stop-opacity=\""+opacity[1]+"\"";
+                }
+                color = color.replace(/rgba/i,"rgb").replace(RGB_CAPTURE_REGEX,"$1");
+            }
+
+            stop_svg += " stop-color=\""+color.replace(/\s+/g,"")+"\"/>";
+            stops_svg.push(stop_svg);
+        }
+
+        var svg = "<svg width=\"100%\" height=\"100%\""
+            + " xmlns=\"http://www.w3.org/2000/svg\">"
+            + "<defs><linearGradient id=\"~\" "+coords_string+">"
+            + stops_svg.join("")
+            + "</linearGradient></defs>"
+            + "<rect width=\"100%\" height=\"100%\" fill=\"url(#~)\"/>"
+            + "</svg>"
+        ;
+
+        svg_cache[the_match] = svg;
+    }
+
+    if ( !(old_image = run_style.backgroundImage) ) {
+        to_install = true;
+    }
+    else {
+        old_image = decodeURIComponent(old_image.replace(ID_REGEX,"~")).replace(/^[^<]+|[^>]+$/g,"");
+        to_install = old_image !== svg;
+    }
+
+    if ( to_install ) {
+        run_style.backgroundImage = bg_image.replace(LINEAR_GRADIENT_REGEX, "url(data:image/svg+xml,"
+            + encodeURIComponent(svg.replace(/~/g, (ID_PREFIX + Math.random()).replace(/0\./,"")))
+                .replace(/[\(\)]/g, function(chr) {return ENCODE_REPLACEMENTS[chr]})
+            + ")" );
+        ;
+    }
+
+    var gradient_filter = el.filters["DXImageTransform.Microsoft.gradient"];
+    if (gradient_filter) gradient_filter.enabled = false;
+}
+
+//This works around a quirk with :active state handling.
+function set_mouseup_listener(el) {
+    var _mouseup_listener = function(e) {
+        e.currentTarget.removeEventListener("mouseup", _mouseup_listener);
+        setTimeout( function() { gradient(el); }, 1 );
+    };
+    window.addEventListener( "mouseup", _mouseup_listener, false );
+}
+
+if ( element.readyState === "complete" ) gradient(element);
+</script>
+</PUBLIC:COMPONENT>
+<![endif]-->

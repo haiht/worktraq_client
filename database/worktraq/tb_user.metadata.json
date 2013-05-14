@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "worktraq.tb_user", "name" : "_id_" }, { "v" : 1, "key" : { "user_id" : 1 }, "ns" : "worktraq.tb_user", "name" : "user_id_1" } ] }

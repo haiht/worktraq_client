@@ -1,0 +1,38 @@
+body{ font-family:Tahoma,Veranda,Arial; font-size:12px; color:#333}
+a{text-decoration:none; outline:none}
+
+#content {
+    width: 980px;
+    margin: 0px auto;
+    background: #FFFFFF;
+}
+a:visited , a:link{color:#FF7E00;}
+a:hover{color:#669B3F}
+
+#col_left{width:480px; float:left; margin: 2px;}
+#col-right{width:480px; float:right; margin: 2px; }
+
+
+.box
+{
+    margin: 5px 0px 5px 2px;
+    border: 1px solid #669B3F;
+}
+p.title
+{
+    height: 35px;
+    background: #669B3F;
+    color: #FFFFFF;
+    margin-top: 0px;
+}
+p.title span
+{
+    vertical-align: sub;
+    padding-left: 5px;
+    font-weight: bold;
+
+}
+p.content
+{
+    padding:5px;
+}

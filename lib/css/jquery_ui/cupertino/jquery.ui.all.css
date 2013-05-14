@@ -1,0 +1,25 @@
+/*
+ * jQuery UI CSS Framework 1.8.6
+ *
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Theming
+ */
+@import "jquery.ui.base.css";
+@import "jquery.ui.theme.css";
+/*For datetime picker*/
+.ui-datepicker, .ui-datepicker a{
+ 	font-size:9px !important;
+}
+
+img.ui-datepicker-trigger{
+	vertical-align:middle;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#ui-datepicker-div{
+	/*display:none !important;*/
+}
+	

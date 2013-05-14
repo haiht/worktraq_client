@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "worktraq.tb_settings", "name" : "_id_" }, { "v" : 1, "key" : { "setting_id" : 1 }, "unique" : true, "ns" : "worktraq.tb_settings", "name" : "setting_id_1" }, { "v" : 1, "key" : { "setting_name" : 1 }, "unique" : true, "ns" : "worktraq.tb_settings", "name" : "setting_name_1" } ] }

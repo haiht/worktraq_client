@@ -1,0 +1,67 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	margin-top:10px;
+	margin-left:0;
+	margin-right:0;
+	margin-bottom:10px;
+	text-align:center;
+}
+body, table{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+}#div_wrapper {
+	margin: auto;
+	height: auto;
+	width: 1000px;
+}
+#div_wrapper #div_header {
+	margin: 0px;
+	height: 100px;
+	overflow:hidden;
+
+}
+#div_wrapper #div_header #div_logo {
+	float: left;
+	width: 300px;
+	text-align:left;
+	padding-left:20px;
+}
+#div_wrapper #div_header #div_cpanel {
+	margin-left: 305px;
+	padding-right: 10px;
+	text-align: right;
+}
+#div_wrapper #div_menu {
+	margin: 0px;
+	height: 45px;
+}
+#div_wrapper #div_body {
+	height: auto;
+	overflow:auto;
+}
+#div_wrapper #div_footer {
+	text-align: right;
+	height: 60px;
+}
+#div_wrapper #div_body #div_path {
+	height: 20px;
+	margin-top: 5px;
+	text-align: left;
+	padding-left: 10px;
+}
+#div_wrapper #div_body #div_tag {
+	background-color: #e3e1e1;
+	float: left;
+	width: 200px;
+	overflow:auto;
+	padding:10px;
+}
+#div_wrapper #div_body #div_product_search {
+	margin-left: 240px;
+	border-bottom: 1px solid #C2C2C2;
+}
+#div_wrapper #div_body #div_product_detail {
+	margin-left: 240px;
+	padding-left:0;
+}

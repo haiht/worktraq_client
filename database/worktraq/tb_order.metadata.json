@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "worktraq.tb_order", "name" : "_id_" }, { "v" : 1, "key" : { "order_id" : 1 }, "unique" : true, "ns" : "worktraq.tb_order", "name" : "order_id_key", "dropDups" : 1 } ] }
