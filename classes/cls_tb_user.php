@@ -779,7 +779,7 @@ class cls_tb_user{
         $v_user_type = $this->v_user_type;
         $v_company_id = $this->v_company_id;
         $arr_user_rule = $this->arr_user_rule;
-		if(!is_array($arr_user_rule)) $arr_user_rule= array();
+        if(!is_array($arr_user_rule)) $arr_user_rule= array();
         $cls_role = new cls_tb_role($db, $this->v_dir);
         $cls_module = new cls_tb_module($db, $this->v_dir);
         $arr_all_role = array();
@@ -874,7 +874,6 @@ class cls_tb_user{
         return $arr_return;
     }
 
-
     /**
      * @param MongoDb $db
      * @param $p_module_menu
@@ -894,7 +893,7 @@ class cls_tb_user{
         $v_user_type = $this->v_user_type;
         $v_company_id = $this->v_company_id;
         $arr_user_rule = $this->arr_user_rule;
-		if(!is_array($arr_user_rule)) $arr_user_rule= array();
+        if(!is_array($arr_user_rule)) $arr_user_rule = array();
         $cls_role = new cls_tb_role($db, $this->v_dir);
         $cls_module = new cls_tb_module($db, $this->v_dir);
         $arr_all_role = array();

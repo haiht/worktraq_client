@@ -40,6 +40,8 @@ $(document).ready(function(){
         dataTextField:"product_group_name"
     }).data("kendoDropDownList");
 
+    combo_product_group.value(<?php echo $v_product_group_parent;?>);
+
     $('select#txt_filter').kendoDropDownList({
         change: filter_product
     });
