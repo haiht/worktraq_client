@@ -1,80 +1,121 @@
 <?php if(!isset($v_sval)) die();?>
 <?php
 $v_act = isset($_GET['act'])?$_GET['act']:'';
-$v_action = isset($_GET['action'])?$_GET['action']:'';
-add_class('cls_tb_user');
-$cls_tb_user = new cls_tb_user($db);
+$v_user_id = isset($_GET['id'])?$_GET['id']:'0';
+settype($v_user_id, 'int');
+add_class('cls_tb_role', 'cls_tb_role.php');
+$cls_tb_role = new cls_tb_role($db, LOG_DIR);
+
+$v_this_module_menu = isset($v_module_menu)?$v_module_menu:''; //replace module_menu_key here
+$v_user_full_name = '';
+$v_user_name = isset($arr_user['user_name'])?$arr_user['user_name']:'';
+$arr_user_module_rule = array();
+$v_user_id = isset($arr_user['user_id'])?$arr_user['user_id']:0;
+$v_row = $cls_tb_user->select_one(array('user_id'=>$v_user_id));
+if($v_row == 1){
+	$v_contact_id = $cls_tb_user->get_contact_id();
+	$v_user_name = $cls_tb_user->get_user_name();
+	$v_user_full_name = $cls_tb_contact->get_full_name_contact($v_contact_id);
+	$arr_user_module_rule = $cls_tb_user->get_all_permission($db);
+}
+$v_view_right = isset($arr_user_module_rule[$v_this_module_menu]['view']);
+$v_edit_right = isset($arr_user_module_rule[$v_this_module_menu]['edit']);
+$v_create_right = isset($arr_user_module_rule[$v_this_module_menu]['create']);
+$v_delete_right = isset($arr_user_module_rule[$v_this_module_menu]['delete']);
+$v_report_right = isset($arr_user_module_rule[$v_this_module_menu]['report']);
+$v_search_right = true;
+$v_view_all_right = false;
+$v_is_admin = is_admin_by_user($v_user_name) || is_admin();
+$v_dsp_menu = $cls_tb_module->draw_kendo_menu($v_module_key, URL.'admin/', $v_is_admin, $arr_user_module_rule);
+$v_dsp_horizontal_menu = $cls_tb_module->draw_kendo_horizontal_menu_from($v_dsp_menu);
+$v_dsp_tree_menu = $cls_tb_module->draw_kendo_tree_menu_from('ANVY', URL, $v_dsp_menu, 'images/icons/logos.png');
+
+//Show hide icon
+$v_show_report_icon = $v_report_right || $v_is_admin;
+$v_show_view_icon = $v_view_right || $v_is_admin;
+$v_show_create_icon = $v_create_right || $v_is_admin;
+$v_show_search_icon = $v_search_right || $v_is_admin;
+//End show hide icon
+
 switch($v_act){
-    case "SH";
-        include 'qry_details_user.php';
-        include 'user_account/admin/header.php';
-        include 'dsp_details_user.php';
-        include 'user_account/admin/footer.php';
-        break;
-    case "RP";
-        include 'qry_view_report.php';
-        include 'user_account/admin/header.php';
-        include 'dsp_view_report.php';
-        include 'user_account/admin/footer.php';
-        break;
-    case "R";//Rule News
-        include 'qry_rules_user.php';
-        include 'user_account/admin/header.php';
-        include 'dsp_rules_user.php';
-        include 'user_account/admin/footer.php';
-        break;
-    case "RO";//Rule News
-        include 'qry_all_rules_user.php';
-        include 'user_account/admin/header.php';
-        include 'dsp_all_rules_user.php';
-        include 'user_account/admin/footer.php';
-        break;
-    case 'AJ':
-        include 'act_update_user_rule_ajax.php';
-        break;
-    case "RULE";
-        include 'qry_rule_user.php';
-        include 'user_account/admin/admin_header.php';
-        include 'dsp_rule_user.php';
-        include 'user_account/admin/admin_footer.php';
-        break;
-    case 'DE';
-        include 'act_show_details_user.php';
-        break;
-    case 'SU';
-        include 'act_check_user.php';
-        break;
-    case 'U';
-        include 'act_update_user.php';
-        break;
-    case 'CP';
-        include 'qry_change_password.php';
-        include 'user_account/admin/admin_header.php';
-        include 'dsp_change_password.php';
-        include 'user_account/admin/admin_footer.php';
-        break;
-    case 'CU';
-        include 'qry_create_user.php';
-        include 'user_account/admin/header.php';
-        include 'dsp_create_user.php';
-        include 'user_account/admin/footer.php';
-        break;
 	case 'N':
+		if($v_create_right || $v_is_admin){
+			include 'qry_single_tb_user.php';
+			include 'user_account/admin/admin_header.php';
+			include 'dsp_single_tb_user.php';
+			include 'user_account/admin/admin_footer.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
+		break;
+	case 'V':
+		if($v_view_right || $v_is_admin){
+			include 'qry_single_tb_user.php';
+			include 'user_account/admin/admin_header.php';
+			include 'dsp_single_tb_user.php';
+			include 'user_account/admin/admin_footer.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
+		break;
 	case 'E':
-		include 'qry_single_tb_user.php';
-		include 'user_account/admin/admin_header.php';
-		include 'dsp_single_tb_user.php';
-        include 'user_account/admin/admin_footer.php';
+		if($v_edit_right || $v_is_admin){
+			include 'qry_single_tb_user.php';
+			include 'user_account/admin/admin_header.php';
+			include 'dsp_single_tb_user.php';
+			include 'user_account/admin/admin_footer.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
 		break;
 	case 'D':
-		include 'act_delete_tb_user.php';
+		if($v_delete_right || $v_is_admin){
+			include 'act_delete_tb_user.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
+		break;
+	case 'J':
+		include 'qry_json_tb_user.php';
+		break;
+    case 'AJ':
+        $v_ajax_type = isset($_POST['txt_ajax_type'])?$_POST['txt_ajax_type']:'';
+        if($v_ajax_type=='check_exist_user'){
+            include 'qry_ajax_check_exist_user.php';
+        }else if($v_ajax_type=='load_user_info'){
+            include 'qry_ajax_load_user_info.php';
+        }else if($v_ajax_type=='save_user_info'){
+            include 'qry_ajax_save_user_info.php';
+        }
+        break;
+	case 'X':
+		if($v_report_right || $v_is_admin){
+			include 'qry_export_tb_user.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
+		break;
+	case 'P':
+		if($v_report_right || $v_is_admin){
+			include 'qry_print_tb_user.php';
+			include 'user_account/admin/print_header.php';
+			include 'dsp_print_tb_user.php';
+			include 'user_account/admin/print_footer.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
 		break;
 	case 'A':
 	default:
-		include 'qry_all_tb_user.php';
-        include 'user_account/admin/admin_header.php';
-		include 'dsp_all_tb_user.php';
-        include 'user_account/admin/admin_footer.php';
+		if($v_view_right || $v_is_admin){
+			$v_act = 'A';
+			include 'qry_all_tb_user.php';
+			include 'user_account/admin/admin_header.php';
+			include 'dsp_all_tb_user.php';
+			include 'user_account/admin/admin_footer.php';
+		}else{
+			redir(URL.'admin/error/');
+		}
 		break;
 }
 ?>

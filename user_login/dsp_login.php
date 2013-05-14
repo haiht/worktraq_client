@@ -13,11 +13,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <!--<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />-->
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="<?php  echo URL; ?>user_account/office/templates/default/css/screen.css" media="screen" />
-    <!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="<?php  echo URL; ?>user_acoount/office/tempates/default/css/iehack.css" /><![endif]-->
-    <!--[if lt IE 9]><script type="text/javascript" src="<?php echo URL; ?>user_account/office/templates/default/js/html5.js"></script><![endif]-->
+    <link rel="stylesheet" type="text/css" href="<?php  echo URL; ?>user_account/customer/templates/default/css/screen.css" media="screen" />
+    <!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="<?php  echo URL; ?>user_acoount/customer/tempates/default/css/iehack.css" /><![endif]-->
+    <!--[if lt IE 9]><script type="text/javascript" src="<?php echo URL; ?>user_account/customer/templates/default/js/html5.js"></script><![endif]-->
     <link rel="shortcut icon" href="<?php echo URL;?>images/icons/favicon.ico" type="image/x-icon">
-    <script type="text/javascript" src="<?php  echo URL; ?>lib/js/jquery.min.1.8.2.js"></script>
+    <script type="text/javascript" src="<?php  echo URL; ?>lib/js/jquery.min.1.9.1.js"></script>
 </head>
 <body>
 <section id="login-cms">
@@ -28,19 +28,19 @@
         <section id="main">
 
             <div class="login">              
-                <form class="form-general" id="login-form" action="<?php echo URL.'login';?>" method="post" >
+                <form class="form-general" id="login-form" action="<?php echo URL;?>" method="post" >
                     <input type="hidden" name="txt_ajax" id="txt_ajax">
                     <h2>Login</h2>
 					<?php if(isset($_REQUEST['txt_error'])){ ?>
 						<div class="alert-message"><?php echo isset($_SESSION['error_login']) ?$_SESSION['error_login']:''; ?></div>
 					<?php } ?>
-                    <div><input type="text" required="" placeholder="Username" name="txt_user_name" id="username"></div>
-                    <div><input type="password" required="" placeholder="Password" name="txt_user_pass" id="password"></div>
+                    <div><input type="text" required placeholder="Username" name="txt_user_name" id="username"></div>
+                    <div><input type="password" required placeholder="Password" name="txt_user_pass" id="password"></div>
 					
                     <div>
                         <input type="checkbox" name="remember" id="remember">
                         <label for="remember">Remind my password</label>
-                        <input type="submit" class="btn btn-danger" id="submit-login" value="Submit">
+                        <input type="submit" class="btn btn-danger" id="submit-login" value="Submit" name="btn_login_submit">
                     </div>
                 </form>
                 <div class="footer-login-form">
@@ -52,9 +52,6 @@
         <footer id="footer">&copy; Anvy Inc. 2012 </footer>
     </section>
 </section>
-<script type="text/javascript" src="<?php echo URL;?>user_account/office/templates/default/js/lib.js"></script>
-<script type="text/javascript" src="<?php echo URL;?>user_account/office/templates/default/js/util.js"></script>
-<script type="text/javascript" src="<?php echo URL;?>user_account/office/templates/default/js/start.js"></script>
 </body>
 
 </html>

@@ -16,6 +16,7 @@ class cls_tb_module{
 	private $v_module_category = 0;
 	private $v_module_description = '';
     private $v_module_menu = '';
+    private $v_module_icon = '';
     private $arr_module_rules = array();
 	private $collection = NULL;
 	private $v_mongo_id = NULL;
@@ -129,8 +130,25 @@ class cls_tb_module{
 		$this->v_module_text = $p_module_text;
 	}
 
-	
-	/**
+    /**
+     * function return properties "module_icon" value
+     * @return string value
+     */
+    public function get_module_icon(){
+        return $this->v_module_icon;
+    }
+
+
+    /**
+     * function allow change properties "module_icon" value
+     * @param $p_module_icon: string value
+     */
+    public function set_module_icon($p_module_icon){
+        $this->v_module_icon = $p_module_icon;
+    }
+
+
+    /**
 	 * function return properties "module_key" value
 	 * @return string value
 	 */
@@ -395,6 +413,7 @@ class cls_tb_module{
 					,'module_index' => $this->v_module_index
 					,'module_locked' => $this->v_module_locked
 					,'module_time' => $this->v_module_time
+					,'module_icon' => $this->v_module_icon
 					,'module_category' => $this->v_module_category
 					,'module_description' => $this->v_module_description
                     ,'module_menu'=>$this->v_module_menu);
@@ -447,6 +466,7 @@ class cls_tb_module{
 			$this->v_module_category = isset($arr['module_category'])?$arr['module_category']:0;
 			$this->v_module_description = isset($arr['module_description'])?$arr['module_description']:'';
 			$this->v_module_menu = isset($arr['module_menu'])?$arr['module_menu']:'';
+			$this->v_module_icon = isset($arr['module_icon'])?$arr['module_icon']:'';
 			$this->v_mongo_id = $arr['_id'];
 			$v_count++;
 		}
@@ -595,9 +615,9 @@ class cls_tb_module{
 				$arr_where = array('_id' => $this->v_mongo_id);
 		}
 		if(isset($v_has_mongo_id) && $v_has_mongo_id)
-			$arr = array('$set' => array('module_id' => $this->v_module_id,'module_pid' => $this->v_module_pid,'module_text' => $this->v_module_text,'module_key' => $this->v_module_key,'module_type' => $this->v_module_type,'module_root' => $this->v_module_root,'module_rules' => $this->arr_module_rules,'module_dir' => $this->v_module_dir,'module_order' => $this->v_module_order,'module_index' => $this->v_module_index,'module_locked' => $this->v_module_locked,'module_time' => $this->v_module_time,'module_category' => $this->v_module_category,'module_description' => $this->v_module_description,'module_menu'=>$this->v_module_menu, 'module_role'=>$this->v_module_role));
+			$arr = array('$set' => array('module_id' => $this->v_module_id,'module_pid' => $this->v_module_pid,'module_text' => $this->v_module_text,'module_key' => $this->v_module_key,'module_type' => $this->v_module_type,'module_root' => $this->v_module_root,'module_rules' => $this->arr_module_rules,'module_dir' => $this->v_module_dir,'module_order' => $this->v_module_order,'module_index' => $this->v_module_index,'module_locked' => $this->v_module_locked,'module_time' => $this->v_module_time,'module_category' => $this->v_module_category,'module_description' => $this->v_module_description,'module_menu'=>$this->v_module_menu, 'module_role'=>$this->v_module_role, 'module_icon'=>$this->v_module_icon));
 		else
-			$arr = array('$set' => array('module_pid' => $this->v_module_pid,'module_text' => $this->v_module_text,'module_key' => $this->v_module_key,'module_type' => $this->v_module_type,'module_root' => $this->v_module_root,'module_rules' => $this->arr_module_rules,'module_dir' => $this->v_module_dir,'module_order' => $this->v_module_order,'module_index' => $this->v_module_index,'module_locked' => $this->v_module_locked,'module_time' => $this->v_module_time,'module_category' => $this->v_module_category,'module_description' => $this->v_module_description,'module_menu'=>$this->v_module_menu, 'module_role'=>$this->v_module_role));
+			$arr = array('$set' => array('module_pid' => $this->v_module_pid,'module_text' => $this->v_module_text,'module_key' => $this->v_module_key,'module_type' => $this->v_module_type,'module_root' => $this->v_module_root,'module_rules' => $this->arr_module_rules,'module_dir' => $this->v_module_dir,'module_order' => $this->v_module_order,'module_index' => $this->v_module_index,'module_locked' => $this->v_module_locked,'module_time' => $this->v_module_time,'module_category' => $this->v_module_category,'module_description' => $this->v_module_description,'module_menu'=>$this->v_module_menu, 'module_role'=>$this->v_module_role, 'module_icon'=>$this->v_module_icon));
 		try{
 			$this->collection->update($arr_where, $arr, array('safe'=>true));
 			return true;
@@ -869,5 +889,151 @@ class cls_tb_module{
         return $v_ret;
     }
 
+    public function draw_kendo_tree_menu($p_current_key, $p_root_text, $p_root_url, $p_is_admin = true, array $arr_user_rule = array(),  $p_root_icon_url='', $p_new_line = "\n\t"){
+        $v_ret = $p_new_line.'dataSource:[{';
+        //if($p_root_icon_url!='') $p_root_icon_url = ' style="background-image:url('.$p_root_icon_url.'); background-repeat:no-repeat"';
+        $v_ret .= $p_new_line."\t".'text: "'.$p_root_text.'", expanded: true, LinksTo: "'.$p_root_url.'",';
+        if($p_root_icon_url!='') $v_ret .= 'imageUrl: "'.$p_root_icon_url.'", ';
+        $v_ret .= $p_new_line."\t".'items:[';
+        $v_all_data = '';
+        $arr_where = array('module_root'=>'admin', 'module_pid'=>0);
+        $arr_parent_node = $this->select($arr_where, array('module_order'=>1));
+        foreach($arr_parent_node as $arr_node){
+            $v_parent_module_key = isset($arr_node['module_key'])?$arr_node['module_key']:'';
+            $v_parent_module_text = isset($arr_node['module_text'])?$arr_node['module_text']:'';
+            $v_parent_module_menu = isset($arr_node['module_menu'])?$arr_node['module_menu']:'';
+            $v_parent_module_id = isset($arr_node['module_id'])?$arr_node['module_id']:'';
+            $v_parent_module_icon = isset($arr_node['module_icon'])?$arr_node['module_icon']:'';
+            $v_dsp_one_node = $p_new_line."\t\t".'{text: "'.$v_parent_module_text.'", expanded: _IS-EXPANDED_, LinksTo: "'.$p_root_url.$v_parent_module_key.'"'.($v_parent_module_icon!=''?', imageUrl:"'.$v_parent_module_icon.'"':'').',';
+            $v_dsp_one_node .= $p_new_line."\t\t".'items: [';
+
+            $arr_sub_module = $this->select(array('module_pid'=>$v_parent_module_id), array('module_order'=>1));
+            $v_dsp_sub_node = '';
+            $v_note_expand = false;
+            foreach($arr_sub_module as $arr){
+                $v_sub_module_key = isset($arr['module_key'])?$arr['module_key']:'';
+                $v_sub_module_text = isset($arr['module_text'])?$arr['module_text']:'';
+                $v_sub_module_menu = isset($arr['module_menu'])?$arr['module_menu']:'';
+                $v_sub_module_id = isset($arr['module_id'])?$arr['module_id']:'';
+                $v_sub_module_icon = isset($arr['module_icon'])?$arr['module_icon']:'';
+                $v_selected = $p_current_key == $v_sub_module_key;
+                if(!$v_note_expand && $v_selected) $v_note_expand = true;
+                $v_dsp_sub_node .= $p_new_line."\t\t\t".'{text: "'.$v_sub_module_text.'"'.($v_selected?', selected:true':'').', LinksTo: "'.$p_root_url.$v_sub_module_key.'"'.($v_sub_module_icon!=''?', imageUrl: "'.$v_sub_module_icon.'"':'').'},';
+            }
+            $v_dsp_one_node = str_replace('_IS-EXPANDED_',$v_note_expand?'true':'false', $v_dsp_one_node);
+            if($v_dsp_sub_node!='') $v_dsp_sub_node = substr($v_dsp_sub_node,0,strlen($v_dsp_sub_node)-1);
+            $v_dsp_one_node .= $v_dsp_sub_node;
+            $v_dsp_one_node .= $p_new_line."\t\t".']},';
+            $v_all_data.=$v_dsp_one_node;
+        }
+        if($v_all_data!='') $v_all_data = substr($v_all_data,0, strlen($v_all_data)-1);
+        $v_ret .= $v_all_data;
+        $v_ret .= $p_new_line."\t".']';
+        $v_ret .= $p_new_line.'}]';
+        return $v_ret;
+    }
+    public function draw_kendo_tree_menu_from($p_root_text, $p_root_url, $p_menu_content, $p_root_icon_url='', $p_new_line = "\n\t"){
+        $v_ret = $p_new_line.'dataSource:[{';
+        //if($p_root_icon_url!='') $p_root_icon_url = ' style="background-image:url('.$p_root_icon_url.'); background-repeat:no-repeat"';
+        $v_ret .= $p_new_line."\t".'text: "'.$p_root_text.'", expanded: true, LinksTo: "'.$p_root_url.'",';
+        if($p_root_icon_url!='') $v_ret .= 'imageUrl: "'.$p_root_icon_url.'", ';
+        $v_ret .= $p_new_line."\t".'items:[';
+        $v_ret .= $p_menu_content;
+        $v_ret .= $p_new_line."\t".']';
+        $v_ret .= $p_new_line.'}]';
+        return $v_ret;
+    }
+
+    public function draw_kendo_horizontal_menu_from($p_menu_content, $p_new_line = "\n\t"){
+        $v_ret = $p_new_line.'dataSource:[';
+        $v_ret .= str_ireplace('LinksTo', 'url',$p_menu_content);
+        $v_ret .= $p_new_line.']';
+        return $v_ret;
+    }
+
+    public function draw_kendo_menu($p_current_key, $p_root_url, $p_is_admin = true, array $arr_user_rule = array(),  $p_new_line = "\n\t"){
+        $v_ret = '';
+        $v_all_data = '';
+        $arr_where = array('module_root'=>'admin', 'module_pid'=>0);
+        $arr_parent_node = $this->select($arr_where, array('module_order'=>1));
+        foreach($arr_parent_node as $arr_node){
+            $v_parent_module_key = isset($arr_node['module_key'])?$arr_node['module_key']:'';
+            $v_parent_module_text = isset($arr_node['module_text'])?$arr_node['module_text']:'';
+            $v_parent_module_menu = isset($arr_node['module_menu'])?$arr_node['module_menu']:'';
+            $v_parent_module_id = isset($arr_node['module_id'])?$arr_node['module_id']:0;
+            $v_parent_module_icon = isset($arr_node['module_icon'])?$arr_node['module_icon']:'';
+            $v_parent_module_locked = isset($arr_node['module_locked'])?$arr_node['module_locked']:0;
+            if($v_parent_module_locked==1) continue;
+            $v_dsp_one_node = $p_new_line."\t\t".'{text: "'.$v_parent_module_text.'", expanded: _IS-EXPANDED_, LinksTo: "'.$p_root_url.$v_parent_module_key.'"'.($v_parent_module_icon!=''?', imageUrl:"'.$v_parent_module_icon.'"':'').',';
+            $v_dsp_one_node .= $p_new_line."\t\t".'items: [';
+
+            $arr_sub_module = $this->select(array('module_pid'=>$v_parent_module_id), array('module_order'=>1));
+            $v_dsp_sub_node = '';
+            $v_note_expand = false;
+            foreach($arr_sub_module as $arr){
+                $v_sub_module_key = isset($arr['module_key'])?$arr['module_key']:'';
+                $v_sub_module_text = isset($arr['module_text'])?$arr['module_text']:'';
+                $v_sub_module_menu = isset($arr['module_menu'])?$arr['module_menu']:'';
+                $v_sub_module_id = isset($arr['module_id'])?$arr['module_id']:0;
+                $v_sub_module_icon = isset($arr['module_icon'])?$arr['module_icon']:'';
+                $v_sub_module_role = isset($arr['module_role'])?$arr['module_role']:0;
+                $v_sub_module_locked = isset($arr['module_locked'])?$arr['module_locked']:0;
+                if($v_sub_module_locked==1) continue;
+                $v_selected = $p_current_key == $v_sub_module_key;
+                if(!$v_note_expand && $v_selected) $v_note_expand = true;
+                if($p_is_admin || (isset($arr_user_rule[$v_sub_module_menu]['view']) && $v_sub_module_role==1))
+                    $v_dsp_sub_node .= $p_new_line."\t\t\t".'{text: "'.$v_sub_module_text.'"'.($v_selected?', selected:true':'').', LinksTo: "'.$p_root_url.$v_sub_module_key.'"'.($v_sub_module_icon!=''?', imageUrl: "'.$v_sub_module_icon.'"':'').'},';
+            }
+            if($v_dsp_sub_node!=''){
+                $v_dsp_one_node = str_replace('_IS-EXPANDED_',$v_note_expand?'true':'false', $v_dsp_one_node);
+                if($v_dsp_sub_node!='') $v_dsp_sub_node = substr($v_dsp_sub_node,0,strlen($v_dsp_sub_node)-1);
+                $v_dsp_one_node .= $v_dsp_sub_node;
+                $v_dsp_one_node .= $p_new_line."\t\t".']},';
+                $v_all_data.=$v_dsp_one_node;
+            }
+        }
+        if($v_all_data!='') $v_all_data = substr($v_all_data,0, strlen($v_all_data)-1);
+        $v_ret .= $v_all_data;
+        return $v_ret;
+    }
+
+    public function draw_kendo_horizontal_menu($p_current_key, $p_root_url, $p_is_admin = true, array $arr_user_rule = array(),  $p_new_line = "\n\t"){
+        $v_ret = $p_new_line.'dataSource:[';
+        $v_all_data = '';
+        $arr_where = array('module_root'=>'admin', 'module_pid'=>0);
+        $arr_parent_node = $this->select($arr_where, array('module_order'=>1));
+        foreach($arr_parent_node as $arr_node){
+            $v_parent_module_key = isset($arr_node['module_key'])?$arr_node['module_key']:'';
+            $v_parent_module_text = isset($arr_node['module_text'])?$arr_node['module_text']:'';
+            $v_parent_module_menu = isset($arr_node['module_menu'])?$arr_node['module_menu']:'';
+            $v_parent_module_id = isset($arr_node['module_id'])?$arr_node['module_id']:'';
+            $v_parent_module_icon = isset($arr_node['module_icon'])?$arr_node['module_icon']:'';
+            $v_dsp_one_node = $p_new_line."\t\t".'{text: "'.$v_parent_module_text.'", expanded: _IS-EXPANDED_, LinksTo: "'.$p_root_url.$v_parent_module_key.'"'.($v_parent_module_icon!=''?', imageUrl:"'.$v_parent_module_icon.'"':'').',';
+            $v_dsp_one_node .= $p_new_line."\t\t".'items: [';
+
+            $arr_sub_module = $this->select(array('module_pid'=>$v_parent_module_id), array('module_order'=>1));
+            $v_dsp_sub_node = '';
+            $v_note_expand = false;
+            foreach($arr_sub_module as $arr){
+                $v_sub_module_key = isset($arr['module_key'])?$arr['module_key']:'';
+                $v_sub_module_text = isset($arr['module_text'])?$arr['module_text']:'';
+                $v_sub_module_menu = isset($arr['module_menu'])?$arr['module_menu']:'';
+                $v_sub_module_id = isset($arr['module_id'])?$arr['module_id']:'';
+                $v_sub_module_icon = isset($arr['module_icon'])?$arr['module_icon']:'';
+                $v_selected = $p_current_key == $v_sub_module_key;
+                if(!$v_note_expand && $v_selected) $v_note_expand = true;
+                $v_dsp_sub_node .= $p_new_line."\t\t\t".'{text: "'.$v_sub_module_text.'"'.($v_selected?', selected:true':'').', LinksTo: "'.$p_root_url.$v_sub_module_key.'"'.($v_sub_module_icon!=''?', imageUrl: "'.$v_sub_module_icon.'"':'').'},';
+            }
+            $v_dsp_one_node = str_replace('_IS-EXPANDED_',$v_note_expand?'true':'false', $v_dsp_one_node);
+            if($v_dsp_sub_node!='') $v_dsp_sub_node = substr($v_dsp_sub_node,0,strlen($v_dsp_sub_node)-1);
+            $v_dsp_one_node .= $v_dsp_sub_node;
+            $v_dsp_one_node .= $p_new_line."\t\t".']},';
+            $v_all_data.=$v_dsp_one_node;
+        }
+        if($v_all_data!='') $v_all_data = substr($v_all_data,0, strlen($v_all_data)-1);
+        $v_ret .= $v_all_data;
+        $v_ret .= $p_new_line.']';
+        return $v_ret;
+    }
 }
 ?>

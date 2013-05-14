@@ -1,87 +1,162 @@
 <?php if(!isset($v_sval)) die();?>
-<p class="navTitle"><a href="?a=ACC"> Account  </a> &gt &gt Location  </p>
-<p class="highlightNavTitle"><span> Location  </span></p>
-<p class="break"></p>
-<script type="text/javascript ">
-    $(document).ready(function(){
-        $("a[rel=showdetails]").fancybox({
-            'showNavArrows'         : false,
-            'width'                 : '65%',
-            'height'                : '85%',
-            'autoScale'             :  true,
-            'type'                  : 'iframe',
-            'transitionIn'	        :	'elastic',
-            'transitionOut'	        :	'elastic',
-            'overlayShow'	        :	true
-        });
-    });
-</script>
 
-<div class="insert" align="right">
-    <a href="<?php echo URL.$v_admin_key.'/add' ?>"> Insert new Location; </a>
-</div>
-<p class="break"></p>
-<div class="form">
-    <form method="POST" >
-        <table cellpadding="3" cellspacing="3" class="list_table" width="100%" border="0px">
-            <tr>
-                <td colspan="2">
-                    <b>Search Location in database</b>
-                </td>
-            </tr>
-            <tr>
-                <td align="right" width="180px">Company</td>
-                <td >
-                    <select name="txt_company_id">
-                        <option value="0" <?php echo ($v_search_company_id==0? 'selected' :''); ?>> -- Select -- </option>
-                        <?php echo $cls_tb_company->draw_option('company_id','company_name',$v_search_company_id); ?>
+    <div id="div_body">
+        <div id="div_splitter_content" style="height: 100%; width: 100%;">
+            <div id="div_left_pane">
+                <div class="pane-content">
+                	<div id="div_treeview"></div>
+                </div>
+            </div>
+            <div id="div_right_pane">
+                <div class="pane-content">
+                    <div id="div_title" class="k-block k-widget">
+                        <h3>Location</h3>
+                    </div>
+                    <div id="div_quick">
+                    <div id="div_quick_search">
+                    <form method="post" id="frm_quick_search">
+                    <span class="k-textbox k-space-left" id="txt_quick_search">
+                    <input type="text" name="txt_quick_search" placeholder="Search by Location Name or Number" value="<?php echo isset($v_quick_search)?htmlspecialchars($v_quick_search):'';?>" />
+                    <a id="a_quick_search" style="cursor: pointer" class="k-icon k-i-search"></a>
+                        <script type="text/javascript">
+                            $(document).ready(function(e){
+                                $('a#a_quick_search').click(function(e){
+                                    $('form#frm_quick_search').submit();
+                                })
+                            });
+                        </script>
+                    </span>
+                        <input type="hidden" name="txt_company_id" id="txt_company_id" value="<?php echo $v_company_id;?>" />
+                    </form>
+                    </div>
+                    <div id="div_select">
+                    <form id="frm_company_id" method="post">
+                    Company: <select id="txt_company_id" name="txt_company_id" onchange="this.form.submit();">
+                    <option value="0" selected="selected">-------</option>
+                    <?php
+					echo $v_dsp_company_option;
+					?>
                     </select>
-                </td>
-            </tr>
-
-            <tr>
-                <td  align="right" >Location name </td>
-                <td ><input type="text" name="txt_location_name" value="<?php echo ftext($v_search_location_name);?>" size="50"> </td>
-            </tr>
-            <tr>
-                <td align="right" width="180px">Location banner</td>
-                <td ><input type="text" name="txt_location_banner" value="<?php echo ftext($v_search_location_banner);?>" size="20">
-                &nbsp Location number
-                    <input type="text" name="txt_location_number" value="<?php echo ftext($v_search_location_number);?>" size="25">
+                    <input type="hidden" name="txt_quick_search" id="txt_quick_search" value="<?php echo htmlspecialchars($v_quick_search);?>" />
+                    </form>
+                    </div>
+                    </div>
 
 
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><b>Sort by</b> </td>
-            </tr>
-            <tr>
-                <td align="right">Type</td>
-                <td>
-                    <select name="txt_order_id">
-                        <option value="_id" <?php echo ($v_sort_name=='_id'?'selected':''); ?>> -- Select -- </option>
-                        <option value="company_id" <?php echo ($v_sort_name=='company_id'?'selected':''); ?>>Company</option>
-                        <option value="location_name" <?php echo ($v_sort_name=='location_name'?'selected':''); ?>>Location name</option>
-                        <option value="location_banner" <?php echo ($v_sort_name=='location_banner'?'selected':''); ?>>Location banner</option>
+                    <div id="grid"></div>
+                    <div id="advanced_search_window" style="display:none">
+                    <h2>Advanced Search for Location</h2>
+                    <form id="frm_advanced_search" method="post" action="<?php echo URL.$v_admin_key;?>">
+                    <table align="center" width="100%" border="1" class="list_table" cellpadding="3" cellspacing="0">
+                    <tr align="left" valign="middle">
+                    <td align="right">Company:</td>
+                    <td>
+                    <select id="txt_search_company_id" name="txt_search_company_id">
+                    <option value="0" selected="selected">--------</option>
+                    <?php echo $v_dsp_company_option;?>
                     </select>
-                    Ascending
-                    <input type="radio" name="txt_order_by" value="1" <?php echo ($v_sort_by==1?'checked':''); ?>>
-                    Descending
-                    <input type="radio" name="txt_order_by" value="-1" <?php echo ($v_sort_by==-1)?'checked':''; ?>>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">
-                    <input name="btn_product_search" id="btn_product_search" type="submit" class="button" value="Search Location">
-                    <input name="btn_product_cancel" id="btn_product_cancel" type="submit" class="button" value="Clear">
-                </td>
-            </tr>
-        </table>
-    </form>
-</div>
-<p class="break"></p>
-<?php echo '<span class="paginate">Total: '.$v_total_row.' records in '.$v_total_page.' pages. Current page: '.$v_page.'</span>'; ?>
-<p class="break"></p>
-<?php echo $v_dsp_tb_location; ?>
-<p class="break"></p>
-<?php echo '<span class="paginate">Total: '.$v_total_row.' records in '.$v_total_page.' pages </span>'. $v_dsp_paginition; ?>
+                    </td>
+                    </tr>
+                    <tr align="center" valign="middle">
+                    <td colspan="2">
+                    <input type="submit" class="k-button k-button button_css" value="Search" name="btn_advanced_search" />
+                    <input type="submit" class="k-button k-button button_css" value="Reset" name="btn_advanced_reset" />
+                    </td>
+                    </tr>
+                    </table>
+                    </form>
+                    </div>
+				<script type="text/javascript">
+					var window_search;
+                    $(document).ready(function() {
+                        window_search = $('div#advanced_search_window');
+                        $('li#icons_advanced_search').bind("click", function() {
+                            if (!window_search.data("kendoWindow")) {
+                                window_search.kendoWindow({
+                                    width: "600px",
+                                    actions: ["Maximize", "Close"],
+                                    modal: true,
+                                    title: "Advanced Search for Location"
+                                });
+                            }
+                            window_search.data("kendoWindow").center().open();
+                        });
+
+                        var grid = $("#grid").kendoGrid({
+                            dataSource: {
+                                pageSize: 20,
+                                page: <?php echo (isset($v_page) && $v_page>0)?$v_page:1;?>,
+                                serverPaging: true,
+                                serverSorting: true,
+                                transport: {
+                                    read: {
+                                        url: "<?php echo URL.$v_admin_key;?>/json/",
+                                        type: "POST",
+                                        data: {txt_session_id:"<?php echo session_id();?>",txt_json_type:'load_location',txt_quick_search:'<?php echo isset($v_quick_search)?htmlspecialchars($v_quick_search):'';?>', txt_search_company_id: '<?php echo $v_company_id;?>',txt_search_location_name:'<?php echo isset($v_search_location_name)?htmlspecialchars($v_search_location_name):'';?>',txt_search_location_number:'<?php echo isset($v_search_location_number)?htmlspecialchars($v_search_location_number):'';?>'}
+                                    }
+                                },
+                                schema: {
+                                    data: "tb_location"
+                                    ,total: function(data){
+                                        return data.total_rows;
+                                    }
+                                },
+                                type: "json"
+                            },
+                            pageSize: 20,
+                            height: 430,
+                            scrollable: true,
+                            sortable: true,
+                            //selectable: "single",
+                            pageable: {
+                                input: true,
+                                refresh: true,
+                                pageSizes: [10, 20, 30, 40, 50],
+                                numeric: false
+                            },
+						columns: [
+							{field: "row_order", title: "&nbsp;", type:"int", width:"20px", sortable: false, template: '<span style="float:right">#= row_order #</span>'},
+							{field: "location_name", title: "Location Name", type:"string", width:"100px", sortable: true},
+                            {field: "location_number", title: "Number", type:"string", width:"50px", sortable: true},
+							{field: "company_name", title: "Company", type:"string", width:"100px", sortable: true},
+							{field: "region_name", title: "Region", type:"int", width:"80px", sortable: true},
+							{field: "main_contact", title: "Main Contact", type:"int", width:"50px", sortable: false},
+							{field: "approved_contact", title: "Approved Contact", type:"string", width:"50px", sortable: false },
+							{field: "status", title: "Status", type:"string", width:"50px", sortable: true},
+							{ command:  [
+								{ name: "View", text:'', click: view_row, imageClass: 'k-grid-View' }
+								<?php if($v_edit_right || $v_is_admin){?>
+								,{ name: "Edit", text:'', click: edit_row, imageClass: 'k-grid-Edit' }
+								<?php }?>
+								<?php if($v_delete_right || $v_is_admin){?>
+								,{ name: "Delete", text:'', click: delete_row, imageClass: 'k-grid-Delete' }
+								<?php }?>
+								],
+								title: " ", width: "70px" }
+						 ]
+					 }).data("kendoGrid");
+				});
+              function view_row(e) {
+                    e.preventDefault();
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    document.location = "<?php echo URL.$v_admin_key.'/';?>"+dataItem.location_id+"/view";
+                }
+                function edit_row(e) {
+                    e.preventDefault();
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    if(confirm('Do you want to edit location with ID: '+dataItem.location_id+'?')){
+                        document.location = "<?php echo URL.$v_admin_key.'/';?>"+dataItem.location_id+"/edit";
+                    }
+                }
+                function delete_row(e) {
+                    e.preventDefault();
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    if(confirm('Do you want to delete location with ID: '+dataItem.location_id+'?')){
+                        document.location = "<?php echo URL.$v_admin_key.'/';?>"+dataItem.location_id+"/delete";
+                    }
+                }
+            </script>
+                </div>
+            </div>
+        </div>
+  </div>

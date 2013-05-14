@@ -5,9 +5,15 @@ class cls_tb_allocation{
 	private $v_order_items_id = 0;
 	private $v_order_id = 0;
 	private $v_location_id = 0;
+	private $v_product_id = 0;
+	private $v_shipping_id = 0;
 	private $v_location_name = '';
+	private $v_product_name = '';
 	private $v_location_address = '';
 	private $v_quantity = 1;
+	private $v_shipped_quantity = 1;
+    private $v_ship_complete = 0;
+    private $v_parent_allocation = 0;
 	private $v_shipper = '';
 	private $v_tracking_number = '';
 	private $v_tracking_url = '';
@@ -151,8 +157,43 @@ class cls_tb_allocation{
 		$this->v_location_id = (int) $p_location_id;
 	}
 
-	
-	/**
+
+    /**
+     * function return properties "shipping_id" value
+     * @return int value
+     */
+    public function get_shipping_id(){
+        return (int) $this->v_shipping_id;
+    }
+
+
+    /**
+     * function allow change properties "shipping_id" value
+     * @param $p_shipping_id: int value
+     */
+    public function set_shipping_id($p_shipping_id){
+        $this->v_shipping_id = (int) $p_shipping_id;
+    }
+
+    /**
+     * function return properties "product_id" value
+     * @return int value
+     */
+    public function get_product_id(){
+        return (int) $this->v_product_id;
+    }
+
+
+    /**
+     * function allow change properties "product_id" value
+     * @param $p_product_id: int value
+     */
+    public function set_product_id($p_product_id){
+        $this->v_product_id = (int) $p_product_id;
+    }
+
+
+    /**
 	 * function return properties "location_name" value
 	 * @return string value
 	 */
@@ -169,8 +210,25 @@ class cls_tb_allocation{
 		$this->v_location_name = $p_location_name;
 	}
 
-	
-	/**
+    /**
+     * function return properties "product_name" value
+     * @return string value
+     */
+    public function get_product_name(){
+        return $this->v_product_name;
+    }
+
+
+    /**
+     * function allow change properties "product_name" value
+     * @param $p_product_name: string value
+     */
+    public function set_product_name($p_product_name){
+        $this->v_product_name = $p_product_name;
+    }
+
+
+    /**
 	 * function return properties "location_address" value
 	 * @return string value
 	 */
@@ -205,8 +263,61 @@ class cls_tb_allocation{
 		$this->v_quantity = (int) $p_quantity;
 	}
 
-	
-	/**
+
+    /**
+     * function return properties "parent_allocation" value
+     * @return int value
+     */
+    public function get_parent_allocation(){
+        return (int) $this->v_parent_allocation;
+    }
+
+
+    /**
+     * function allow change properties "parent_allocation" value
+     * @param $p_parent_allocation: int value
+     */
+    public function set_parent_allocation($p_parent_allocation){
+        $this->v_parent_allocation = (int) $p_parent_allocation;
+    }
+
+    /**
+     * function return properties "ship_complete" value
+     * @return int value
+     */
+    public function get_ship_complete(){
+        return (int) $this->v_ship_complete;
+    }
+
+
+    /**
+     * function allow change properties "ship_complete" value
+     * @param $p_ship_complete: int value
+     */
+    public function set_ship_complete($p_ship_complete){
+        $this->v_ship_complete = (int) $p_ship_complete;
+    }
+
+    /**
+     * function return properties "shipped_quantity" value
+     * @return int value
+     */
+    public function get_shipped_quantity(){
+        return (int) $this->v_shipped_quantity;
+    }
+
+
+    /**
+     * function allow change properties "shipped_quantity" value
+     * @param $p_shipped_quantity: int value
+     */
+    public function set_shipped_quantity($p_shipped_quantity){
+        $this->v_shipped_quantity = (int) $p_shipped_quantity;
+    }
+
+
+
+    /**
 	 * function return properties "shipper" value
 	 * @return string value
 	 */
@@ -378,14 +489,20 @@ class cls_tb_allocation{
 					,'order_items_id' => $this->v_order_items_id
 					,'order_id' => $this->v_order_id
 					,'location_id' => $this->v_location_id
+					,'product_id' => $this->v_product_id
+					,'shipping_id' => $this->v_shipping_id
 					,'location_name' => $this->v_location_name
+					,'product_name' => $this->v_product_name
 					,'location_address' => $this->v_location_address
 					,'quantity' => $this->v_quantity
+					,'shipped_quantity' => $this->v_shipped_quantity
 					,'shipper' => $this->v_shipper
 					,'tracking_number' => $this->v_tracking_number
 					,'tracking_url' => $this->v_tracking_url
 					,'date_shipping' => $this->v_date_shipping
 					,'ship_status' => $this->v_ship_status
+					,'ship_complete' => $this->v_ship_complete
+					,'parent_allocation' => $this->v_parent_allocation
 					,'location_from' => $this->v_location_from
 					,'create_by' => $this->v_create_by
 					,'create_time' => $this->v_create_time);
@@ -445,14 +562,20 @@ class cls_tb_allocation{
 			$this->v_order_items_id = isset($arr['order_items_id'])?$arr['order_items_id']:0;
 			$this->v_order_id = isset($arr['order_id'])?$arr['order_id']:0;
 			$this->v_location_id = isset($arr['location_id'])?$arr['location_id']:0;
+			$this->v_product_id = isset($arr['product_id'])?$arr['product_id']:0;
+			$this->v_shipping_id = isset($arr['shipping_id'])?$arr['shipping_id']:0;
 			$this->v_location_name = isset($arr['location_name'])?$arr['location_name']:'';
+			$this->v_product_name = isset($arr['product_name'])?$arr['product_name']:'';
 			$this->v_location_address = isset($arr['location_address'])?$arr['location_address']:'';
 			$this->v_quantity = isset($arr['quantity'])?$arr['quantity']:1;
+			$this->v_shipped_quantity = isset($arr['shipped_quantity'])?$arr['shipped_quantity']:1;
 			$this->v_shipper = isset($arr['shipper'])?$arr['shipper']:'';
 			$this->v_tracking_number = isset($arr['tracking_number'])?$arr['tracking_number']:'';
 			$this->v_tracking_url = isset($arr['tracking_url'])?$arr['tracking_url']:'';
 			$this->v_date_shipping = isset($arr['date_shipping'])?$arr['date_shipping']:(new MongoDate(time()));
 			$this->v_ship_status = isset($arr['ship_status'])?$arr['ship_status']:0;
+			$this->v_ship_complete = isset($arr['ship_complete'])?$arr['ship_complete']:0;
+			$this->v_parent_allocation = isset($arr['parent_allocation'])?$arr['parent_allocation']:0;
 			$this->v_location_from = isset($arr['location_from'])?$arr['location_from']:0;
 			$this->v_create_by = isset($arr['create_by'])?$arr['create_by']:'';
 			$this->v_create_time = isset($arr['create_time'])?$arr['create_time']:(new MongoDate(time()));
@@ -615,9 +738,9 @@ class cls_tb_allocation{
 				$arr_where = array('_id' => $this->v_mongo_id);
 		}
 		if(isset($v_has_mongo_id) && $v_has_mongo_id)
-			$arr = array('$set' => array('allocation_id' => $this->v_allocation_id,'order_items_id' => $this->v_order_items_id,'order_id' => $this->v_order_id,'location_id' => $this->v_location_id,'location_name' => $this->v_location_name,'location_address' => $this->v_location_address,'quantity' => $this->v_quantity,'shipper' => $this->v_shipper,'tracking_number' => $this->v_tracking_number,'tracking_url' => $this->v_tracking_url,'date_shipping' => $this->v_date_shipping,'ship_status' => $this->v_ship_status,'location_from' => $this->v_location_from,'create_by' => $this->v_create_by,'create_time' => $this->v_create_time));
+			$arr = array('$set' => array('allocation_id' => $this->v_allocation_id,'order_items_id' => $this->v_order_items_id,'order_id' => $this->v_order_id,'location_id' => $this->v_location_id,'product_id' => $this->v_product_id,'shipped_quantity'=>$this->v_shipped_quantity,'product_name' => $this->v_product_name,'location_name' => $this->v_location_name,'location_address' => $this->v_location_address,'quantity' => $this->v_quantity,'shipper' => $this->v_shipper,'tracking_number' => $this->v_tracking_number,'tracking_url' => $this->v_tracking_url,'date_shipping' => $this->v_date_shipping,'ship_status' => $this->v_ship_status,'location_from' => $this->v_location_from,'create_by' => $this->v_create_by,'create_time' => $this->v_create_time, 'ship_complete'=>$this->v_ship_complete, 'parent_allocation'=>$this->v_parent_allocation, 'shipping_id'=>$this->v_shipping_id));
 		 else 
-			$arr = array('$set' => array('order_items_id' => $this->v_order_items_id,'order_id' => $this->v_order_id,'location_id' => $this->v_location_id,'location_name' => $this->v_location_name,'location_address' => $this->v_location_address,'quantity' => $this->v_quantity,'shipper' => $this->v_shipper,'tracking_number' => $this->v_tracking_number,'tracking_url' => $this->v_tracking_url,'date_shipping' => $this->v_date_shipping,'ship_status' => $this->v_ship_status,'location_from' => $this->v_location_from,'create_by' => $this->v_create_by,'create_time' => $this->v_create_time));
+			$arr = array('$set' => array('order_items_id' => $this->v_order_items_id,'order_id' => $this->v_order_id,'location_id' => $this->v_location_id,'product_id' => $this->v_product_id,'shipped_quantity'=>$this->v_shipped_quantity, 'product_name' => $this->v_product_name, 'location_name' => $this->v_location_name,'location_address' => $this->v_location_address,'quantity' => $this->v_quantity,'shipper' => $this->v_shipper,'tracking_number' => $this->v_tracking_number,'tracking_url' => $this->v_tracking_url,'date_shipping' => $this->v_date_shipping,'ship_status' => $this->v_ship_status,'location_from' => $this->v_location_from,'create_by' => $this->v_create_by,'create_time' => $this->v_create_time, 'ship_complete'=>$this->v_ship_complete, 'parent_allocation'=>$this->v_parent_allocation, 'shipping_id'=>$this->v_shipping_id));
 		try{
 			$this->collection->update($arr_where, $arr, array('safe'=>true));
 			return true;
@@ -665,7 +788,7 @@ class cls_tb_allocation{
 				$arr_where = array('_id' => $this->v_mongo_id);
 		}
 		try{
-			$this->collection->update($arr_where, array('$set' => array($p_field => $p_value)), array('safe'=>true));
+			$this->collection->update($arr_where, array('$set' => array($p_field => $p_value)), array('safe'=>true, 'multiple'=>true));
 			return true;
 		}catch(MongoCursorException $e){
 			$this->v_error_code = $e->getCode();
@@ -804,5 +927,65 @@ class cls_tb_allocation{
 		 else
 			return $this->collection->find($arr_where, array($p_field => array('$exists' => true)))->count();
 	}
+
+    public function create_shipping(cls_tb_order $cls_tb_order, cls_tb_order_items $cls_tb_order_items, array $arr_status = array('$gte'=>30)){
+        $cls_tmp_order = $cls_tb_order;
+        $cls_tmp_order_items = $cls_tb_order_items;
+
+        $arr_where_clause = array('dispatch'=>0,'status'=>$arr_status);
+        $arr_order = $cls_tmp_order->select($arr_where_clause);
+
+        foreach($arr_order as $arr){
+            $v_order_id = isset($arr['order_id'])?$arr['order_id']:0;
+            $arr_where_clause = array('order_id'=>(int) $v_order_id);
+            $arr_order_items = $cls_tmp_order_items->select($arr_where_clause);
+
+            foreach($arr_order_items as $arr_temp){
+                $v_quantity = isset($arr_temp['quantity'])?$arr_temp['quantity']:0;
+
+                $arr_allocation = isset($arr_temp['allocation'])?$arr_temp['allocation']:array();
+                $v_order_item_id = isset($arr_temp['order_item_id'])?$arr_temp['order_item_id']:0;
+
+                $v_total = sizeof($arr_allocation);
+                for($i=0;$i<$v_total;$i++){
+                    $v_location_id = isset($arr_allocation[$i]['location_id'])?$arr_allocation[$i]['location_id']:'';
+                    $v_location_name = isset($arr_allocation[$i]['location_name'])?$arr_allocation[$i]['location_name']:'';
+                    $v_location_address = isset($arr_allocation[$i]['location_address'])?$arr_allocation[$i]['location_address']:'';
+                    $v_tracking_url = isset($arr_allocation[$i]['tracking_url'])?$arr_allocation[$i]['tracking_url']:'';
+                    $v_tracking_number = isset($arr_allocation[$i]['tracking_number'])?$arr_allocation[$i]['tracking_number']:'';
+                    $v_tracking_company = isset($arr_allocation[$i]['tracking_company'])?$arr_allocation[$i]['tracking_company']:'';
+                    $v_date_shipping = isset($arr_allocation[$i]['date_shipping'])?$arr_allocation[$i]['date_shipping']:NULL;
+                    $v_ship_status = isset($arr_allocation[$i]['shipping_status'])?$arr_allocation[$i]['shipping_status']:0;
+                    $v_location_quantity = isset($arr_allocation[$i]['location_quantity'])?$arr_allocation[$i]['location_quantity']:0;
+                    $v_product_id = isset($arr_allocation[$i]['product_id'])?$arr_allocation[$i]['product_id']:0;
+                    $v_product_name = isset($arr_allocation[$i]['product_name'])?$arr_allocation[$i]['product_name']:'';
+
+                    $arr_temp_where = array('order_items_id'=>(int)$v_order_item_id,
+                        'location_id'=>(int) $v_location_id,
+                        'order_id'=>(int) $v_order_id);
+                    if($this->count($arr_temp_where)==0){
+                        $v_allocation_id  = $this->select_next('allocation_id');
+                        $this->set_allocation_id($v_allocation_id);
+                        $this->set_location_id((int)$v_location_id);
+                        $this->set_location_name($v_location_name);
+                        $this->set_location_address($v_location_address);
+                        $this->set_order_id((int)$v_order_id);
+                        $this->set_quantity((int)$v_location_quantity);
+                        $this->set_order_items_id((int)$v_order_item_id);
+                        $this->set_tracking_number($v_tracking_number);
+                        $this->set_shipper($v_tracking_company);
+                        $this->set_tracking_url($v_tracking_url);
+                        $this->set_date_shipping($v_date_shipping);
+                        $this->set_ship_status($v_ship_status);
+                        $this->set_product_id($v_product_id);
+                        $this->set_product_name($v_product_name);
+                        $this->set_shipped_quantity(0);
+                        $this->insert();
+                    }
+                }
+            }
+        }
+    }
+
 }
 ?>

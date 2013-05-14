@@ -1,13 +1,17 @@
 <?php if(!isset($v_sval)) die();?>
-<p class="highlightTitle"><span class="note"> System </span> </p>
-<div id="leftNav" class="leftNavResize3">
+
+<div class="pane-content">
+    <div class="k-block k-widget" style="margin-bottom: 20px; padding-left: 20px"><h3>SYSTEM</h3></div>
+<div id="leftNav" class="k-block k-info-colored" style="float: left; width: 48%; text-align: left">
+    <div class="k-header k-shadow" style="text-align: center">Order List</div>
     <?php echo $v_list_order; ?>
 </div>
-<div id="rightNav" class="rightNavResize3">
+<div id="rightNav" class="k-block k-info-colored" style="margin-left: 52% ; text-align: left">
+    <div class="k-header k-shadow" style="text-align: center">Shipping List</div>
     <?php echo $v_list_shipping; ?>
 </div>
-
-<p class="highlightTitle"><span> TOTAL ORDERS IN WEEK </span> </p>
+</div>
+<!--<p class="highlightTitle"><span> TOTAL ORDERS IN WEEK </span> </p>-->
 <?php echo js_hight_chart(); ?>
 <script type="text/javascript">
     $(function () {
@@ -77,4 +81,4 @@
 
     });
 </script>
-<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto; clear:both"></div>

@@ -20,8 +20,7 @@ RewriteRule ^setting.html$ index.php?a=ACC&txt_user_type=0&acc=CONF
 RewriteRule ^setting.html/$ index.php?a=ACC&txt_user_type=0&acc=CONF
 
 RewriteRule ^account$ index.php?a=ACC
-RewriteRule ^admin/$ index.php?a=ACC&txt_user_type=0
-RewriteRule ^admin$ index.php?a=ACC&txt_user_type=0
+RewriteRule ^account/$ index.php?a=ACC
 
 RewriteRule ^catalogue/order$ index.php?a=ACC&acc=CAOR&txt_user_type=2
 RewriteRule ^catalogue/order/$ index.php?a=ACC&acc=CAOR&txt_user_type=2
@@ -78,153 +77,61 @@ RewriteRule ^signage_layout$ index.php?a=ACC&acc=SIGN&txt_user_type=2
 RewriteRule ^support.html/$ index.php?a=ACC&acc=SUPPORT&txt_user_type=2
 RewriteRule ^support.html$ index.php?a=ACC&acc=SUPPORT&txt_user_type=2
 
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/choose/page([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&act=CH&id=$2&txt_page=$3
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/choose/page([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&act=CH&id=$2&txt_page=$3
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/choose$ index.php?a=ACC&txt_user_type=0&key=$1&act=CH&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/choose/$ index.php?a=ACC&txt_user_type=0&key=$1&act=CH&id=$2
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/status$ index.php?a=ACC&txt_user_type=0&key=$1&act=CS&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/status/$ index.php?a=ACC&txt_user_type=0&key=$1&act=CS&id=$2
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/order_status$ index.php?a=ACC&txt_user_type=0&key=$1&act=UCS&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/order_status/$ index.php?a=ACC&txt_user_type=0&key=$1&act=UCS&id=$2
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/order_tracking$ index.php?a=ACC&txt_user_type=0&key=$1&act=TNU&txt_order_items_id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/order_tracking/$ index.php?a=ACC&txt_user_type=0&key=$1&act=TNU&txt_order_items_id=$2
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/shipping$ index.php?a=ACC&txt_user_type=0&key=$1&act=SHP&txt_order_id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/shipping/$ index.php?a=ACC&txt_user_type=0&key=$1&act=SHP&txt_order_id=$2
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/print index.php?a=ACC&txt_user_type=0&key=$1&act=PRI&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/print/$ index.php?a=ACC&txt_user_type=0&key=$1&act=PRI&id=$2
-
 RewriteRule ^order/([0-9]+)/item/([0-9]+)$ index.php?a=ACC&acc=ITEM&item=EDIT&txt_item=$2&txt_user_type=2&txt_order=$1
 RewriteRule ^order/([0-9]+)/allocation/([0-9]+)/([0-9]+)/$ index.php?a=ACC&acc=ALLOCATION&allocation=EDIT&txt_product_id=$3&txt_item=$2&txt_user_type=2&txt_order=$1
 
 RewriteRule ^customer/$ index.php?a=ACC&txt_user_type=2
 RewriteRule ^customer$ index.php?a=ACC&txt_user_type=2
 
+RewriteRule ^admin/$ index.php?a=ACC&txt_user_type=0
+RewriteRule ^admin$ index.php?a=ACC&txt_user_type=0
 
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/check_user$ index.php?a=ACC&txt_user_type=0&key=$1&act=SU
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/check_user/$ index.php?a=ACC&txt_user_type=0&key=$1&act=SU
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/shipping$ index.php?a=ACC&txt_user_type=0&key=$1&act=SHP&id=$2
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/shipping/$ index.php?a=ACC&txt_user_type=0&key=$1&act=SHP&id=$2
 
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/update index.php?a=ACC&txt_user_type=0&key=$1&act=U&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/update/$ index.php?a=ACC&txt_user_type=0&key=$1&act=U&id=$2
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/tracking$ index.php?a=ACC&txt_user_type=0&key=$1&act=TNU&id=$2
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/tracking/$ index.php?a=ACC&txt_user_type=0&key=$1&act=TNU&id=$2
+
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/print index.php?a=ACC&txt_user_type=0&key=$1&act=PRI&id=$2
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/print/$ index.php?a=ACC&txt_user_type=0&key=$1&act=PRI&id=$2
 
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/view index.php?a=ACC&txt_user_type=0&key=$1&act=V&id=$2
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/view/$ index.php?a=ACC&txt_user_type=0&key=$1&act=V&id=$2
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/modules index.php?a=ACC&txt_user_type=0&key=$1&act=MODL&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/modules/ index.php?a=ACC&txt_user_type=0&key=$1&act=MODL&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/rules index.php?a=ACC&txt_user_type=0&key=$1&act=RULE&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/rules/$ index.php?a=ACC&txt_user_type=0&key=$1&act=RULE&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/rule index.php?a=ACC&txt_user_type=0&key=$1&act=R&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/rule/$ index.php?a=ACC&txt_user_type=0&key=$1&act=R&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/threshold/$ index.php?a=ACC&txt_user_type=0&key=$1&act=THR&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/threshold$ index.php?a=ACC&txt_user_type=0&key=$1&act=THR&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/threshold-group-location/$ index.php?a=ACC&txt_user_type=0&key=$1&act=TGL&id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/threshold-group-location$ index.php?a=ACC&txt_user_type=0&key=$1&act=TGL&id=$2
-
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/error/$ index.php?a=ACC&txt_user_type=0&key=$1&act=E&txt_error=1
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/error$ index.php?a=ACC&txt_user_type=0&key=$1&act=E&txt_error=1
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/edit/([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E&txt_page=$3
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/edit/([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E&txt_page=$3
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/edit$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/edit/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/edit/er$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E&txt_error=1
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/edit/er/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E&txt_error=1
 
-RewriteRule ^admin/([a-z\-\/]+)/check$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CAJ
-RewriteRule ^admin/([a-z\-\/]+)/check/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CAJ
-##### Check User - Search
-#### User
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/delete$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=D
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/delete/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=D
-#####update Template
-##### Create User
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/([0-9]+)/([0-9]+)/cuser index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CU&txt_company_id=$3&txt_location_id=$4
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/([0-9]+)/([0-9]+)/cuser/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CU&txt_company_id=$3&txt_location_id=$4
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/province$ index.php?a=ACC&txt_user_type=0&key=$1&act=PVN&txt_address_country_id=$2
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/province/$ index.php?a=ACC&txt_user_type=0&key=$1&act=PVN&txt_address_country_id=$2
-
-###### Search Admin
-RewriteRule ^admin/([a-z\-\/]+)/details/user/([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&txt_contact_id=$2&act=DE
-RewriteRule ^admin/([a-z\-\/]+)/details/user/([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&txt_contact_id=$2&act=DE
-###### Show Report
-RewriteRule ^admin/([a-z\-\/]+)/report/([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&act=RP&txt_user_id=$2
-RewriteRule ^admin/([a-z\-\/]+)/report/([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&act=RP&txt_user_id=$2
-##### Contact
-
-RewriteRule ^admin/([a-z\-\/]+)/load$ index.php?a=ACC&txt_user_type=0&key=$1&act=LOAD
-RewriteRule ^admin/([a-z\-\/]+)/load/$ index.php?a=ACC&txt_user_type=0&key=$1&act=LOAD
-RewriteRule ^admin/([a-z\-\/]+)/add/([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&act=E&id2=$2
-RewriteRule ^admin/([a-z\-\/]+)/add/([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&act=E&id2=$2
-RewriteRule ^admin/([a-z\-\/]+)/add/([0-9]+)/([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&act=E&txt_location_id=$2&txt_company_id=$3
-RewriteRule ^admin/([a-z\-\/]+)/add/([0-9]+)/([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&act=E&txt_location_id=$2&txt_company_id=$3
-
-
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cpasswd index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CP
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cpasswd/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CP
 
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/details index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=SH
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/details/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=SH
 
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/area index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=AREA
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/area/ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=AREA
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/area/update$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UPAR
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/area/update/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UPAR
-
-#Signage Layout
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/mview$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=MV
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/mview/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=MV
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/map$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=MP
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/map/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=MP
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cmap$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CM
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cmap/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CM
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/images$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UI
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/images/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UI
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cimages$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CI
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cimages/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CI
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/upload$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UL
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/upload/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UL
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/product$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=PD
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/product/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=PD
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/product/page([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=PD&txt_page=$3
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/product/page([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=PD&txt_page=$3
+#Product
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/exclude$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=EXL
 RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/exclude/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=EXL
 
-#End Signage Layout
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/threshold$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=THR
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/threshold/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=THR
 
-#signage layout area image upload
-#RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cimage$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CI
-#RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/cimage/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=CI
-#RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/image$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=AUI
-#RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/image/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=AUI
-#RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/upload$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UI
-#RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/upload/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UI
+#Signage Layout
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/upload$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UL
+RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/upload/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=UL
 
 
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E
-RewriteRule ^admin/([a-z\-\/]+)/([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&id=$2&act=E
 RewriteRule ^admin/([a-z\-\/]+)/ajax$ index.php?a=ACC&txt_user_type=0&key=$1&act=AJ
 RewriteRule ^admin/([a-z\-\/]+)/ajax/$ index.php?a=ACC&txt_user_type=0&key=$1&act=AJ
-RewriteRule ^admin/([a-z\-\/]+)/list$ index.php?a=ACC&txt_user_type=0&key=$1&act=L
-RewriteRule ^admin/([a-z\-\/]+)/list/$ index.php?a=ACC&txt_user_type=0&key=$1&act=L
-RewriteRule ^admin/([a-z\-\/]+)/list/page([0-9]+)$ index.php?a=ACC&txt_user_type=0&key=$1&act=L&page=$2
-RewriteRule ^admin/([a-z\-\/]+)/list/page([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&act=L&page=$2
 RewriteRule ^admin/([a-z\-\/]+)/add$ index.php?a=ACC&txt_user_type=0&key=$1&act=N
 RewriteRule ^admin/([a-z\-\/]+)/add/$ index.php?a=ACC&txt_user_type=0&key=$1&act=N
-RewriteRule ^admin/([a-z\-\/]+)/page([0-9]+)$  index.php?a=ACC&txt_user_type=0&key=$1&act=L&page=$2
-RewriteRule ^admin/([a-z\-\/]+)/page([0-9]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&act=L&page=$2
+RewriteRule ^admin/([a-z\-\/]+)/print$ index.php?a=ACC&txt_user_type=0&key=$1&act=P
+RewriteRule ^admin/([a-z\-\/]+)/print/$ index.php?a=ACC&txt_user_type=0&key=$1&act=P
+RewriteRule ^admin/([a-z\-\/]+)/export$ index.php?a=ACC&txt_user_type=0&key=$1&act=X
+RewriteRule ^admin/([a-z\-\/]+)/export/$ index.php?a=ACC&txt_user_type=0&key=$1&act=X
+RewriteRule ^admin/([a-z\-\/]+)/json$ index.php?a=ACC&txt_user_type=0&key=$1&act=J
+RewriteRule ^admin/([a-z\-\/]+)/json/$ index.php?a=ACC&txt_user_type=0&key=$1&act=J
+
+
 RewriteRule ^admin/([a-z\-\/]+) index.php?a=ACC&txt_user_type=0&key=$1&act=L
 RewriteRule ^admin/([a-z\-\/]+)/$ index.php?a=ACC&txt_user_type=0&key=$1&act=L
-
-
 
 RewriteRule ^admin/([a-z\-\/]+)$ index.php?a=ACC&txt_user_type=0&key=$1
 RewriteRule ^admin/([a-z\-\/]+)/$ index.php?a=ACC&txt_user_type=0&key=$1

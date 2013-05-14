@@ -9,11 +9,14 @@
     <title><?php echo $v_main_site_title .'-'. $v_sub_site_title; ?></title>
     <link rel="shortcut icon" type="image/x-icon" href="<?php echo URL;?>images/icons/favicon.ico" />
     <meta name="keywords" content="" />
-    <meta http-equiv="REFRESH" content="1800" />
-    <script type="text/javascript" language="javascript" src="<?php echo URL; ?>lib/js/jquery.1.8.2.js"></script>
-    <link rel="stylesheet" href="<?php echo URL .'lib/css/manage.css'  ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo URL .'lib/css/news_paginition.css'  ?>" type="text/css" />
-    
+    <base href="<?php echo URL;?>" />
+    <link href="<?php echo URL;?>lib/kendo/css/kendo.common.min.css" rel="stylesheet" />
+    <link href="<?php echo URL;?>lib/css/special.css" rel="stylesheet" type="text/css" />
+    <link id="link_theme" href="<?php echo URL;?>lib/css/theme.<?php echo $v_default_theme;?>.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="<?php echo URL;?>lib/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo URL;?>lib/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="<?php echo URL;?>lib/kendo/js/kendo.web.min.js"></script>
 </head>
 <body>
 <div id="page">

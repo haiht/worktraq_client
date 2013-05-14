@@ -4,8 +4,7 @@ if(!isset($v_sval)) die();
 
 <style type="text/css">
 #div_area{
-    float: left;
-    width: 700px;
+    width: 100%;
     height: auto;
 }
 #div_close{
@@ -28,7 +27,6 @@ select#txt_selected_location, select#txt_all_location{
     border: none;
 }
 #tbl_inner td, th {
-    border: 1px solid #DBDBDB;
     margin: 5px;
     text-align: center;
     vertical-align: middle;
@@ -37,11 +35,6 @@ p{
     margin: 10px;;
 }
 .btn_button{
-    background-color: #0074CC;
-    background-image: -moz-linear-gradient(center top , #0088CC, #0055CC);
-    background-repeat: repeat-x;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    color: #FFFFFF;
     width: 30px;
     height: 30px;
 }
@@ -50,6 +43,11 @@ p{
 parent.list_excluded = new Array();
 
 $(document).ready(function(){
+    var combo_company = $("#txt_company_id").width(300).kendoComboBox().data("kendoComboBox");
+    <?php if($v_product_id>0){?>
+    combo_company.enable(false);
+    <?php }?>
+
 	if($('input#txt_hidden_search').val()=='0'){
 		var value = '';
 		var text = '';
@@ -76,12 +74,12 @@ $(document).ready(function(){
         $('select#txt_selected_location option').each(function(){
             val = $(this).val();
             text = $(this).text();
-            //alert(val + ' --- '+text);
             parent.list_excluded[i] = new Array(val, text);
             i++;
         });
 
-        parent.$.fancybox.close();
+        parent.window_excluded_location_close_flag = true;
+        parent.window_excluded_location.data("kendoWindow").close();
     });
 	$('input#btn_right').click(function(e) {
 		var value = '';
@@ -149,8 +147,11 @@ $(document).ready(function(){
     });
 });
 </script>
+<div id="div_close" class="k-block">
+    <input type="button" value="Get them" id="btn_get"  class="k-button button_css" />
+</div>
 
-<div id="div_area">
+<div id="div_area" class="k-block">
 <form id="frm_exclude" method="POST" action="<?php echo URL.$v_admin_key.'/'.$v_product_id.'/exclude';?>">
     <table id="tbl_wrapper" width="100%" border="0" cellspacing="0" cellpadding="3" align="center">
     <tr align="left" valign="top">
@@ -167,7 +168,7 @@ $(document).ready(function(){
     <tr align="left" valign="top">
     <td align="right">Search for locations:</td>
     <td>&nbsp;</td>
-    <td>By name: <input type="text" id="txt_location_name" name="txt_location_name" value="<?php echo $v_location_name;?>" size="20" /> By number: <input type="text" id="txt_location_number" name="txt_location_number" value="<?php echo $v_location_number;?>" size="20" /> <input type="submit" value="Go" id="btn_submit" name="btn_submit" class="button" />
+    <td>By name: <input type="text" id="txt_location_name" name="txt_location_name" class="k-textbox" value="<?php echo $v_location_name;?>" size="20" /> By number: <input class="k-textbox" type="text" id="txt_location_number" name="txt_location_number" value="<?php echo $v_location_number;?>" size="20" /> <input type="submit" value="Go" id="btn_submit" name="btn_submit" class="k-button" />
     </tr>
 
     <tr valign="top">
@@ -180,18 +181,18 @@ $(document).ready(function(){
             </tr>
             <tr align="center" valign="middle">
                 <td>
-                    <select id="txt_all_location" name="txt_all_location[]" multiple="multiple">
+                    <select id="txt_all_location" name="txt_all_location[]" multiple="multiple" class="k-textbox k-input">
                         <?php echo $v_dsp_location;?>
                     </select>
                 </td>
                 <td width="10%">
-                    <p><input type="button" value="&gt;&gt;" id="btn_right_all" class="btn_button" /></p>
-                    <p><input type="button" value="&gt;" id="btn_right" class="btn_button" /></p>
-                    <p><input type="button" value="&lt;&lt;" id="btn_left_all" class="btn_button" /></p>
-                    <p><input type="button" value="&lt;" id="btn_left" class="btn_button" /></p>
+                    <p><input type="button" value="&gt;&gt;" id="btn_right_all" class="k-button btn_button" /></p>
+                    <p><input type="button" value="&gt;" id="btn_right" class="k-button btn_button" /></p>
+                    <p><input type="button" value="&lt;&lt;" id="btn_left_all" class="k-button btn_button" /></p>
+                    <p><input type="button" value="&lt;" id="btn_left" class="k-button btn_button" /></p>
                 </td>
                 <td>
-                    <select id="txt_selected_location" name="txt_selected_location[]" multiple="multiple">
+                    <select id="txt_selected_location" name="txt_selected_location[]" multiple="multiple" class="k-textbox k-input">
                         <?php echo $v_dsp_selected_location;?>
                     </select>
                 </td>
@@ -201,7 +202,4 @@ $(document).ready(function(){
 <input type="hidden" id="txt_hidden_selected_location" name="txt_hidden_selected_location" value="" />
 <input type="hidden" id="txt_hidden_search" name="txt_hidden_search" value="<?php echo $v_hidden_search;?>" />
 </form>
-</div>
-<div id="div_close">
-    <input type="button" value="Get them" id="btn_get" class="button" />
 </div>

@@ -1,5 +1,5 @@
 <?php
-define('URL','http://worktraq-dev.anvy.net/');
+define('URL','http://192.168.0.108/worktraq_client/');
 
 define('ROOT_DIR', getcwd());
 define('DS', DIRECTORY_SEPARATOR);

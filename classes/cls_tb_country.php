@@ -1,5 +1,5 @@
 <?php
-class cls_tb_conutry{
+class cls_tb_country{
 
 	private $v_country_id = 0;
 	private $v_country_name = '';
@@ -43,10 +43,10 @@ class cls_tb_conutry{
 		$v_log_str .= "\r\n".$this->v_error_message.' ['.$this->v_error_code.']';
 		$v_log_str .= "\r\n----------------End Log-----------------";
 		$v_log_str .= "\r\n";
-		if(file_exists($this->v_dir.'tb_conutry.log')){
-			if(filesize($this->v_dir.'tb_conutry.log') > 1024000) rename($this->v_dir.'tb_conutry.log', $this->v_dir.'tb_conutry_'.date('Y-m-d_H:i:s').'.log');
+		if(file_exists($this->v_dir.'tb_country.log')){
+			if(filesize($this->v_dir.'tb_country.log') > 1024000) rename($this->v_dir.'tb_country.log', $this->v_dir.'tb_country_'.date('Y-m-d_H:i:s').'.log');
 		}
-		$fp = fopen($this->v_dir.'tb_conutry.log','a+');
+		$fp = fopen($this->v_dir.'tb_country.log','a+');
 		if($fp){
 			fwrite($fp, $v_log_str, strlen($v_log_str));
 			fflush($fp);
@@ -213,8 +213,8 @@ class cls_tb_conutry{
 	* @param $arr_where = array(), example: array('field'=>3), that equal to: WHERE field=3
 	* @param $arr_order = array(), example: array('field'=>-1), that equal to: ORDER BY field DESC
 	* result: assign to properties
-	* example: SELECT * FROM `tb_conutry` WHERE `user_id`=2 ORDER BY `user_email` DESC LIMIT 0,1
-	* 		 $cls = new cls_tb_conutry($db)
+	* example: SELECT * FROM `tb_country` WHERE `user_id`=2 ORDER BY `user_email` DESC LIMIT 0,1
+	* 		 $cls = new cls_tb_country($db)
 	* 		 $cls->select_one(array('user_id'=>2), array('user_email'=>-1))
 	*/
 	public function select_one(array $arr_where = array(), array $arr_order = array()){
@@ -241,8 +241,8 @@ class cls_tb_conutry{
 	* @param $arr_where = array(), example: array('field'=>3), that equal to: WHERE field=3
 	* @param $arr_order = array(), example: array('field'=>-1), that equal to: ORDER BY field DESC
 	* result: assign to properties
-	* example: SELECT `country_id` FROM `tb_conutry` WHERE `user_id`=2 ORDER BY `user_email` DESC LIMIT 0,1
-	* 		 $cls = new cls_tb_conutry($db)
+	* example: SELECT `country_id` FROM `tb_country` WHERE `user_id`=2 ORDER BY `user_email` DESC LIMIT 0,1
+	* 		 $cls = new cls_tb_country($db)
 	* 		 $cls->select_scalar('country_id',array('user_id'=>2), array('user_email'=>-1))
 	*/
 	public function select_scalar($p_field_name, array $arr_where = array(), array $arr_order = array()){
@@ -262,8 +262,8 @@ class cls_tb_conutry{
 	* @param $arr_where = array(), example: array('field'=>3), that equal to: WHERE field=3
 	* @param $arr_order = array(), example: array('field'=>-1), that equal to: ORDER BY field DESC
 	* result: assign to properties
-	* example: SELECT `country_id` FROM `tb_conutry` WHERE `user_id`=2 ORDER BY `country_id` DESC LIMIT 0,1
-	* 		 $cls = new cls_tb_conutry($db)
+	* example: SELECT `country_id` FROM `tb_country` WHERE `user_id`=2 ORDER BY `country_id` DESC LIMIT 0,1
+	* 		 $cls = new cls_tb_country($db)
 	* 		 $cls->select_next('country_id',array('user_id'=>2), array('country_id'=>-1))
 	*/
 	public function select_next($p_field_name, array $arr_where = array()){
@@ -305,7 +305,7 @@ class cls_tb_conutry{
 	* @return: array with indexes are names of fields 
 	* result: assign to properties
 	* example: SELECT * FROM `tbl_users` WHERE `user_id`>=2 ORDER BY `user_email` DESC LIMIT 10,20
-	* 		 $cls = new cls_tb_conutry($db)
+	* 		 $cls = new cls_tb_country($db)
 	* 		 $cls->select_limit(10, 20, array('user_id' => array('$gte' => 2), array('user_email' => -1))
 	*/
 	public function select_limit($p_offset, $p_row, array $arr_where = array(), array $arr_order = array()){
@@ -315,7 +315,14 @@ class cls_tb_conutry{
 		$arr = $this->collection->find($arr_where)->sort($arr_order)->limit($p_row)->skip($p_offset);
 		return $arr;
 	}
-	
+
+    public function select(array $arr_where = array(), array $arr_order = array()){
+        if(is_null($arr_order) || count($arr_order)==0){
+            $arr_order = array('country_key' => 1);//last insert show first
+        }
+        $arr = $this->collection->find($arr_where)->sort($arr_order);
+        return $arr;
+    }
 	/**
 	* function select limit fields
 	* @param $p_offset: start record to select, first record is 0
@@ -325,7 +332,7 @@ class cls_tb_conutry{
 	* @return: array with indexes are names of fields 
 	* result: assign to properties
 	* example: SELECT * FROM `tbl_users` WHERE `user_id`>=2 ORDER BY `user_email` DESC LIMIT 10,20
-	* 		 $cls = new cls_tb_conutry($db)
+	* 		 $cls = new cls_tb_country($db)
 	* 		 $cls->select_limit_field(10, 20, array('user_id' => array('$gte' => 2), array('user_email' => -1))
 	*/
 	public function select_limit_fields($p_offset, $p_row, array $arr_fields, array $arr_where = array(), array $arr_order = array()){
