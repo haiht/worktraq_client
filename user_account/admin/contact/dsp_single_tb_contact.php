@@ -1,6 +1,6 @@
 <?php if(!isset($v_sval)) die();?>
 <script type="text/javascript">
-var allow = false;
+var allow = true;
 $(document).ready(function(){
 	$("input#btn_submit_tb_contact").click(function(e){
 		var company_id = $("input#txt_company_id").val();
@@ -13,17 +13,21 @@ $(document).ready(function(){
             combo_company.focus();
             return false;
         }
+
         if(!validator.validate()){
             e.preventDefault();
             if(tab_strip.select().index()!=0) tab_strip.select(0);
             return false;
         }
+
         $('input#txt_birth_date').val(kendo.toString(birthday.value(),'yyyy-MM-dd HH:mm:ss'));
+
         if(!validator1.validate()){
             e.preventDefault();
             if(tab_strip.select().index()!=1) tab_strip.select(1);
             return false;
         }
+
         var user_id = $('input#txt_user_id').val();
         user_id = parseInt(user_id,10);
         if(isNaN(user_id) || user_id<0) user_id = 0;
@@ -32,7 +36,9 @@ $(document).ready(function(){
                 e.preventDefault();
                 if(tab_strip.select().index()!=2) tab_strip.select(2);
                 return false;
-            }else allow = true;
+            }else{
+                $('div.account').remove();
+            }
         }
         return true;
 	});
@@ -119,8 +125,20 @@ $(document).ready(function(){
         });
     });
     <?php if($v_user_id<=0){?>
+    $('input#txt_repeat_password').focusout(function(e){
+        var p1 = $('input#txt_user_password').val();
+        var p2 = $('input#txt_repeat_password').val();
+        if(p1!='' && p2!='' && p1!=p2){
+            $('input#txt_hidden_repeat_password').val('');
+        }else{
+            $('input#txt_hidden_repeat_password').val('Y');
+        }
+        validator2.validate();
+    });
     var validator2 = $('div.account').kendoValidator({
-        rules:{
+        validateOnBlur: false
+        /*
+        ,rules:{
             custom: function(input){
                 if(input.is("[name=txt_user_name]") && $.trim(input.val())==''){
                     return false;
@@ -132,10 +150,12 @@ $(document).ready(function(){
                     return false;
                 }else if(input.is("[name=txt_repeat_password]") && input.val()!=$('input#txt_user_password').val()){
                     return false;
-                }else return allow;
+                }else return true;
             }
         }
+        */
     }).data("kendoValidator");
+
     $('select#txt_user_type').width(150).kendoComboBox();
     $('input#btn_create_user').click(function(e){
         var company_id = $('select#txt_company_id').val();
@@ -158,6 +178,7 @@ $(document).ready(function(){
             return false;
         }
         if(!validator2.validate()){
+            e.preventDefault();
             return false;
         }
         var $this = $(this);
@@ -217,8 +238,8 @@ $(document).ready(function(){
                     $('input#txt_hidden_user_name').val('Y');
                 }else{
                     $('input#txt_hidden_user_name').val('');
-                    $this.prop("disabled", false);
                 }
+                $this.prop("disabled", false);
                 validator2.validate();
             }
         });
@@ -404,8 +425,8 @@ $(document).ready(function(){
                     <td style="width: 1px;">&nbsp;</td>
                     <td align="left">
                         <?php if($v_user_id<=0){?>
-                            <input class="k-textbox" type="text" id="txt_user_name" name="txt_user_name" value="" validationMessage="Please input username" />
-                            <input type="hidden" id="txt_hidden_user_name" name="txt_hidden_user_name" validationMessage="Duplicate username" value="Y" />
+                            <input class="k-textbox" type="text" id="txt_user_name" name="txt_user_name" value="" required data-required-msg="Please input username" />
+                            <input type="hidden" id="txt_hidden_user_name" name="txt_hidden_user_name" required data-required-msg="Duplicate username" value="Y" />
                             <span id="sp_user_name"></span>
                             <span class="tooltips"><a title="User Name is unique">&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
                             <label id="lbl_user_name" class="k-required">(*)</label>
@@ -419,12 +440,14 @@ $(document).ready(function(){
                     <tr align="right" valign="top">
                         <td>User Password</td>
                         <td>&nbsp;</td>
-                        <td align="left"><input class="k-textbox" type="text" id="txt_user_password" name="txt_user_password" value="" required validationMessage="Please input password" /> <label id="lbl_user_password" class="k-required">(*)</label></td>
+                        <td align="left"><input class="k-textbox" type="text" id="txt_user_password" name="txt_user_password" value="" required data-required-msg="Please input password" /> <label id="lbl_user_password" class="k-required">(*)</label></td>
                     </tr>
                     <tr align="right" valign="top">
                         <td>Repeat Password</td>
                         <td>&nbsp;</td>
-                        <td align="left"><input class="k-textbox" type="text" id="txt_repeat_password" name="txt_repeat_password" value="" required validationMessage="Please repeat password" /> <label id="lbl_user_password" class="k-required">(*)</label></td>
+                        <td align="left"><input class="k-textbox" type="text" id="txt_repeat_password" name="txt_repeat_password" value="" required data-required-msg="Please repeat password" />
+                            <input type="hidden" id="txt_hidden_repeat_password" value="N" name="txt_hidden_repeat_password" required data-required-msg="Repeat password is not the same!">
+                            <label id="lbl_user_password" class="k-required">(*)</label></td>
                     </tr>
                 <tr align="right" valign="top">
                     <td>User Type</td>
