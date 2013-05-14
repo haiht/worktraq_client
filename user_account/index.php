@@ -21,7 +21,7 @@ $cls_tb_user_log->set_log_url("http:".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
 $cls_tb_user_log->insert();
 */
 
-s
+
 if($v_user_type<=2){
     $v_template = 'user_account/admin/';
     include 'user_account/admin/index.php';
