@@ -1,4 +1,4 @@
-<?php if (!isset($v_sval)) header("Location: ".URL); ?>
+ <?php if (!isset($v_sval)) header("Location: ".URL); ?>
 <?php
 /* __auto load class php */
 if ($handle = opendir('functions')) {

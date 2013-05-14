@@ -161,7 +161,7 @@ $(document).ready(function(){
                         <p class="title_lates">[@PRODUCT_INFO_TITLE]</p>
                         <div class="clear indent_lates">
                             <p class="up float_left">Print Image:</p>
-                            <p class="up_lates">This product uses a standard image already provided 2.</p>
+                            <p class="up_lates">This product uses a standard image already provided.</p>
                         </div>
 
                         <div class="clear indent_lates2">

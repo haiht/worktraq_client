@@ -29,7 +29,7 @@ $cls_tb_company = new cls_tb_company($db);
 
 $v_customer_template_id = $cls_tb_company->select_scalar('company_template_id', array('company_id'=>(int) $v_company_id));
 if(!isset($_SESSION['templates']) || (isset($_SESSION['templates']) && $_SESSION['templates']=='')){
-    $v_templates_name = 'default';\
+    $v_templates_name = 'default';
     add_class('cls_tb_template');
     $cls_tb_template = new cls_tb_template($db);
     if($v_customer_template_id > 0)

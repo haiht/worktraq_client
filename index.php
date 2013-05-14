@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 error_reporting(E_ALL);
 $v_sval = 1;

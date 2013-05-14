@@ -1,5 +1,6 @@
 <?php if(!isset($v_sval)) die();?>
 <script type="text/javascript">
+var allow = false;
 $(document).ready(function(){
 	$("input#btn_submit_tb_contact").click(function(e){
 		var company_id = $("input#txt_company_id").val();
@@ -31,9 +32,9 @@ $(document).ready(function(){
                 e.preventDefault();
                 if(tab_strip.select().index()!=2) tab_strip.select(2);
                 return false;
-            }
+            }else allow = true;
         }
-		return true;
+        return true;
 	});
 	var birthday = $('input#txt_birth_date').kendoDatePicker({format:"dd-MMM-yyyy"}).data("kendoDatePicker");
 
@@ -131,7 +132,7 @@ $(document).ready(function(){
                     return false;
                 }else if(input.is("[name=txt_repeat_password]") && input.val()!=$('input#txt_user_password').val()){
                     return false;
-                }else return true;
+                }else return allow;
             }
         }
     }).data("kendoValidator");

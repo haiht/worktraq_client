@@ -120,6 +120,9 @@ if(isset($_SESSION['ss_current_order']))
                 $arr_order_count['invalid_rows']++;
                 //$v_product_material.='<br />[<span style="text-decoration:blink; color:red; font-weight: bold">'.$v_description.'</span>]';
             }
+            if(strpos($v_product_image,'http://')==false)
+                $v_product_image = URL.$v_product_image;
+            die("$v_product_image");
             $tpl_order_items->set('PRODUCT_MATERIAL', $v_product_material);
             $tpl_order_items->set('PRODUCT_IMAGE',$v_product_image);
             //$tpl_order_items->set('PRODUCT_IMAGE',URL.$v_product_image);

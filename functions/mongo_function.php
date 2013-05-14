@@ -27,4 +27,19 @@ function get_file_from_mongo(MongoDB $db, $p_filename){
 function select_distinct(MongoDB $db, $p_table_name, $p_field_name){
     return $db->command(array("distinct" => $p_table_name, "key" => $p_field_name));
 }
+
+function get_array_data($cls, $p_field_value, $p_field_display, & $p_selected_value, array $arr_placeholder = array(), array $arr_where = array(), array $arr_order = array()){
+    $arr_data = $cls->select_limit_fields(0, 0, array($p_field_value, $p_field_display), $arr_where, $arr_order);
+    $arr_return_data = array();
+    if(count($arr_placeholder)==2){
+        $arr_return_data[] = array($p_field_value=>$arr_placeholder[0], $p_field_display=>$arr_placeholder[1]);
+    }
+    $v_tmp_selected = is_numeric($p_selected_value)?0:'';
+    foreach($arr_data as $arr){
+        $arr_return_data[] = array($p_field_value=>$arr[$p_field_value], $p_field_display=>$arr[$p_field_display]);
+        if($p_selected_value==$arr[$p_field_value]) $v_tmp_selected = $p_selected_value;
+    }
+    $p_selected_value = $v_tmp_selected;
+    return $arr_return_data;
+}
 ?>

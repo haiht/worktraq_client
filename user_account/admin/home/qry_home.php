@@ -32,7 +32,7 @@ $v_temp_location_id = 0;
 
 $cls_tb_allocation = new cls_tb_allocation($db);
 $arr_where_clause = array();
-$arr_sort = array('tracking_number'=>'','date_shipping'=>-1,'location_id');
+$arr_sort = array('tracking_number'=>'','date_shipping'=>-1,'location_id'=>0);
 $arr_tb_allocation = $cls_tb_allocation->select_limit(0,5,$arr_where_clause,$arr_sort);
 $v_list_shipping = '<table cellpadding="2" cellspacing="2" border="1" width="100%"  class="list_table">';
 foreach($arr_tb_allocation as $arr){

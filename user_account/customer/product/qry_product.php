@@ -148,9 +148,9 @@ if($v_package_type<=1){
     }
     // size
     if (count($size) != 0) {
-        $v_product_size .= 'Standard Sizes: ';//</h1>';
+        $v_product_size .= '<br >Standard Sizes: ';//</h1>';
         foreach($size as $v_size){
-            $v_product_size .= ' '.$v_size.' ';
+            $v_product_size .= ' <br>'.$v_size.' ';
         }
         $v_product_size .='</p>';
     }

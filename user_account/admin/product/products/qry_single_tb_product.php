@@ -200,7 +200,6 @@ if(isset($_POST['btn_submit_tb_product'])){
         $v_material = stripcslashes($v_material);
         $arr_material = json_decode($v_material, true);
     }
-
     $v_location_threshold = isset($_POST['txt_hidden_location_threshold'])?$_POST['txt_hidden_location_threshold']:'';
     if($v_location_threshold!=''){
         $v_location_threshold = stripcslashes($v_location_threshold);

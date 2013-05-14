@@ -231,10 +231,12 @@ foreach($arr_order as $a){
             if($v_tmp_order_status<20){
                 if($v_user_rule_create || ($v_user_rule_create && $v_user_rule_edit)){
                     $v_dsp_option_order .= '<option class="text_color" value="edit">Edit</option>';
-                    $v_dsp_option_order .= '<option class="text_color" value="delete">Delete</option>';
                 }
                 else if($v_user_rule_edit || $v_user_rule_submit){
                     $v_dsp_option_order .= '<option class="text_color" value="edit">Edit</option>';
+                }
+                else if($v_user_rule_delete){
+                    $v_dsp_option_order .= '<option class="text_color" value="delete">Delete</option>';
                 }
             }
         }

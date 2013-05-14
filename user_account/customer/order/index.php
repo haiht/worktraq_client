@@ -109,7 +109,7 @@ if($v_order_ajax==0){
             if($v_user_rule_reorder)
                 include $v_head.'order/qry_create_reorder.php';
         case 'CRE':
-            if($v_user_rule_create){
+            if($v_user_rule_create || $v_user_rule_reorder){
                 include $v_head.'header.php';
                 include $v_head.'order/qry_create_order.php';
                 include $v_head.'footer.php';

@@ -101,8 +101,8 @@ class ManageFile{
                     $ext = '.'.$ext;
                 }
                 $ext = strtolower($ext);
-                $len = strlen($ext);
             }
+            $len = strlen($ext);
             while( ($file=readdir($dh))!==false ){
                 if( $file=='.' || $file=='..' ) continue;
                 if( is_dir("$dir/$file") ){
@@ -215,6 +215,55 @@ class ManageFile{
         }else{
             return 0;
         }
+    }
+    public function draw_list_folder_option($p_root='', $p_select='', $p_glue = ''){
+        $v_ret = '';
+        $v_root = $p_root!=''?$p_root:$this->dir;
+        if(file_exists($v_root)){
+            $v_handle = opendir($v_root);
+            if($v_handle){
+                while(($file = readdir($v_handle))!==false){
+                    if($file!='.' && $file!='..'){
+                        $v_file = $v_root.$this->ds.$file;
+                        if(is_dir($v_file)){
+                            $v_file = str_replace(getcwd().$this->ds,'',$v_file);
+                            $v_ret .= '<option value="'.$v_file.'"'.($v_file==$p_select?' selected="selected"':'').'>'.$p_glue.$file.'</option>';
+                            //echo $file.'<br>';
+                            $v_ret .= $this->draw_list_folder_option($v_file, $p_select, $p_glue.'--');
+                        }
+                    }
+                }
+                closedir($v_handle);
+            }
+        }
+        return $v_ret;
+    }
+
+    public function list_folder($p_root='', $p_dim = '', array $arr_return=array()){
+        if(is_null($arr_return) || !is_array($arr_return)) $arr_return = array();
+        $v_root = $p_root!=''?$p_root:$this->dir;
+        if(file_exists($v_root)){
+            $v_handle = opendir($v_root);
+            if($v_handle){
+                while(($file = readdir($v_handle))!==false){
+                    if($file!='.' && $file!='..'){
+                        $v_file = $v_root.$this->ds.$file;
+                        if(is_dir($v_file)){
+                            $v_value = str_replace($p_dim,'',$v_file);
+                            $v_value = str_replace($this->ds, '/', $v_value);
+                            $arr_return[] = array(
+                                'folder_value'=>$v_value,
+                                'folder_text'=>$v_value
+                            );
+
+                            $arr_return = $this->list_folder($v_file, $p_dim, $arr_return);
+                        }
+                    }
+                }
+                closedir($v_handle);
+            }
+        }
+        return $arr_return;
     }
 }
 ?>

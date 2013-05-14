@@ -228,9 +228,10 @@ $tpl_order_item_row->set('TOTAL_PRICE',$v_total_price);
 $tpl_order_item_row->set('URL_TEMPLATE',URL.$v_dir_templates);
 $tpl_order_item_row->set('QUANTITY',1);
 $v_order_option_item = '';
+
 $arr_order_where = array();
 if($arr_user['user_type']>=5){
-    if($v_user_rule_order_edit){
+    if(isset($v_user_rule_order_edit) && $v_user_rule_order_edit!=''){
         add_class('cls_tb_user');
         $cls_user = new cls_tb_user($db, LOG_DIR);
         $v_user_location_view = $cls_user->select_scalar('user_location_view', array('user_name'=>$arr_user['user_name']));
