@@ -60,6 +60,10 @@
         $('input#btn_submit_order').click(function(){
             check_save_order(2);
         });
+        $('input#btn_disapprove_order').click(function(){
+            $('form#frm_disapprove_order').submit();
+
+        });
         $('input#btn_save_order').click(function(){
             check_save_order(1);
         });
@@ -172,7 +176,6 @@ function save_order_info(key, value, order){
     });
 }
 function check_save_order(order_status){
-
     $('input#txt_order_status').val(order_status);
     var po_number = $.trim($('input#txt_po_number').val());
     var order_ref = $.trim($('input#txt_order_ref').val());
@@ -313,8 +316,8 @@ function check_save_order(order_status){
                         <div class="line" [@STYLE]>
                             <input class="btn_create2" type="button" value="Add More Item" id="btn_add_more" [@ADD_BUTTON_ITEM]>
                             <input class="btn_create" type="button" value="Save Your Order" id="btn_save_order" [@SAVE_BUTTON_DISPLAY]>
-                            <input id="btn_disapprove_order" type="button" class="btn btn-large btn-success" value="Disapprove Your Order" [@DIS_BUTTON_DISPLAY] />
-                            <input class="btn_create" id="btn_submit_order" type="button" value="[@SUBMIT_BUTTON_TITLE] Your Order"  [@SUBMIT_BUTTON_DISPLAY]>
+                            <input id="btn_disapprove_order" type="button" class="btn_create btn btn-large btn-success" value="Disapprove Your Order" [@DIS_BUTTON_DISPLAY] />
+                            <input class="btn_create" name="btn_submit_order" id="btn_submit_order" type="button" value="[@SUBMIT_BUTTON_TITLE] Your Order"  [@SUBMIT_BUTTON_DISPLAY]>
                         </div>
                 </div>
                     <div class="clear"></div>

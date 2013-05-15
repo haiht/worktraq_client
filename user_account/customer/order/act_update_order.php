@@ -2,11 +2,25 @@
 if(!isset($v_sval)) die();
 ?>
 <?php
+
+if(isset($v_user_rule_approve) && $v_user_rule_approve!='' && isset($_POST['txt_order_status']) && isset($_POST['txt_order_id']) ){
+    $cls_tb_order_2 = new $cls_tb_order($db);
+    $v_order_id = isset($_POST['txt_order_id'])?$_POST['txt_order_id']:'0';
+    settype($v_order_id,"int");
+    $v_order_status = $cls_tb_order_2->select_scalar('status',array("order_id"=>$v_order_id));
+    settype($v_order_status,"int");
+    if($v_order_status==20){
+        $cls_tb_order_2->update_field("status",30,array("order_id"=>$v_order_id));
+        redir(URL.'order');
+    }
+}
+
 $v_po_number = isset($_POST['txt_po_number'])?$_POST['txt_po_number']:'';
 $v_order_ref = isset($_POST['txt_order_ref'])?$_POST['txt_order_ref']:'';
 $v_description = isset($_POST['txt_order_description'])?$_POST['txt_order_description']:'';
 $v_date_required = isset($_POST['txt_date_required'])?$_POST['txt_date_required']:'';
 $v_order_id = isset($_POST['txt_order_id'])?$_POST['txt_order_id']:'0';
+
 $v_order_status = isset($_POST['txt_order_status'])?$_POST['txt_order_status']:'0';
 $v_order_threshold = isset($_POST['txt_order_threshold'])?$_POST['txt_order_threshold']:'0';
 settype($v_order_id, 'int');
@@ -227,7 +241,12 @@ if($v_order_id>0){
                     }
                     else
                     {
-                        $v_set_order_status = 30;
+                        if(isset($v_user_rule_approve) && $v_user_rule_approve!=''){
+                            $v_set_order_status = 30;
+                        }
+                        else{
+                            $v_set_order_status = 20;
+                        }
                         //$v_order_message .= '*This order was submitted';
                         $v_redirect = 1;
                         $v_mail_send = 2;
@@ -235,8 +254,6 @@ if($v_order_id>0){
                 }else{
                     $v_set_order_status = $v_current_order_status<20?$v_current_order_status:10;
                     $v_redirect = 0;
-
-
                 }
             }else{
                 $v_set_order_status = $v_current_order_status<20?$v_current_order_status:10;
@@ -584,8 +601,7 @@ if($v_order_id>0){
                     $v_order_message .= $v_item_message;
                     $v_set_order_status = 10;
                     $v_redirect = $v_order_status==2?0:1;
-                    if($v_redirect==0)
-                        die("another po number 2");
+
                     //if($v_set_order_status==20) $v_mail_send=1;
                 }
 
@@ -602,8 +618,7 @@ if($v_order_id>0){
                 if($v_check==0){
                     $v_set_order_status = $v_set_order_status<20?$v_set_order_status:10;
                     $v_redirect = $v_order_status==2?0:1;
-                    if($v_redirect==0)
-                        die(" chua bik");
+
                 }
                 //End check threshold for group of products
 

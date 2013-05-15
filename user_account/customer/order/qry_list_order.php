@@ -215,6 +215,7 @@ foreach($arr_order as $a){
     $v_tmp_order_location = $a['location_id'];
     $v_tmp_order_user = $a['user_name'];
     $v_order_status = $cls_settings->get_option_name_by_id('order_status',$v_tmp_order_status);
+
     $v_date_created = isset($a['date_created'])?$a['date_created']:NULL;
     if(is_null($v_date_created))
         $v_date_created = time();

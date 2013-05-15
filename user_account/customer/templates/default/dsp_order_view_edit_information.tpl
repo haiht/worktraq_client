@@ -1,4 +1,7 @@
 <div class="indent_sup2">
+    <form id="frm_disapprove_order" method="post" action="[@URL]order/disapprove" style="display:none">
+        <input type="hidden" name="txt_order_id" id="txt_order_id" value="[@ORDER_ID]" />
+    </form>
     <form id="frm_order_information" method="post" action="[@URL]order/update">
         <p class="required create_in"></p>
         <div class="indent_form clear create_h">

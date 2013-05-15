@@ -376,7 +376,7 @@ function allocation_order(pid, oid, otid){
                     <div class="block-submit">
 	                     <a class="btn btn-large btn-success" href="[@URL]catalogue" title="Add More Item" [@ADD_BUTTON_ITEM]>Add More Item</a>
 						<input id="btn_save_order" type="button" class="btn btn-large btn-success" value="Save Your Order" [@SAVE_BUTTON_DISPLAY] />
-                        <input id="btn_disapprove_order" type="button" class="btn btn-large btn-success" value="Disapprove Your Order" [@DIS_BUTTON_DISPLAY] />
+                        <input id="btn_disapprove_order" type="button" class="btn_create btn btn-large btn-success" value="Disapprove Your Order" [@DIS_BUTTON_DISPLAY] />
 						<input id="btn_submit_order" type="button" class="btn btn-large btn-primary" value="[@SUBMIT_BUTTON_TITLE] Your Order" [@SUBMIT_BUTTON_DISPLAY] />
                     </div>                    
                 </div>

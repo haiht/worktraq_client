@@ -86,7 +86,7 @@ if($v_order_ajax==0){
             }
             break;
 
-        case 'DIS': //========== chua xu ly
+        case 'DIS':
             include $v_head.'order/act_disapprove_order.php';
             break;
         case 'UP':

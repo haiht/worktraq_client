@@ -2,7 +2,6 @@
 <script type="text/javascript" src="[@URL]/lib/js/json-min.js"></script>
 <script>
     $(document).ready(function(){
-
         var product = $("#data-product-id").val();
         var order = $("#data-order-id").val();
         var order_item = $("#data-order-item-id").val();
@@ -24,18 +23,44 @@
                     add_row_table_new(pos,loc);
                 }
                 else{
-                    alert(pos);
+                    //alert(pos);
                 }
             }
             else{
                 alert("please choose a location");
             }
         });
-
         $("#btn_save_allocation").click(function(){
             allocation_order(product, order, order_item,loc);
         });
 
+        $(document).keyup(function(){
+            var val=  0;
+            $('input.quantity').each(function(){
+                val += parseInt($(this).val());
+            });
+            val = parseInt(val, 10);
+            var s_location_id=$('input[type="text"]').attr('data-location');
+            var p = find_location(s_location_id,loc);
+            if(p>=0 && val>0){
+                var c_remain = $('span#location_quanlity').html();
+                var total = $('span#product_quanlity').html();
+                c_remain = parseInt(c_remain,10);
+                if(!isNaN(c_remain) && c_remain>0)
+                {
+                    var first = c_remain;
+                    c_remain = total - val;
+                    if(c_remain < 0){
+                        alert("Please insert a number from "+first +" to " +total);
+                        return false;
+                    }
+                    $(this).parent().parent().parent().parent().find('input[type="text"]').val(val);
+                    loc[p].quantity = val;
+                    $('span#location_quanlity').html(c_remain);
+                }
+            }
+
+        });
     });
 </script>
 <script type="text/javascript">
@@ -50,7 +75,26 @@ function find_location(location_id,loc){
     }
     return pos;
 }
+function keyPhone(e)
+{
+    var keyword=null;
+    if(window.event)
+    {
+        keyword=window.event.keyCode;
+    }else
+    {
+        keyword= e.which; //NON IE;
+    }
 
+    if(keyword<48 || keyword>57)
+    {
+        if(keyword==48 || keyword==127)
+        {
+            return ;
+        }
+        return false;
+    }
+}
 function add_row_table_new(pos,loc)
 {
     var remain = $('span#location_quanlity').html();
@@ -133,7 +177,7 @@ function add_row_table_new(pos,loc)
             }
     );
 
-    var $t = $('<input type="text" class="bg float_left location_id" data-location="'+location_id+'" readonly="readonly" value="'+quantity+'" />');
+    var $t = $('<input type="text"  onkeypress="return keyPhone(event);" class="quantity bg float_left " data-location="'+location_id+'"  value="'+quantity+'" />');
     var $d12 = $t;//$('<div class="allocation-text"></div>');
     $d11.append($d12);
     $d11.append($b1);
@@ -305,7 +349,7 @@ function load_allocation(pid, oid, otid){
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert("that bai");
+
         }
     });
     return loc;
@@ -319,7 +363,6 @@ function allocation_order(pid, oid, otid,loc)
     total = parseInt(total, 10);
 
     if(isNaN(total)) {
-        alert("rong o total");
         return false;
     }
 
@@ -360,7 +403,6 @@ function allocation_order(pid, oid, otid,loc)
                 }
             },
             error : function(){
-                alert("that bai o loar_order");
             }
         });
     }

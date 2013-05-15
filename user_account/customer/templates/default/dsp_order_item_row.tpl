@@ -32,10 +32,32 @@
 
     });
 </script>
+<script type="text/javascript">
+    function keyPhone(e)
+    {
+        var keyword=null;
+        if(window.event)
+        {
+            keyword=window.event.keyCode;
+        }else
+        {
+            keyword= e.which; //NON IE;
+        }
+
+        if(keyword<48 || keyword>57)
+        {
+            if(keyword==48 || keyword==127)
+            {
+                return ;
+            }
+            return false;
+        }
+    }
+</script>
 <div class="[@PRODUCT_ADD_ORDER_CLASS]">
     <div class="table_qua float_left">
         <form class="field" method="post">
-            <input type="text" id="product_quantity" name="product_quantity" class="bg float_left" data-location="10327" readonly="readonly" value="1">
+            <input type="text" id="product_quantity" name="product_quantity" class="bg float_left" onkeypress="return keyPhone(event);" data-location="10327" value="1">
         </form>
         <input type="image" src="[@URL_TEMPLATE]/images/up.jpg" id="btn_up" class="btn_down">
         <input type="image" src="[@URL_TEMPLATE]/images/down.jpg"  id="btn_down" class="btn_up">

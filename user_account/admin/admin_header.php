@@ -40,7 +40,6 @@
 </head>
 
 <body>
-
 <div id="div_wrapper">
     <div id="div_header" class="k-widget">
         <div id="div_logo"></div>

@@ -90,7 +90,9 @@ if($v_row==1){
         if($v_item_status==1){
             $v_error_approve.='*Product: '.$v_product_code.' has not been allocated.';
         }
-        $v_image_url = URL .'/'.$v_graphic_file ;
+        if (!preg_match("~^(?:f|ht)tps?://~i", $v_graphic_file)) {
+            $v_image_url = URL.$v_graphic_file;
+        }
 
         $tpl_order_items = new Template('dsp_order_items_all.tpl',$v_dir_templates);
         $v_class_table_name = $v_count_record%2==0?'td_3':'td_2';
@@ -281,7 +283,11 @@ if($v_row==1){
                     $v_graphic_file = $arr[$i]['product_image'];
                     if(strpos($v_graphic_file,'/')===false) $v_graphic_file = $v_company_product_url.$v_graphic_file;
 
-                    $tpl_order_allocation_items->set('PRODUCT_IMAGE', URL. $v_graphic_file);
+                    if (!preg_match("~^(?:f|ht)tps?://~i", $v_graphic_file)) {
+                        $v_graphic_file = URL.$v_graphic_file;
+                    }
+
+                    $tpl_order_allocation_items->set('PRODUCT_IMAGE', $v_graphic_file);
                     $tpl_order_allocation_items->set('PRODUCT_QUANTITY', $arr[$i]['location_quantity']);
                     $tpl_order_allocation_items->set('PRODUCT_PRICE', $v_user_rule_hide_price_all?NO_PRICE:format_currency($arr[$i]['location_price']));
                     $v_tmp_location_price = $arr[$i]['location_price']*$arr[$i]['location_quantity'];

@@ -1,6 +1,6 @@
 <?php
 if (!isset($v_sval)) die();
-if(isset($_GET['txt_order'])==false) die("ko co gi ca");//redir($link);
+
 $v_request_order_id = isset($_GET['txt_order'])?$_GET['txt_order']:'0';
 if(settype($v_request_order_id, 'int')==false)
     redir($link);

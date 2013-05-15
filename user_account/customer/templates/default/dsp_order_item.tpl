@@ -3,9 +3,9 @@
     <div class="table_no float_left">[@ORDER_ORDER_NUMBER]</div>
     <div class="table_date float_left">[@ORDER_DATE]</div>
     <div class="table_po float_left">
-        <span class="with-tooltip" title="[@TOOL_TIP]">
+        <a  href="#" class="with-tooltip" title="[@TOOL_TIP]">
             [@ORDER_PO_NUMBER]
-        </span>
+        </a>
     </div>
     <div class="table_lo float_left">[@ORDER_LOCATION_NAME]</div>
     <div class="table_to float_left"><span class="color_r2">[@ORDER_TOTAL_MONEY]</span></div>
