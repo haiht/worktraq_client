@@ -1080,7 +1080,15 @@ class cls_tb_order_items{
 		$arr = $this->collection->find($arr_where)->sort($arr_order)->limit($p_row)->skip($p_offset);
 		return $arr;
 	}
-	
+	public function get_all_quantity_by_id(array $arr_where = array()){
+
+        $arr_all = $this->collection->find($arr_where);
+        $total =0;
+        foreach($arr_all as $arr){
+            $total+=$arr['quantity'];
+        }
+        return $total;
+    }
 	/**
 	 * function select records
 	 * @param $arr_where array, example: array('field'=>3), that equal to: WHERE field=3

@@ -27,40 +27,49 @@
                 }
             }
             else{
-                alert("please choose a location");
+                alert("Please choose a location");
             }
         });
         $("#btn_save_allocation").click(function(){
             allocation_order(product, order, order_item,loc);
         });
-
+        /*
         $(document).keyup(function(){
             var val=  0;
             $('input.quantity').each(function(){
                 val += parseInt($(this).val());
             });
             val = parseInt(val, 10);
-            var s_location_id=$('input[type="text"]').attr('data-location');
-            var p = find_location(s_location_id,loc);
-            if(p>=0 && val>0){
-                var c_remain = $('span#location_quanlity').html();
-                var total = $('span#product_quanlity').html();
-                c_remain = parseInt(c_remain,10);
-                if(!isNaN(c_remain) && c_remain>0)
-                {
-                    var first = c_remain;
-                    c_remain = total - val;
-                    if(c_remain < 0){
-                        alert("Please insert a number from "+first +" to " +total);
-                        return false;
+            var s_location_id=0;
+            $('input[rel=allocation]').each(function(){
+                s_location_id =$(this).attr('data-location');
+                var v_value = $(this).val();
+                var $input = $(this);
+
+                s_location_id = parseInt(s_location_id);
+                var p = find_location(s_location_id,loc);
+
+                if(p>=0 && val>0){
+                    var c_remain = $('span#location_quanlity').html();
+                    var total = $('span#product_quanlity').html();
+                    c_remain = parseInt(c_remain,10);
+                    if(!isNaN(c_remain) && c_remain>0)
+                    {
+                        var first = c_remain;
+                        c_remain = total - val;
+                        if(c_remain < 0){
+                            alert("Please insert a number from "+first +" to " +total);
+                            return false;
+                        }
+                        $($input).val(v_value);
                     }
-                    $(this).parent().parent().parent().parent().find('input[type="text"]').val(val);
-                    loc[p].quantity = val;
-                    $('span#location_quanlity').html(c_remain);
                 }
-            }
+            });
+            loc[p].quantity = val;
+            $('span#location_quanlity').html(c_remain);
 
         });
+        */
     });
 </script>
 <script type="text/javascript">
@@ -101,7 +110,7 @@ function add_row_table_new(pos,loc)
     remain = parseInt(remain,10);
     if(remain<=0)
     {
-        alert("there are no item left to ship");
+        alert("There are no item left to ship");
         return false;
     }
     var location_id = loc[pos].location_id;
@@ -163,6 +172,7 @@ function add_row_table_new(pos,loc)
                     var val=$(this).parent().parent().parent().parent().find('input[type="text"]').val();
                     val = parseInt(val, 10);
                     var s_location_id=$(this).parent().parent().parent().parent().find('input[type="text"]').attr('data-location');
+                    //alert(s_location_id);
                     var p = find_location(s_location_id,loc);
                     if(p>=0 && val>1){
                         var c_remain = $('span#location_quanlity').html();
@@ -177,7 +187,43 @@ function add_row_table_new(pos,loc)
             }
     );
 
-    var $t = $('<input type="text"  onkeypress="return keyPhone(event);" class="quantity bg float_left " data-location="'+location_id+'"  value="'+quantity+'" />');
+    var $t = $('<input type="text" rel="allocation"  class="quantity bg float_left" data-location="'+location_id+'"  value="'+quantity+'" />');
+    $t.bind('keyup', function(){
+        var val = 0;
+        $.each($('input.quantity'), function(index, element){
+            var one = $(this).val();
+            one = parseInt(one, 10);
+            val += one;
+        });
+        var s_location_id =$(this).attr('data-location');
+        var v_value = $(this).val();
+        var $input = $(this);
+
+        s_location_id = parseInt(s_location_id);
+        var p = find_location(s_location_id,loc);
+
+        if(p>=0 && val>0){
+            var c_remain = $('span#location_quanlity').html();
+            var total = $('span#product_quanlity').html();
+            c_remain = parseInt(c_remain,10);
+            if(!isNaN(c_remain) && c_remain>0)
+            {
+                var first = c_remain;
+                c_remain = total - val;
+                if(c_remain < 0){
+                    alert("Please insert a number from "+first +" to " +total);
+                    return false;
+                }
+                $($input).val(v_value);
+                loc[p].quantity = v_value;
+                $('span#location_quanlity').html(c_remain);
+            }
+        }
+    });
+    $t.bind('keypress', function(e){
+        return keyPhone(e);
+    });
+    //var $t = $('<input type="text" rel="allocation"  onkeypress="return keyPhone(event);" class="quantity bg float_left" data-location="'+location_id+'"  value="'+quantity+'" />');
     var $d12 = $t;//$('<div class="allocation-text"></div>');
     $d11.append($d12);
     $d11.append($b1);
@@ -254,39 +300,6 @@ function Location(location_id, location_name, location_number, quantity){
     this.quantity = quantity;
     this.status = quantity>0?1:0;
 }
-/*
- function readKey(key,data,type){
- if(data=='undefined' || data == null || data=="")
- return "";
- var k = "{"+key+"=";
-	    var p = data.indexOf(k,0);
-	    if(p==-1) return (type=="int")?-1:"";
-	    var val = data.substring(p+k.length,data.length);
-	    p = val.indexOf("}",0);
- val = (p>=0)?val.substring(0,p):val;
- switch(type){
- case "int":
- val = parseInt(val,10);
- return isNaN(val)?-1:val;
- break;
- default:
- return val;
- break;
- }
- }
- function replaceText(str,findText, replaceText){
- var found = true;
- var p=-1;
- do{
- p = str.indexOf(findText);
- if(p>=0)
- str = str.replace(findText, replaceText);
- else
- found = false;
- }while(found);
- return str;
- }
- */
 
 function setup_list_(obj){
     $('select#txt_all_locations option').remove();
@@ -357,18 +370,13 @@ function load_allocation(pid, oid, otid){
 
 function allocation_order(pid, oid, otid,loc)
 {
-
     var total = $('span#product_quanlity').html();
-
     total = parseInt(total, 10);
-
     if(isNaN(total)) {
         return false;
     }
-
     var flag = true;
     var allocation = [];
-
     for(var i=0; i<loc.length;i++){
         if(loc[i].status==1){
             allocation.push(new Array(pid,loc[i].location_id, loc[i].quantity));
@@ -377,7 +385,6 @@ function allocation_order(pid, oid, otid,loc)
     }
     flag = total==0;
     var ask = false;
-
     if(!flag){
         if(total>0){
             ask = confirm('Some quantity (exactly '+total+') has not allocated. Do you want to continue saving without allocating?');
@@ -399,7 +406,7 @@ function allocation_order(pid, oid, otid,loc)
                 var err = readKey('error', data, 'int');
                 var msg = readKey('message', data);
                 if(err==0){
-                    document.location = '[@URL_REQUEST]';
+                    alert("Your item has been saved");
                 }
             },
             error : function(){

@@ -31,7 +31,8 @@ $arr_product_threshold = array();
 $arr_all_material = array();
 $v_error_approve = '';
 $v_all_price=0;
-$v_all_quantity=0;
+//$v_all_quantity=0;// chi lay so luong da allocate
+$v_all_quantity = $cls_tb_order_items->get_all_quantity_by_id(array('order_id'=>$v_order_id));;//lay sach ko can bik da allocate chua
 if($v_row==1){
     $_SESSION['order_id'] = $v_order_id;
     $v_po_number = $cls_tb_order->get_po_number();
@@ -294,7 +295,7 @@ if($v_row==1){
                     $tpl_order_allocation_items->set('PRODUCT_AMOUNT', $v_user_rule_hide_price_all?NO_PRICE:format_currency($v_tmp_location_price));
                     $v_location_total_amount += $v_tmp_location_price;
                     $v_all_price +=$v_tmp_location_price;
-                    $v_all_quantity+=$arr[$i]['location_quantity'];
+                   // $v_all_quantity+=$arr[$i]['location_quantity'];
                     $arr_tpl_order_allocation_items[] = $tpl_order_allocation_items;
                 }
             }
@@ -379,7 +380,8 @@ if($v_row==1){
     $tpl_order->set('AJAX_LOAD_ORDER_ALLOCATION_URL', URL.'order/');
     $tpl_order->set('SESSION_ID', session_id());
     $tpl_order->set('TOTAL_AMOUNT', $v_user_rule_hide_price_all?NO_PRICE:format_currency($v_allocation_total_amount));
-    $tpl_order->set('URL_REQUEST', $_SERVER['REQUEST_URI']);
+    $tpl_order->set('URL_REQUEST',  URL.'order/'.$v_order_id.'/edit');
+    //$tpl_order->set('URL_REQUEST', URL.'order/'+$v_order_id+'/allocation/'+$v_order_item_id+'/'+$v_product_id);//$_SERVER['REQUEST_URI']);
 
     $arr_user_allocation = array();
 

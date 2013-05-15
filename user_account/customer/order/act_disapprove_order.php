@@ -10,7 +10,6 @@ $v_redirect = false;
 
 $v_row = $cls_tb_order->select_one(array('order_id'=>$v_tmp_order_id));
 if($v_row==1){
-
     add_class('cls_tb_user');
     $cls_user = new cls_tb_user($db, LOG_DIR);
 
@@ -21,7 +20,6 @@ if($v_row==1){
     $v_tmp_user_name = $cls_tb_order->get_user_name();
     $v_tmp_order_ref = $cls_tb_order->get_order_ref();
     $v_tmp_date_created = $cls_tb_order->get_date_created();
-
 
     if($v_tmp_order_status==20){
         if($v_user_rule_approve){
