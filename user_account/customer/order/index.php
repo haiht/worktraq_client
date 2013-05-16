@@ -38,6 +38,7 @@ $v_user_rule_reorder = isset($arr_user_rule[$v_module_menu_key]['reorder']);
 $v_user_rule_approve = isset($arr_user_rule[$v_module_menu_key]['approve']);
 $v_user_rule_submit = isset($arr_user_rule[$v_module_menu_key]['submit']);
 $v_user_rule_allocate = isset($arr_user_rule[$v_module_menu_key]['allocate']);
+$v_user_rule_cancel = isset($arr_user_rule[$v_module_menu_key]['cancel']);
 $v_user_rule_hide_price_all = $v_user_rule_hide_price_all || isset($arr_user_rule[$v_module_menu_key]['hide']);
 /*
  * End check user rules vs module rules
@@ -55,6 +56,7 @@ if($v_check_order_id>0){
 }else $v_check_order_user=$arr_user['user_name'];
 $v_company_code = isset($_SESSION['company_code'])?$_SESSION['company_code']:'default';
 $v_company_product_url = RESOURCE_URL.$v_company_code.'/products/';
+$v_owner = $cls_tb_order->check_order_own(array("order_id"=>(int)$v_order_id),$v_check_order_user);
 if($v_order_ajax==0){
     switch($v_order){
         case 'UPL'://upload image //========== chua xu ly
@@ -79,7 +81,10 @@ if($v_order_ajax==0){
         case 'VIEW':
             $v_view_order_only = 1;
         case 'EDIT':
-            if((($v_user_rule_edit || $v_user_rule_view) && check_rule_approve($v_check_order_location, $arr_user)) ||($v_check_order_user==$arr_user['user_name'] && $v_user_rule_create)){
+            if((($v_user_rule_edit || $v_user_rule_view) && check_rule_approve($v_check_order_location, $arr_user)) ||($v_check_order_user==$arr_user['user_name'] && $v_user_rule_create)
+                ||(isset($v_view_order_only) && $v_view_order_only==1) || $v_owner==true
+                || $v_user_rule_cancel!=''
+                ){
                 include $v_head.'header.php';
                 include $v_head.'order/qry_load_edit_order.php';
                 include $v_head.'footer.php';

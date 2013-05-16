@@ -11,8 +11,6 @@ $arr_temp_location = array();
 $arr_order_where = array();
 $v_order_count=1;
 $tpl_order = new Template('dsp_order.tpl', $v_dir_templates);
-?>
-<?php
 if($v_page==1)
 {
     if(isset($_SESSION['ss_current_order']))
@@ -227,13 +225,13 @@ foreach($arr_order as $a){
         if($v_tmp_order_user==$arr_user['user_name'])
         {
             if($v_tmp_order_status<20){
-                if($v_user_rule_create || ($v_user_rule_create && $v_user_rule_edit)){
+                if($v_user_rule_create || ($v_user_rule_create && $v_user_rule_edit) || $v_owner==true){
                     $v_dsp_option_order .= '<option class="text_color" value="edit">Edit</option>';
                 }
                 else if($v_user_rule_edit || $v_user_rule_submit){
                     $v_dsp_option_order .= '<option class="text_color" value="edit">Edit</option>';
                 }
-                else if($v_user_rule_delete){
+                if($v_user_rule_delete){
                     $v_dsp_option_order .= '<option class="text_color" value="delete">Delete</option>';
                 }
             }
@@ -244,6 +242,9 @@ foreach($arr_order as $a){
                 if($v_tmp_order_status==20){
                     if($v_user_rule_approve && $cls_user->check_user_rule('user_location_approve', $v_tmp_order_location, $arr_user['user_name'])==1){
                         $v_dsp_option_order .= '<option class="text_color" value="edit">Approve</option>';
+                    }
+                    if($v_user_rule_cancel!=''){
+                        $v_dsp_option_order .= '<option class="text_color" value="edit">Cancel</option>';
                     }
                 }else{
                     if($v_user_rule_edit)

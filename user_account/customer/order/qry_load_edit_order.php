@@ -1,15 +1,18 @@
 <?php if (!isset($v_sval)) die(); ?>
 <?php
 $v_order_id = isset($_GET['txt_order'])?$_GET['txt_order']:'0';
-$v_owner = $cls_tb_order->check_order_own(array("order_id"=>(int)$v_order_id));
-if($v_user_rule_edit=='' && $v_owner==false){
+$v_username = get_unserialize_user('user_name');
+$v_type = isset($_GET['order'])?$_GET['order']:'VIEW';
+$v_owner = $cls_tb_order->check_order_own(array("order_id"=>(int)$v_order_id),$v_username);
+if($v_user_rule_edit=='' && $v_owner==false && $v_type!='VIEW' && $v_user_rule_approve=='' && $v_user_rule_cancel==''){
     $_SESSION['ss_error_title'] = 'Access denied';
-    $_SESSION['ss_error_info'] = 'You do not  have right to edit order .';
+    $_SESSION['ss_error_info'] = 'You do not  have right to edit order....';
     redir(URL.'error/');
 }
-$v_type = isset($_GET['order'])?$_GET['order']:'VIEW';
-if(isset($v_user_rule_edit) && $v_user_rule_edit!='' && $v_type=='EDIT') $v_style = '';
-else $v_style = 'style="display:none"';
+if(isset($v_user_rule_edit) && $v_user_rule_edit!='' && $v_type=='EDIT' || $v_owner==true || $v_user_rule_approve || $v_user_rule_cancel ) $v_style = '';
+else {
+    $v_style = 'style="display:none"';
+}
 settype($v_order_id, 'int');
 if($v_order_id<=0) $v_order_id = isset($_SESSION['order_id'])?$_SESSION['order_id']:'0';
 else $_SESSION['order_id'] = $v_order_id;
@@ -38,7 +41,7 @@ $arr_all_material = array();
 $v_error_approve = '';
 $v_all_price=0;
 //$v_all_quantity=0;// chi lay so luong da allocate
-$v_all_quantity = $cls_tb_order_items->get_all_quantity_by_id(array('order_id'=>$v_order_id));;//lay sach ko can bik da allocate chua
+$v_all_quantity = $cls_tb_order_items->get_all_quantity_by_id(array('order_id'=>$v_order_id));//lay sach ko can bik da allocate chua
 if($v_row==1){
     $_SESSION['order_id'] = $v_order_id;
     $v_po_number = $cls_tb_order->get_po_number();
@@ -409,10 +412,21 @@ if($v_row==1){
         if($v_order_status<=20)
         {
             if($v_order_status==20){
-                if($v_user_rule_approve){
-                    $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
-                    $tpl_order->set('DIS_BUTTON_DISPLAY', '');
-                    $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Approve');
+                if($v_user_rule_approve || $v_user_rule_cancel){
+                    if($v_user_rule_approve!='' && $v_user_rule_cancel!=''){
+                        $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
+                        $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Approve');
+                        $tpl_order->set('DIS_BUTTON_DISPLAY', '');
+                    }
+                    else if($v_user_rule_approve!=''){
+                        $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
+                        $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Approve');
+                        $tpl_order->set('DIS_BUTTON_DISPLAY', 'style="display:none"');
+                    }
+                    else if($v_user_rule_cancel!=''){
+                        $tpl_order->set('SUBMIT_BUTTON_DISPLAY', 'style="display:none"');
+                        $tpl_order->set('DIS_BUTTON_DISPLAY', '');
+                    }
                     $tpl_order->set('SAVE_BUTTON_DISPLAY', 'style="display:none"');
                     $tpl_order->set('ADD_BUTTON_ITEM', 'style="display:none"');
                 }
@@ -439,8 +453,8 @@ if($v_row==1){
             else{
                 $tpl_order->set('DIS_BUTTON_DISPLAY', 'style="display:none"');
                 if($v_user_rule_submit || $v_user_rule_approve){
-                    $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
                     $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Submit');
+                    $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
                     $tpl_order->set('SAVE_BUTTON_DISPLAY', '');
                     $tpl_order->set('ADD_BUTTON_ITEM', '');
                 }else
@@ -450,7 +464,7 @@ if($v_row==1){
                         $tpl_order->set('SAVE_BUTTON_DISPLAY', '');
                         $tpl_order->set('ADD_BUTTON_ITEM', '');
                     }
-                    else if($v_user_rule_edit){
+                    else if($v_user_rule_edit ){
                         $tpl_order->set('SUBMIT_BUTTON_DISPLAY', 'style="display:none"');
                         $tpl_order->set('SAVE_BUTTON_DISPLAY', '');
                         $tpl_order->set('ADD_BUTTON_ITEM', '');
@@ -461,6 +475,7 @@ if($v_row==1){
                         $tpl_order->set('ADD_BUTTON_ITEM', '');
                     }
                 }
+
             }
         }else
         {

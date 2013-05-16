@@ -785,11 +785,11 @@ class cls_tb_order{
 	 * </code>
 	 * @return int
 	 */
-    public function check_order_own(array $arr_where = array()){
+    public function check_order_own(array $arr_where = array(),$p_value){
         $v_check = false;
         $rss = $this->collection->find($arr_where);
         foreach($rss as $arr){
-            if(isset($arr['order_id'])){
+            if(isset($arr['order_id']) && $arr['user_name']==$p_value){
                 $v_check = true;
             }
         }
