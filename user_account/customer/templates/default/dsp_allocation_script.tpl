@@ -1,6 +1,6 @@
 <script type="text/javascript" src="[@URL]/lib/js/yahoo-min.js"></script>
 <script type="text/javascript" src="[@URL]/lib/js/json-min.js"></script>
-<script>
+<script> 
     $(document).ready(function(){
         var product = $("#data-product-id").val();
         var order = $("#data-order-id").val();
@@ -10,7 +10,6 @@
         $("#btn_caner").click(function(){
             window.location = '[@URL]'+'order/'+order+'/edit';
         });
-
         $('input#btn_right').click(function(e) {
             var $l = $('select#txt_all_locations option:selected');
             if($l.length==1)
