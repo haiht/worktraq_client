@@ -18,11 +18,7 @@
 
                 var pos = find_location(location_id,loc);
                 if(pos>=0){
-
                     add_row_table_new(pos,loc);
-                }
-                else{
-                    //alert(pos);
                 }
             }
             else{
@@ -32,43 +28,6 @@
         $("#btn_save_allocation").click(function(){
             allocation_order(product, order, order_item,loc);
         });
-        /*
-        $(document).keyup(function(){
-            var val=  0;
-            $('input.quantity').each(function(){
-                val += parseInt($(this).val());
-            });
-            val = parseInt(val, 10);
-            var s_location_id=0;
-            $('input[rel=allocation]').each(function(){
-                s_location_id =$(this).attr('data-location');
-                var v_value = $(this).val();
-                var $input = $(this);
-
-                s_location_id = parseInt(s_location_id);
-                var p = find_location(s_location_id,loc);
-
-                if(p>=0 && val>0){
-                    var c_remain = $('span#location_quanlity').html();
-                    var total = $('span#product_quanlity').html();
-                    c_remain = parseInt(c_remain,10);
-                    if(!isNaN(c_remain) && c_remain>0)
-                    {
-                        var first = c_remain;
-                        c_remain = total - val;
-                        if(c_remain < 0){
-                            alert("Please insert a number from "+first +" to " +total);
-                            return false;
-                        }
-                        $($input).val(v_value);
-                    }
-                }
-            });
-            loc[p].quantity = val;
-            $('span#location_quanlity').html(c_remain);
-
-        });
-        */
     });
 </script>
 <script type="text/javascript">
@@ -129,9 +88,12 @@ function add_row_table_new(pos,loc)
     var $tr = $('<div class='+table_name+'></div>');
     var $c2 = $('<div class="table_yourpro float_left">'+location_number+'</div>');
     var $c3 = $('<div class="table_quali1 float_left">'+location_name+'</div>');
+    var $c_3 = $('<div class="table_quali1 float_left">'+location_name+'</div>');
+
 
     $tr.append($c2);
     $tr.append($c3);
+    $tr.append($c_3);
 
     var $d1 = $('<div class="table_unitprice float_left"></div>');
     var $d11 = $('<div class="dent float_right"></div>');
@@ -189,7 +151,7 @@ function add_row_table_new(pos,loc)
     );
 
     var $t = $('<input type="text" rel="allocation"  class="quantity bg float_left" data-location="'+location_id+'"  value="'+quantity+'" />');
-    $t.bind('keyup', function(){
+    $t.keypress(function(){
         var val = 0;
         $.each($('input.quantity'), function(index, element){
             var one = $(this).val();
@@ -212,7 +174,8 @@ function add_row_table_new(pos,loc)
                 var first = c_remain;
                 c_remain = total - val;
                 if(c_remain < 0){
-                    alert("Please insert a number from "+first +" to " +total);
+                    alert("Please insert a number from 1 to " + first);
+                    $input.val(0);
                     return false;
                 }
                 $($input).val(v_value);
@@ -231,6 +194,7 @@ function add_row_table_new(pos,loc)
     $d11.append($b2);
     $d1.append($d11);
     remain-=quantity;
+
     $('span#location_quanlity').html(remain);
 
     var $c5 = $('<div class="table_extended float_left"></div>');
@@ -407,7 +371,7 @@ function allocation_order(pid, oid, otid,loc)
                 var err = readKey('error', data, 'int');
                 var msg = readKey('message', data);
                 if(err==0){
-                    alert("Your item has been saved");
+                    alert(msg);
                 }
             },
             error : function(){

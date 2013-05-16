@@ -14,6 +14,7 @@ if($v_request_product_id<0) $v_request_product_id=0;
 
 add_class('cls_tb_product');
 $cls_tb_product = new cls_tb_product($db, LOG_DIR);
+
 $v_product_excluded_location = $cls_tb_product->select_scalar('excluded_location', array('product_id'=>$v_request_product_id));
 if($v_product_excluded_location!='') $v_product_excluded_location .= ',';
 

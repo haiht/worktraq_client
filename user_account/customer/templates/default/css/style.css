@@ -1186,7 +1186,7 @@ ul.nav li a:hover, ul.nav li a.active_item{
     font-size:0px;
 }
 #page .content .float_right .reate .box4{
-    width:648px;
+    width:946px;
     margin-right:10px;
     margin-top:27px;
 }
@@ -1239,6 +1239,9 @@ ul.nav li a:hover, ul.nav li a.active_item{
 #page .content .table5 .td_3{
 }
 #page .content .table5 div.table_yourpro{
+    width:98px;
+}
+#page .content .table5 div.td{
     width:98px;
 }
 
@@ -1294,7 +1297,7 @@ ul.nav li a:hover, ul.nav li a.active_item{
     cursor:pointer;
 }
 #page .content .table5 div.table_extended{
-    width:110px;
+    width:126px;
     border-left:1px solid #e8eef2;
 }
 #page .content .table5 div.table_extended input.btn_delete{
@@ -1702,7 +1705,9 @@ a:hover{
 .color_r2{
     color:#747474;
 }
-
+.tleft{
+    text-align: left;
+}
 
 
 

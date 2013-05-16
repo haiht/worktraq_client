@@ -1,10 +1,10 @@
-[@ALLOCATION_SCRIPT]
 <div class="sub">
     <a href="[@URL]">HOME</a>
     <span class="icon_sub_next"></span>
     <a class="sub_active" href="[@URL]order" >order</a>
     <span class="icon_sub_next"></span>
-    <span class="sub_active" href="[@URL]order/allocation" >order</span>
+    <span class="sub_active"> <a href="[@URL]order/allocation"> Alliocation </a></span>
+
 </div>
 </div>
 </div>
@@ -19,33 +19,25 @@
             <div class="indent">
                 <div class="reate">
                     <div>
-                        <p class="title_lef_dis2">[@PRODUCT_NAME]</p>
-                        <div class="float_left box3">
-                            <p class="title_3">all location</p>
-                            <select id="txt_all_locations" name="txt_all_locations" class="txt_all_locations text_color" size="10">
-
-                            </select>
-                        </div>
-
-                        <input type="button" id="btn_right" class="button float_left" />
+                        <p class="title_lef_dis2">Product Name: [@PRODUCT_NAME]</p>
                         <div class="float_right box4">
-                            <p class="title_lef_dis3">allocated locations</p>
                             <div class="table5" id="table5">
                                 <div class="td_1">
-                                    <div class="table_yourpro float_left">Number</div>
-                                    <div class="table_quali float_left">Name</div>
+                                    <div class="table_yourpro float_left">#</div>
+                                    <div class="table_quali float_left">Location Number</div>
+                                    <div class="table_quali float_left">Location Number</div>
                                     <div class="table_unitprice float_left">Quantity</div>
                                     <div class="table_extended float_left">Action</div>
                                 </div>
                                 <p class="clear"></p>
-
+                                [@ALLOCATION_ITEMS]
                             </div>
                         </div>
                         <p class="clear"></p>
                         <div class="total_price2">
-                            <p>Quantity: <span class="color_blue" id="product_quanlity">2</span></p>
+                            <p>Quantity: <span class="color_blue " id="product_quanlity"></span></p>
                             <p class="float_left">Remaining to allocate: </p>
-                            <span class="color_blue block float_left" id="location_quanlity">99</span>
+                            <span class="color_blue block float_left" id="location_quanlity"></span>
                         </div>
                     </div>
                     <div class="line">
