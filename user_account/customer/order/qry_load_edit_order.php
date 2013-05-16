@@ -1,13 +1,14 @@
-<?php if (!isset($v_sval)) die();  if(!isset($_GET['order'])) die(); ?>
+<?php if (!isset($v_sval)) die(); ?>
 <?php
-$style = $_GET['order']=='VIEW'?'style="display:none"':'';
+$v_type = isset($_GET['order'])?$_GET['order']:'VIEW';
+if(isset($v_user_rule_edit) && $v_user_rule_edit!='' && $v_type=='EDIT') $v_style = '';
+else $v_style = 'style="display:none"';
 $v_order_id = isset($_GET['txt_order'])?$_GET['txt_order']:'0';
 settype($v_order_id, 'int');
 if($v_order_id<=0) $v_order_id = isset($_SESSION['order_id'])?$_SESSION['order_id']:'0';
 else $_SESSION['order_id'] = $v_order_id;
 settype($v_order_id, 'int');
 if($v_order_id<=0) redir(URL.'order/');
-$style='';
 $v_display_save_btn ='style="display:none"';
 $v_row = $cls_tb_order->select_one(array('order_id'=>$v_order_id, 'company_id'=>$v_company_id));
 $v_count_record=1;
@@ -374,7 +375,7 @@ if($v_row==1){
 
     $tpl_order->set('URL_TEMPLATE', URL.$v_dir_templates);
     $tpl_order->set('ORDER_ID', $v_order_id);
-    $tpl_order->set('STYLE',  $style);
+    $tpl_order->set('STYLE',  $v_style);
     $tpl_order->set('ORDER_DETAIL_ALLOCATION', $v_dsp_order_allocations);
     $tpl_order->set('URL', URL);
     $tpl_order->set('AJAX_LOAD_ORDER_ALLOCATION_URL', URL.'order/');
