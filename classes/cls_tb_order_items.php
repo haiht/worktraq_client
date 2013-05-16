@@ -1009,8 +1009,8 @@ class cls_tb_order_items{
         $arr_items = $this->select(array('order_id'=>(int) $p_order_id));
         $v_total = 0;
         foreach($arr_items as $arr){
-            if(isset($arr['quantity']) && $arr['quantity']>0)
-                $v_total +=$arr['quantity'];
+            if(isset($arr['quantity']) && $arr['quantity'] > 0)
+                $v_total +=isset($arr['quantity']) ? $arr['quantity'] : 0;
         }
         return $v_total;
     }
@@ -1080,12 +1080,17 @@ class cls_tb_order_items{
 		$arr = $this->collection->find($arr_where)->sort($arr_order)->limit($p_row)->skip($p_offset);
 		return $arr;
 	}
-	public function get_all_quantity_by_id(array $arr_where = array()){
+
+    /**
+     * @param array $arr_where
+     * @return int
+     */
+    public function get_all_quantity_by_id(array $arr_where = array()){
 
         $arr_all = $this->collection->find($arr_where);
         $total =0;
         foreach($arr_all as $arr){
-            $total+=$arr['quantity'];
+            $total+=isset($arr['quantity']) ? $arr['quantity'] : 0 ;
         }
         return $total;
     }
