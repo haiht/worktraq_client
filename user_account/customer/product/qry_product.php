@@ -1,9 +1,11 @@
 <?php
 if (!isset($v_sval)) die();
-if(!isset($_GET['txt_product_id'])) die();
-?>
+if(!isset($_GET['txt_product_id'])){
+    $_SESSION['ss_error_title'] = 'Access denied';
+    $_SESSION['ss_error_info'] = 'You may have no right here';
+    redir(URL.'error/');
+}
 
-<?php
 $v_sign_money ='$';
 $v_order_item_count=1;
 $v_selected_product_id = isset($_GET['txt_product_id'])?$_GET['txt_product_id']:'0';
@@ -26,18 +28,13 @@ $cls_tb_location = new cls_tb_location($db, LOG_DIR);
 $v_order_option_item = '<option > -- Select Order -- </option>';
 $v_material='';
 $v_color ='';
-?>
-
-<?php
+$v_option_text = "THERE NO OPTION AVAILABLE FOR THIS ITEM";
 if($v_selected_product_id<=0){
     $_SESSION['ss_error_title'] = 'Invalid product!';
     $_SESSION['ss_error_info'] = 'Invalid product!';
     $_SESSION['ss_error_referrer'] = URL.'catalogue/';
     redir(URL.'error/');
 }
-?>
-
-<?php
 $arr_where = array('product_id'=>$v_selected_product_id, 'company_id'=>isset($v_company_id)?$v_company_id:0);
 $v_row = $cls_tb_product->select_one($arr_where);
 if($v_row!=1)
@@ -48,6 +45,12 @@ if($v_row!=1)
     redir(URL.'error/');
 }
 $v_product_detail = $cls_tb_product->get_product_detail();
+$arr_option_text = $cls_tb_product->get_text();
+if(count($arr_option_text)>0)
+    $v_option_text='';
+foreach($arr_option_text as $arr){
+    $v_option_text.="<span color= ".$arr['color']." font-family= ".$arr['font-name']." font-size= ".$arr['font-size']. ">".$arr['text']."</span><br>";
+}
 $v_product_sku = $cls_tb_product->get_product_sku();
 $v_short_description = $cls_tb_product->get_short_description();
 $v_long_description = $cls_tb_product->get_long_description();
@@ -291,9 +294,7 @@ $v_product_name = htmlentities($v_short_description);
 $v_product_name .= '   [Package Type: '.$v_package_type_name.']'.($cls_tb_product->get_package_image_choose($cls_tb_product_images)?' - Allow change image':'');
 $v_session_order_id = isset($_SESSION['order_id'])?$_SESSION['order_id']:'0';
 settype($v_session_order_id, 'int');
-
 $tpl_product_info_main= new Template('dsp_product_info.tpl', $v_dir_templates);
-
 $tpl_edit_order_item = new Template('dsp_edit_order_item.tpl', $v_dir_templates);
 $tpl_edit_order_item->set('DSP_HIDDEN','style="display:none"');
 $tpl_edit_order_item->set('BTN_NAME_DISPLAY','Add to your order');
@@ -317,15 +318,12 @@ $tpl_edit_order_item->set('ALERT_MATERIAL_THICKNESS',$cls_tb_message->select_val
 $tpl_edit_order_item->set('ALERT_ALLOCATE',$cls_tb_message->select_value('invalid_allocate_product'));
 $tpl_edit_order_item->set('OPTION_SIZE',  $v_dsp_option_size);
 $tpl_edit_order_item->set('MATERIAL_OPTION',  json_encode($arr_all_material));
-
 $tpl_edit_order_item->set('OPTION_MATERIAL',  $v_dsp_option_material);
-//$tpl_edit_order_item->set('OPTION_MATERIAL',  $v_option_material_all);
 $tpl_edit_order_item->set('OPTION_THICKNESS',$v_dsp_option_thick);
 $tpl_edit_order_item->set('OPTION_COLOR',$v_dsp_option_color);
-$tpl_edit_order_item->set('OPTION_TEXT',"THERE NO OPTION AVAILABLE FOR THIS ITEM");
+$tpl_edit_order_item->set('OPTION_TEXT',$v_option_text);
 $tpl_edit_order_item->set('PRODUCT_IMAGE',$v_image_url);
 $tpl_edit_order_item->set('PRODUCT_ID',$v_selected_product_id);
-
 $tpl_order_item_row = new Template('dsp_order_item_row.tpl', $v_dir_templates);
 $tpl_order_item_row->set('PRODUCT_ADD_ORDER_CLASS',$v_order_item_count%2==0?'td_2':'td_3');
 $tpl_order_item_row->set('UNIT_PRICE',$v_unit_price);
@@ -340,7 +338,6 @@ $tpl_product_info_main->set('PRODUCT_MATERIAL', $v_material);//
 $tpl_product_info_main->set('PRODUCT_COLOR', $v_color);//$v_color
 $v_size =isset($v_size)?$v_size:'';
 $tpl_product_info_main->set('PRODUCT_SIZE_2', $v_size);//
-
 if($v_long_description=='' || $v_long_description=='.')
     $v_ouput_Des =$v_short_description;
 else
@@ -349,7 +346,6 @@ $tpl_product_info_main->set('DESCRIPTION',$v_ouput_Des );
 $tpl_product_info_main->set('URL', URL);
 $tpl_product_info_main->set('URL_TEMPLATE', URL.$v_dir_templates);
 $tpl_product_info_main->set('PRODUCT_ID',$v_selected_product_id );
-
 if($v_session_order_id==0){
     if($v_user_rule_order_create)
         $tpl_product_info_main->set('DISPLAY_BUTTON', ($v_allow_single==1 && $v_product_status==3)?'':' style="display:none"');
@@ -389,7 +385,6 @@ $arr_order_id = array();
 add_class('cls_tb_user');
 $cls_user = new cls_tb_user($db, LOG_DIR);
 $v_user_location_view = $cls_user->select_scalar('user_location_view', array('user_name'=>$arr_user['user_name']));
-
 if($v_user_location_view!=''){
     if(!$v_user_rule_order_view)  $v_user_location_view = $arr_user['location_default'];
 }
@@ -399,7 +394,6 @@ $v_tmp_order_id = 0;
 foreach($arr_items as $a){
     $v_order_id = $a['order_id'];
     if(isset($arr_order_id[$v_order_id])) continue;
-
     $v_row = $cls_tb_order->select_one(array('order_id'=>$v_order_id));
     $v_location_id = 0;
     $v_user_name = '';
@@ -431,7 +425,6 @@ foreach($arr_items as $a){
     }
 }
 if(count($arr_order)>0){
-
     $v_module_menu_key = 'customer_order';
     $arr_module_rule = $cls_module->select_scalar('module_rules', array('module_menu'=>$v_module_menu_key));
     for($i=0; $i<count($arr_module_rule); $i++){
@@ -457,7 +450,6 @@ if(count($arr_order)>0){
             if($v_user_location_view=='') $v_user_location_view = $arr_user['location_default'];
             if($v_user_location_view!='')
             {
-
                 $arr_user_location_view = explode(',', $v_user_location_view);
                 $arr_location = array();
                 $j=0;
@@ -477,7 +469,6 @@ if(count($arr_order)>0){
                     $arr_order_where = array('company_id'=>-1);
                 }
             }
-            //$arr_order_where = array('company_id'=>$v_company_id, 'location_id'=>$v_location_id, 'status'=>array('$gt'=>0));
         }else
             $arr_order_where = array('company_id'=>$v_company_id, 'user_name'=>$arr_user['user_name'], 'status'=>array('$gt'=>0));
     else
@@ -556,7 +547,6 @@ if($v_user_rule_order_create || $v_user_rule_order_edit)
     $tpl_script->set('ALERT_MATERIAL_THICKNESS',$cls_tb_message->select_value('invalid_material_thickness'));
     $tpl_script->set('ALERT_ALLOCATE',$cls_tb_message->select_value('invalid_allocate_product'));
     $v_dsp_script_tpl = $tpl_script->output();
-
     $v_order_option_item.='<option value="0" selected="selected">New Order in Session</option>';
     $arr_order_where = array();
     if($arr_user['user_type']>=5){

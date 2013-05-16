@@ -11,8 +11,6 @@ $arr_temp_location = array();
 $arr_order_where = array();
 $v_order_count=1;
 $tpl_order = new Template('dsp_order.tpl', $v_dir_templates);
-?>
-<?php
 if($v_page==1)
 {
     if(isset($_SESSION['ss_current_order']))
@@ -167,8 +165,6 @@ if($arr_user['user_type']>=4){
         $arr_order_where = array('company_id'=>$v_company_id, 'user_name'=>$arr_user['user_name'], 'status'=>array('$gt'=>0));}
 else
     $arr_order_where = array('company_id'=>$v_company_id, 'status'=>array('$gt'=>0));
-
-
 foreach($arr_search as $key=>$val){
     if($key=='location_id'){
         if($arr_user['user_type']<5){
@@ -197,7 +193,6 @@ foreach($arr_search as $key=>$val){
     {
         $arr_order_where[$key] = $val;
     }
-
 }
 $v_total_rows = $cls_tb_order->count($arr_order_where);
 $v_total_pages = ceil($v_total_rows/$v_row_page);
@@ -230,13 +225,13 @@ foreach($arr_order as $a){
         if($v_tmp_order_user==$arr_user['user_name'])
         {
             if($v_tmp_order_status<20){
-                if($v_user_rule_create || ($v_user_rule_create && $v_user_rule_edit)){
+                if($v_user_rule_create || ($v_user_rule_create && $v_user_rule_edit) || $v_owner==true){
                     $v_dsp_option_order .= '<option class="text_color" value="edit">Edit</option>';
                 }
                 else if($v_user_rule_edit || $v_user_rule_submit){
                     $v_dsp_option_order .= '<option class="text_color" value="edit">Edit</option>';
                 }
-                else if($v_user_rule_delete){
+                if($v_user_rule_delete){
                     $v_dsp_option_order .= '<option class="text_color" value="delete">Delete</option>';
                 }
             }
@@ -247,6 +242,9 @@ foreach($arr_order as $a){
                 if($v_tmp_order_status==20){
                     if($v_user_rule_approve && $cls_user->check_user_rule('user_location_approve', $v_tmp_order_location, $arr_user['user_name'])==1){
                         $v_dsp_option_order .= '<option class="text_color" value="edit">Approve</option>';
+                    }
+                    if($v_user_rule_cancel!=''){
+                        $v_dsp_option_order .= '<option class="text_color" value="edit">Cancel</option>';
                     }
                 }else{
                     if($v_user_rule_edit)
@@ -265,12 +263,6 @@ foreach($arr_order as $a){
         }
         if(!isset($arr_temp_location[$v_tmp_order_location]))
             $arr_temp_location[$v_tmp_order_location] = $cls_tb_location->select_scalar('location_name',array('location_id'=>(int)$v_tmp_order_location));
-        //======================= ADDING NEW CODE HERE =))
-      //  $v_total_price = 0;
-      //  $arr_current_order = unserialize($_SESSION['ss_current_order']);
-        //for($i=0; $i<count($arr_current_order); $i++){
-          //  $v_total_price += $arr_current_order[$i]['product_price']*$arr_current_order[$i]['product_quantity'];
-        //}
         if(!isset($arr_temp_location[$v_location_id]))
             $arr_temp_location[$v_location_id] = $cls_tb_location->select_scalar('location_name',array('location_id'=>(int)$v_location_id));
         $v_tb_class_name='';
@@ -286,7 +278,6 @@ foreach($arr_order as $a){
             $tpl_order_list_item->set('ORDER_STATUS', $v_order_status);
             $tpl_order_list_item->set('ORDER_ID',$v_tmp_order_id);
             $tpl_order_list_item->set('OPTION_TYPE', $v_dsp_option_order);
-           // if($v_date!='') die($cls_tb_order->select_scalar("order_ref",array("order_id"=>$v_tmp_order_id))." ".date('Y-m-d',$v_date->sec) . " -- " );
             $v_date = $cls_tb_order->select_scalar("date_required",array("order_id"=>$v_tmp_order_id));
             $v_date = isset($v_date)?date('Y-m-d',$v_date->sec):'N/A';
             $v_tool_tip = "<span style='font-weight:bold'>Order quantity: </span> ". number_format($v_total_items)
@@ -297,12 +288,6 @@ foreach($arr_order as $a){
         $v_order++;
     }
 }
-/*
-$v_dsp_order_list = Template::merge($arr_tbl_order_list_item);
-$tpl_order_list = new Template('dsp_order_list.tpl', $v_dir_templates);
-$tpl_order_list->set('ORDER_LIST_ITEM', $v_dsp_order_list);
-*/
-//Check rule
 $v_hide_div_create_new = 'style="display:none"';
 if($v_user_rule_create){
     $v_hide_div_create_new = isset($_SESSION['ss_current_order'])?' style="display:none"':'';
@@ -315,8 +300,5 @@ $tpl_order->set('ORDER_ITEM_LIST',$v_order_list_item);
 $tpl_order->set('FORM_SEARCH', $tbl_order_form_search->output());
 $tpl_order->set('URL',URL);
 $tpl_order->set('URL_TEMPLATE',URL.$v_dir_templates);
-//$tpl_new_order = new Template('create_new_order.tpl', $v_dir_templates);
-//$tpl_order->set('DSP_CREATE_NEW',$tpl_new_order->output());
-
 echo $tpl_order->output();
 ?>

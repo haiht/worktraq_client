@@ -9,7 +9,6 @@ if(!isset($v_sval)) die();
 <base href="<?php echo URL;?>" />
 <script type="text/javascript" src="lib/js/jquery.min.1.8.2.js"></script>
 <script type="text/javascript" src="lib/imagemapster/jquery.imagemapster.js"></script>
-
 <script type="text/javascript">
 $(document).ready(function(){
 <?php echo $v_dsp_script;?>

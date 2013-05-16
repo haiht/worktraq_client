@@ -3,12 +3,9 @@
 $v_area_id  = isset($_REQUEST['txt_area_id']) ? $_REQUEST['txt_area_id'] : '';
 $v_image_id = isset($_REQUEST['txt_image_id']) ? $_REQUEST['txt_image_id'] : '';
 $tpl_signage_layout = new Template('dsp_singer_signage_layout.tpl',$v_dir_templates);
-
 $arr_where_clause = array('area_id'=>(int)$v_area_id );
 $arr_location_area = $cls_tb_location_area->select($arr_where_clause);
-
 $v_dsp_tb_location_area = '<table  width="100%" cellpadding="3" cellspacing="0" border="0" align="center">';
-
 $v_dsp_image = '';
 $v_dsp_area_html ='';
 $v_mapping_image = '';
@@ -27,14 +24,12 @@ foreach($arr_location_area as $arr)
         if($v_image_id==$v_tmp_image_id){
             $v_dsp_image = '<img class="map" usemap="#imgmap" src="'.RESOURCE_URL.$v_company_code.'/signage_layout/'.PRODUCT_IMAGE_NORMAL.'_'.$v_tmp_image. '"> '.$v_tmp_image_html.'<br>';
         }
-
     }
 }
 $v_dsp_tb_location_area .='<tr>';
 $v_dsp_tb_location_area .='<td align="center">' .$v_dsp_image.'</td>' ;
 $v_dsp_tb_location_area .='</tr>';
 $v_dsp_tb_location_area .='</table>';
-
 $tpl_signage_layout->set('IMAGES',$v_dsp_tb_location_area);
 $tpl_signage_layout->set('URL',URL);
 echo $tpl_signage_layout->output();

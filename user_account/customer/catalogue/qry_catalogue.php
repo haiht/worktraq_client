@@ -6,17 +6,13 @@ require 'classes/cls_tb_product.php';
 require 'classes/cls_tb_product_images.php';
 require 'classes/cls_tb_order.php';
 $tpl_content = new Template('dsp_catalogue.tpl',$v_dir_templates);
-
 $cls_tb_order = new cls_tb_order($db);
 $cls_tb_product_images = new cls_tb_product_images($db);
-
 $cls_tb_tag = new cls_tb_tag ($db,LOG_DIR);
 $cls_tb_product = new cls_tb_product ($db,LOG_DIR);
-
 $arr_where_clause = array();
 $v_tag_check=0;
 $v_product_tag_all="";
-//=================
 $v_company_id = (int) $_SESSION['company_id'];
 $arr_tag  = $cls_tb_tag->select(array("company_id"=>$v_company_id));
 $v_tag = '';
@@ -106,7 +102,6 @@ $v_num_row = isset($_REQUEST['num_row'])?$_REQUEST['num_row']:PRODUCT_ROWS_ONE_P
 settype($v_num_row,"int");
 $v_num_row = ($v_num_row<0)?PRODUCT_ROWS_ONE_PAGE:$v_num_row;
 $v_total_row = $cls_tb_product->count($arr_where_clause);
-
 $v_total_num_row = count($v_total_row);
 $v_total_pages = ceil($v_total_row /$v_num_row);
 if($v_total_pages <= 0) $v_total_pages = 1;

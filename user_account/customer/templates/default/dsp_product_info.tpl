@@ -9,7 +9,6 @@
         $("#btn_back_to_order").click(function(){
             window.location = '[@URL]/catalogue';
         });
-
     });
 </script>
 <div class="sub">
@@ -48,22 +47,18 @@
                         <p class="up float_left">Print Image:</p>
                         <p class="up_lates">This product uses a standard image already provided.</p>
                     </div>
-
                     <div class="clear indent_lates">
                         <p class="up float_left">Size:</p>
                         <p class="up_lates">[@PRODUCT_SIZE]</p>
                     </div>
-
                     <div class="clear indent_lates">
                         <p class="up float_left">Print Materials:</p>
                         <p class="up_lates">[@PRODUCT_MATERIAL]</p>
                     </div>
-
                     <div class="clear indent_lates">
                         <p class="up float_left">Product Combinations:</p>
                         <p class="up_lates">[@PRODUCT_MATERIAL] - [@PRODUCT_COLOR] [@PRODUCT_SIZE_2].</p>
                     </div>
-
                     <div class="clear indent_lates2">
                         <p class="up float_left">Description :</p>
                         <p class="up_lates2 clear"></p>

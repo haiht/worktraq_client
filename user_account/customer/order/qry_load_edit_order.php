@@ -1,9 +1,18 @@
 <?php if (!isset($v_sval)) die(); ?>
 <?php
-$v_type = isset($_GET['order'])?$_GET['order']:'VIEW';
-if(isset($v_user_rule_edit) && $v_user_rule_edit!='' && $v_type=='EDIT') $v_style = '';
-else $v_style = 'style="display:none"';
 $v_order_id = isset($_GET['txt_order'])?$_GET['txt_order']:'0';
+$v_username = get_unserialize_user('user_name');
+$v_type = isset($_GET['order'])?$_GET['order']:'VIEW';
+$v_owner = $cls_tb_order->check_order_own(array("order_id"=>(int)$v_order_id),$v_username);
+if($v_user_rule_edit=='' && $v_owner==false && $v_type!='VIEW' && $v_user_rule_approve=='' && $v_user_rule_cancel==''){
+    $_SESSION['ss_error_title'] = 'Access denied';
+    $_SESSION['ss_error_info'] = 'You do not  have right to edit order....';
+    redir(URL.'error/');
+}
+if(isset($v_user_rule_edit) && $v_user_rule_edit!='' && $v_type=='EDIT' || $v_owner==true || $v_user_rule_approve || $v_user_rule_cancel ) $v_style = '';
+else {
+    $v_style = 'style="display:none"';
+}
 settype($v_order_id, 'int');
 if($v_order_id<=0) $v_order_id = isset($_SESSION['order_id'])?$_SESSION['order_id']:'0';
 else $_SESSION['order_id'] = $v_order_id;
@@ -27,13 +36,12 @@ if(isset($cls_tb_product)==false){
     add_class('cls_tb_product');
     $cls_tb_product = new cls_tb_product($db, LOG_DIR);
 }
-
 $arr_product_threshold = array();
 $arr_all_material = array();
 $v_error_approve = '';
 $v_all_price=0;
 //$v_all_quantity=0;// chi lay so luong da allocate
-$v_all_quantity = $cls_tb_order_items->get_all_quantity_by_id(array('order_id'=>$v_order_id));;//lay sach ko can bik da allocate chua
+$v_all_quantity = $cls_tb_order_items->get_all_quantity_by_id(array('order_id'=>$v_order_id));//lay sach ko can bik da allocate chua
 if($v_row==1){
     $_SESSION['order_id'] = $v_order_id;
     $v_po_number = $cls_tb_order->get_po_number();
@@ -87,7 +95,6 @@ if($v_row==1){
         $v_item_status = $arr['status'];
         $v_item_desc = $arr['description'];
         $arr_allocation = $arr['allocation'];
-
         if($v_item_status==1) $v_been_allocated = 1;
         if($v_item_status==1){
             $v_error_approve.='*Product: '.$v_product_code.' has not been allocated.';
@@ -95,7 +102,6 @@ if($v_row==1){
         if (!preg_match("~^(?:f|ht)tps?://~i", $v_graphic_file)) {
             $v_image_url = URL.$v_graphic_file;
         }
-
         $tpl_order_items = new Template('dsp_order_items_all.tpl',$v_dir_templates);
         $v_class_table_name = $v_count_record%2==0?'td_3':'td_2';
         $v_count_record++;
@@ -103,7 +109,6 @@ if($v_row==1){
         $tpl_order_items->set('PRODUCT_ID',$v_product_id);
         $tpl_order_items->set('ORDER_ID',isset($v_order_id)?$v_order_id:0);
         $tpl_order_items->set('ORDER_ITEM_ID',isset($v_order_item_id)?$v_order_item_id:0);
-
         if($v_package_type<=1) {
             $v_product_material = $v_product_code .' - '.$v_product_description.' - ';
             if ($v_material_name != '') {
@@ -127,7 +132,6 @@ if($v_row==1){
         $tpl_order_items->set('GRAPHIC_ID',$v_graphic_id);
         $tpl_order_items->set('PRODUCT_QUANTITY', $v_product_quantity);
         $tpl_order_items->set('PRODUCT_PRICE', $v_user_rule_hide_price_all?NO_PRICE:format_currency($v_current_price));
-
         $tpl_order_items->set('PRODUCT_AMOUNT', $v_user_rule_hide_price_all?NO_PRICE:format_currency($v_current_price*$v_product_quantity));
         if($v_order=='EDIT'){
             $v_display_save_btn='';
@@ -146,7 +150,6 @@ if($v_row==1){
             $v_display_save_btn = 'style="display:none"';
             $tpl_order_items->set('SELECT_DISABLED', 'disabled="disabled"');
         }
-
         $arr_tpl_order_items[] = $tpl_order_items;
         foreach($arr_allocation as $arr_loc){
             $v_location_id = $arr_loc['location_id'];
@@ -161,7 +164,6 @@ if($v_row==1){
             $v_location_tracking_company = $arr_loc['tracking_company'];
             $v_location_tracking_url = $arr_loc['tracking_url'];
             $v_date_shipping = $arr_loc['date_shipping'];
-
             $arr_loc['product_name'] = $v_product_material;
             if($v_item_status==0){
                 if(!isset($arr_product_threshold[$v_location_product_id])) $arr_product_threshold[$v_location_product_id] = $cls_tb_product->select_scalar('product_threshold', array('product_id'=>$v_location_product_id));
@@ -188,10 +190,7 @@ if($v_row==1){
             }
         }
     }
-
-
     $v_dsp_order_details = Template::merge($arr_tpl_order_items);
-
     $v_allocation_total_amount = 0;
     if(count($arr_tmp_allocation)<=0)
     {
@@ -205,11 +204,8 @@ if($v_row==1){
         $tpl_order_allocation_items->set('PRODUCT_QUANTITY', '');
         $tpl_order_allocation_items->set('PRODUCT_PRICE', '');
         $tpl_order_allocation_items->set('PRODUCT_AMOUNT', '');
-
         $arr_tpl_order_allocation_items[] = $tpl_order_allocation_items;
-        //
         $v_dsp_one_allocation = Template::merge($arr_tpl_order_allocation_items);
-
         $tpl_one_allocation = new Template('dsp_order_allocation.tpl', $v_dir_templates);
         $tpl_one_allocation->set('TABLE_CLASS','td_3');
         $tpl_one_allocation->set('LOCATION_NAME', '');
@@ -233,24 +229,19 @@ if($v_row==1){
             $v_tracking_company = isset($arr[0]['tracking_company'])?$arr[0]['tracking_company']:'';
             $v_date_shipping = isset($arr[0]['date_shipping'])?$arr[0]['date_shipping']:NULL;
             $v_link_tracking = isset($arr[0]['tracking_url'])?$arr[0]['tracking_url']:'';
-
             if($v_link_tracking!='' && $v_tracking_number!='')
                 $v_tracking_number = '<a target="_blank" href="'.$v_link_tracking.'"> '.$v_tracking_number.' </a>';
-
             $v_tracking = $v_tracking_number;
             if($v_tracking!='' && $v_tracking_company!='')
                 $v_tracking.=' - '.$v_tracking_company;
             else
                 $v_tracking = $v_tracking_company;
-
             if(is_null($v_date_shipping))
                 $v_shipping = ' --- ';
             else
                 $v_shipping = date('d-M-Y', $v_date_shipping->sec);
-
             $v_location_total_amount = 0;
             $arr_tpl_order_allocation_items = array();
-
             if(count($arr)<=0)
             {
                 $tpl_order_allocation_items = new Template('dsp_order_view_edit_distribution.tpl',$v_dir_templates);
@@ -259,11 +250,8 @@ if($v_row==1){
                 $tpl_order_allocation_items->set('TABLE_CLASS_NAME', 'td_2');
                 $tpl_order_allocation_items->set('ORDER_ID', 0);
                 $tpl_order_allocation_items->set('PRODUCT_MATERIAL', '');
-
-                //$tpl_order_allocation_items->set('PRODUCT_IMAGE', URL.'images/products/'.$arr[$i]['product_id'].'/'.$arr[$i]['product_image']);
                 $v_graphic_file = $arr[$i]['product_image'];
                 if(strpos($v_graphic_file,'/')===false) $v_graphic_file = $v_company_product_url.'/'.$v_graphic_file;
-
                 $tpl_order_allocation_items->set('PRODUCT_IMAGE', '');
                 $tpl_order_allocation_items->set('PRODUCT_QUANTITY', '');
                 $tpl_order_allocation_items->set('PRODUCT_PRICE', '');
@@ -275,20 +263,17 @@ if($v_row==1){
                 for($i=0; $i<count($arr); $i++)
                 {
                     $tpl_order_allocation_items = new Template('dsp_order_view_edit_distribution.tpl',$v_dir_templates);
-
                     $tpl_order_allocation_items->set('PRODUCT_ID', $arr[$i]['product_id']);
                     $tpl_order_allocation_items->set('URL', URL);
                     $tpl_order_allocation_items->set('TABLE_CLASS_NAME', $i%2==0?'td_3':'td_2');
                     $tpl_order_allocation_items->set('ORDER_ID', isset($v_order_id)?$v_order_id:0);
                     $tpl_order_allocation_items->set('PRODUCT_MATERIAL', $arr[$i]['product_name']);
-
                     $v_graphic_file = $arr[$i]['product_image'];
                     if(strpos($v_graphic_file,'/')===false) $v_graphic_file = $v_company_product_url.$v_graphic_file;
 
                     if (!preg_match("~^(?:f|ht)tps?://~i", $v_graphic_file)) {
                         $v_graphic_file = URL.$v_graphic_file;
                     }
-
                     $tpl_order_allocation_items->set('PRODUCT_IMAGE', $v_graphic_file);
                     $tpl_order_allocation_items->set('PRODUCT_QUANTITY', $arr[$i]['location_quantity']);
                     $tpl_order_allocation_items->set('PRODUCT_PRICE', $v_user_rule_hide_price_all?NO_PRICE:format_currency($arr[$i]['location_price']));
@@ -296,7 +281,6 @@ if($v_row==1){
                     $tpl_order_allocation_items->set('PRODUCT_AMOUNT', $v_user_rule_hide_price_all?NO_PRICE:format_currency($v_tmp_location_price));
                     $v_location_total_amount += $v_tmp_location_price;
                     $v_all_price +=$v_tmp_location_price;
-                   // $v_all_quantity+=$arr[$i]['location_quantity'];
                     $arr_tpl_order_allocation_items[] = $tpl_order_allocation_items;
                 }
             }
@@ -316,11 +300,9 @@ if($v_row==1){
             $arr_tpl_order_allocation[] = $tpl_one_allocation;
         }
     }
-
     if(isset($v_po_number))
     {
         $tpl_order_information_form = new Template('dsp_order_view_edit_information.tpl', $v_dir_templates);
-
         $tpl_order_information_form->set('PO_NUMBER',$v_po_number);
         $tpl_order_information_form->set('URL',URL);
         $tpl_order_information_form->set('URL_TEMP',URL.$v_dir_templates);
@@ -335,17 +317,14 @@ if($v_row==1){
             $tpl_order_information_form->set('DATE_REQUIRED',fdate(date('d-M-Y', $v_date_required)));
         else
             $tpl_order_information_form->set('DATE_REQUIRED','');
-
         $tpl_order_information_form->set('ORDER_ALLOCATED',$v_been_allocated);
         $tpl_order_information_form->set('ORDER_THRESHOLD',$v_been_threshold);
         $tpl_order_information_form->set('ORDER_STATUS',$v_order_status_message);
-
         $arr_tmp_order_information_form[] = $tpl_order_information_form;
     }
     else
     {
         $tpl_order_information_form = new Template('dsp_order_view_edit_information.tpl', $v_dir_templates);
-
         $tpl_order_information_form->set('PO_NUMBER','');
         $tpl_order_information_form->set('URL',URL);
         $tpl_order_information_form->set('URL_TEMP',URL.$v_dir_templates);
@@ -360,19 +339,15 @@ if($v_row==1){
             $tpl_order_information_form->set('DATE_REQUIRED',fdate(date('d-M-Y', $v_date_required)));
         else
             $tpl_order_information_form->set('DATE_REQUIRED','');
-
         $tpl_order_information_form->set('ORDER_ALLOCATED',0);
         $tpl_order_information_form->set('ORDER_THRESHOLD',0);
         $tpl_order_information_form->set('ORDER_STATUS',0);
-
         $arr_tmp_order_information_form[] = $tpl_order_information_form;
     }
-
     if(isset($arr_tpl_order_allocation) && is_array($arr_tpl_order_allocation))
         $v_dsp_order_allocations = Template::merge($arr_tpl_order_allocation);
     else
         $v_dsp_order_allocations ='';
-
     $tpl_order->set('URL_TEMPLATE', URL.$v_dir_templates);
     $tpl_order->set('ORDER_ID', $v_order_id);
     $tpl_order->set('STYLE',  $v_style);
@@ -382,10 +357,7 @@ if($v_row==1){
     $tpl_order->set('SESSION_ID', session_id());
     $tpl_order->set('TOTAL_AMOUNT', $v_user_rule_hide_price_all?NO_PRICE:format_currency($v_allocation_total_amount));
     $tpl_order->set('URL_REQUEST',  URL.'order/'.$v_order_id.'/edit');
-    //$tpl_order->set('URL_REQUEST', URL.'order/'+$v_order_id+'/allocation/'+$v_order_item_id+'/'+$v_product_id);//$_SERVER['REQUEST_URI']);
-
     $arr_user_allocation = array();
-
     if($v_order_user_name==$arr_user['user_name'])
         $arr_user_allocation = $arr_user['location'];
     else{
@@ -398,15 +370,12 @@ if($v_row==1){
         if($v_row==1){
             $v_tmp_location_allocate = $cls_user->get_user_location_allocate();
             $v_order_default_location = $cls_user->get_location_id();
-            //$arr_user_location[0] = $v_order_default_location;
             if($v_tmp_location_allocate!=''){
                 $j=0;
-
                 if(strpos($v_tmp_location_allocate.',',$v_order_default_location.',')!==false){
                     $arr_user_location[$j] = $v_order_default_location;
                     $j++;
                 }
-
                 $arr_tmp = explode(',', $v_tmp_location_allocate);
                 for($i=0; $i<count($arr_tmp); $i++){
                     $v_one = (int) $arr_tmp[$i];
@@ -418,7 +387,6 @@ if($v_row==1){
             }else{
                 $arr_user_location[0] = $v_order_default_location;
             }
-            // $arr_where_clause = array('location_id'=>array('$in'=>$arr_user['location']));
             $arr_where_clause = array('location_id'=>array('$in'=>$arr_user_location));
             if(isset($cls_location)==false){
                 add_class('cls_tb_location');
@@ -432,25 +400,33 @@ if($v_row==1){
             $arr_user_allocation = $arr_temp;
         }
     }
-
     $v_option_allocation = '';
     for($i=0; $i<count($arr_user_allocation); $i++){
         $v_option_allocation .= '<option value="'.$arr_user_allocation[$i]['location_id'].'">'.$arr_user_allocation[$i]['location_name'].'</option>';
     }
-
     $v_order_information =  '<ul><li>Your PO#: '.$v_po_number.'</li>';
     $v_order_information .= '<li>Your Order Reference: '.$v_order_ref.'</li>';
     $v_order_information .= '<li>Your Order Status: '.$v_order_status_message.'</li></ul>';
-
     if($v_order=='EDIT')
     {
         if($v_order_status<=20)
         {
             if($v_order_status==20){
-                if($v_user_rule_approve){
-                    $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
-                    $tpl_order->set('DIS_BUTTON_DISPLAY', '');
-                    $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Approve');
+                if($v_user_rule_approve || $v_user_rule_cancel){
+                    if($v_user_rule_approve!='' && $v_user_rule_cancel!=''){
+                        $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
+                        $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Approve');
+                        $tpl_order->set('DIS_BUTTON_DISPLAY', '');
+                    }
+                    else if($v_user_rule_approve!=''){
+                        $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
+                        $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Approve');
+                        $tpl_order->set('DIS_BUTTON_DISPLAY', 'style="display:none"');
+                    }
+                    else if($v_user_rule_cancel!=''){
+                        $tpl_order->set('SUBMIT_BUTTON_DISPLAY', 'style="display:none"');
+                        $tpl_order->set('DIS_BUTTON_DISPLAY', '');
+                    }
                     $tpl_order->set('SAVE_BUTTON_DISPLAY', 'style="display:none"');
                     $tpl_order->set('ADD_BUTTON_ITEM', 'style="display:none"');
                 }
@@ -477,8 +453,8 @@ if($v_row==1){
             else{
                 $tpl_order->set('DIS_BUTTON_DISPLAY', 'style="display:none"');
                 if($v_user_rule_submit || $v_user_rule_approve){
-                    $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
                     $tpl_order->set('SUBMIT_BUTTON_TITLE', 'Submit');
+                    $tpl_order->set('SUBMIT_BUTTON_DISPLAY', '');
                     $tpl_order->set('SAVE_BUTTON_DISPLAY', '');
                     $tpl_order->set('ADD_BUTTON_ITEM', '');
                 }else
@@ -488,19 +464,18 @@ if($v_row==1){
                         $tpl_order->set('SAVE_BUTTON_DISPLAY', '');
                         $tpl_order->set('ADD_BUTTON_ITEM', '');
                     }
-                    else if($v_user_rule_edit){
+                    else if($v_user_rule_edit ){
                         $tpl_order->set('SUBMIT_BUTTON_DISPLAY', 'style="display:none"');
                         $tpl_order->set('SAVE_BUTTON_DISPLAY', '');
                         $tpl_order->set('ADD_BUTTON_ITEM', '');
                     }
                     else{
                         $tpl_order->set('SUBMIT_BUTTON_DISPLAY', 'style="display:none"');
-                        //$tpl_order->set('SAVE_BUTTON_DISPLAY', 'style="display:none"');
                         $tpl_order->set('SAVE_BUTTON_DISPLAY', '');
                         $tpl_order->set('ADD_BUTTON_ITEM', '');
-                        //$tpl_order->set('ADD_BUTTON_ITEM', 'style="display:none"');
                     }
                 }
+
             }
         }else
         {
@@ -512,7 +487,6 @@ if($v_row==1){
     }
     else
     {
-        //$v_order_information = 'You are viewing on order with PO NUMBER: '.$v_po_number.'. Status of this order is: '.$v_order_status_message;
         $tpl_order->set('SUBMIT_BUTTON_DISPLAY', 'style="display:none"');
         $tpl_order->set('SAVE_BUTTON_DISPLAY', 'style="display:none"');
         $tpl_order->set('ADD_BUTTON_ITEM', 'style="display:none"');
@@ -523,12 +497,9 @@ if($v_row==1){
         add_class('cls_tb_location_group_threshold');
         $cls_check_threshold = new cls_tb_location_group_threshold($db, LOG_DIR);
     }
-
     if(isset($cls_check_product)==false){
-        //add_class('cls_tb_product');
         $cls_check_product = new cls_tb_product($db, LOG_DIR);
     }
-
     if(isset($cls_check_group)==false){
         add_class('cls_tb_product_group');
         $cls_check_group = new cls_tb_product_group($db, LOG_DIR);
@@ -548,7 +519,6 @@ if($v_row==1){
         $tpl_order->set('TAB_WARNING_DISPLAY','');
         $tpl_order->set('WARNING_DISPLAY',$v_error_approve);
     }else{
-
         $tpl_order->set('TAB_WARNING_DISPLAY','display:none;');
         $tpl_order->set('WARNING_DISPLAY','');
     }
@@ -558,12 +528,10 @@ if($v_row==1){
     }else{
         $v_order_warning_message = $cls_tb_message->select_scalar('message_value', array('message_key'=>'cannot_submit_over_threshold_allowed'));
     }
-
     if(isset($arr_tmp_order_information_form) && is_array($arr_tmp_order_information_form))
         $v_dsp_order_information = Template::merge($arr_tmp_order_information_form);
     else
         $v_dsp_order_information ='';
-
     $tpl_order->set('ORDER_INFORMATION', $v_dsp_order_information);
     $tpl_order->set('TABLE_ORDER_ITEM', $v_dsp_order_details);
     $tpl_order->set('PO_NUMBER', $v_po_number);
@@ -572,18 +540,14 @@ if($v_row==1){
     $tpl_order->set('TABLE_ORDER_ITEM', $v_dsp_order_details);
     $tpl_order->set('ALL_PRICE', $v_user_rule_hide_price_all ? NO_PRICE : '$ '.$v_all_price);
     $tpl_order->set('TOTAL_QUANTITY', isset($v_all_quantity)?number_format($v_all_quantity):0);
-
     if(isset($arr_tpl_order_allocation) && is_array($arr_tpl_order_allocation))
         $v_dsp_order_allocations = Template::merge($arr_tpl_order_allocation);
     else
         $v_dsp_order_allocations = '';
-
     $tpl_order->set('TABLE_DISTRIBUTION', $v_dsp_order_allocations);
     unset($arr_tpl_order_allocation);
-
     $tpl_order->set('ORDER_INFO', $v_order_information);
     unset($arr_tmp_order_information_form);
-
     $tpl_order->set('SIGN_MONEY', $v_sign_money);
     $tpl_order->set('ORDER_ID', $v_order_id);
     $tpl_order->set('PRICE_DISPLAY', $v_user_rule_hide_price_all?' display: none;':'');
@@ -591,7 +555,6 @@ if($v_row==1){
     $tpl_order->set('MATERIAL_OPTION',  json_encode($arr_all_material));
     $tpl_order->set('URL_TEMPLATE',  URL.$v_dir_templates);
     echo $tpl_order->output();
-
 }else{
     redir(URL.'order');
 }

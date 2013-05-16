@@ -1,7 +1,15 @@
 <?php if (!isset($v_sval)) die(); ?>
-<?php if(isset($_REQUEST['txt_item'])==false) die() ?>
-<?php if(isset($_REQUEST['txt_order'])==false) die() ?>
 <?php
+if(isset($v_user_rule_edit)== false || $v_user_rule_edit==''){
+    $_SESSION['ss_error_title'] = 'Access denied';
+    $_SESSION['ss_error_info'] = 'You do not  have right to edit order .';
+    redir(URL.'error/');
+}
+if(isset($_REQUEST['txt_item'])==false || isset($_REQUEST['txt_order'])==false) {
+    $_SESSION['ss_error_title'] = 'Access denied';
+    $_SESSION['ss_error_info'] = 'The orders that you want to edit/view does not exist.';
+    redir(URL.'error/');
+}
 $v_order_item_id = isset($_REQUEST['txt_item']) ?$_REQUEST['txt_item']  : 0 ;
 $tpl_item_edit = new Template('dsp_edit_order_item.tpl',$v_dir_templates);
 $v_error_approve ='';
@@ -15,6 +23,7 @@ $v_dsp_option_size = '';
 $v_dsp_option_material = '';
 $v_dsp_option_thick = '';
 $v_dsp_option_color = '';
+$v_dsp_text = '';//"THERE NO OPTION AVAILABLE FOR THIS ITEM";
 add_class('cls_tb_order_items') ;
 $cls_tb_order_items = new cls_tb_order_items ($db,LOG_DIR);
 add_class('cls_tb_product');
@@ -38,6 +47,10 @@ if($v_count==1){
     $v_length =$cls_tb_order_items->get_length();
     $v_unit = $cls_tb_order_items->get_unit();
     $v_graphic_file = $cls_tb_order_items->get_graphic_file();
+    $arr_text = $cls_tb_order_items->get_text();
+    foreach($arr_text as $arr){
+        $v_dsp_text.=$arr['text'];
+    }
     $v_graphic_id = $cls_tb_order_items->get_graphic_id();
     $v_current_price =  $cls_tb_order_items->get_current_price();
     $v_material_id = $cls_tb_order_items->get_material_id();
@@ -56,6 +69,7 @@ if($v_count==1){
     $arr_option_material = array();
     $arr_option_color = array();
     $arr_option_thick = array();
+
     $v_index = 0;
     for($i=0; $i<count($arr_material);$i++){
         $v_tmp_material = isset($arr_material[$i]['name'])?$arr_material[$i]['name']:'';
@@ -175,7 +189,6 @@ if($v_count==1){
     if($v_item_status==1){
         $v_error_approve.='*Product: '.$v_product_code.' has not been allocated.';
     }
-
 }
 if($v_package_type<=1) {
     $v_product_material = $v_product_code .' - '.$v_product_description.' - ';
@@ -215,7 +228,7 @@ $tpl_item_edit->set('OPTION_SIZE',  $v_dsp_option_size);
 $tpl_item_edit->set('OPTION_MATERIAL',  $v_dsp_option_material);
 $tpl_item_edit->set('OPTION_THICKNESS',$v_dsp_option_thick);
 $tpl_item_edit->set('OPTION_COLOR',$v_dsp_option_color);
-$tpl_item_edit->set('OPTION_TEXT',"THERE NO OPTION AVAILABLE FOR THIS ITEM");
+$tpl_item_edit->set('OPTION_TEXT',$v_dsp_text);
 $tpl_item_edit->set('GRAPHIC_ID',$v_graphic_id);
 $tpl_item_edit->set('PRODUCT_IMAGE',$v_image_url);
 $tpl_item_edit->set('PRODUCT_ID',$v_product_id);

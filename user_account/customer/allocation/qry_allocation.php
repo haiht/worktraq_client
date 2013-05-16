@@ -1,3 +1,4 @@
+
 <?php if (!isset($v_sval)) die(); ?>
 <?php
 $v_order_id = isset($_REQUEST['txt_item']) ? $_REQUEST['txt_order'] : 0;
@@ -6,6 +7,17 @@ $v_order_item_id = isset($_REQUEST['txt_item']) ? $_REQUEST['txt_item'] : 0;
 settype($v_order_item_id,'int');
 $v_product_id = isset($_REQUEST['txt_product_id']) ? $_REQUEST['txt_product_id'] : 0;
 settype($v_product_id,'int');
+
+if(isset($v_user_rule_allocate)== false || $v_user_rule_allocate==''){
+    $_SESSION['ss_error_title'] = 'Access denied';
+    $_SESSION['ss_error_info'] = 'You do not  have right to allocate order .';
+    redir(URL.'error/');
+}
+if(isset($_REQUEST['txt_item'])==false || isset($_REQUEST['txt_order'])==false || isset($_REQUEST['txt_product_id'])==false){
+    $_SESSION['ss_error_title'] = 'Access denied';
+    $_SESSION['ss_error_info'] = 'The orders that you want to edit/view does not exist.';
+    redir(URL.'error/');
+}
 
 add_class("cls_tb_product");
 add_class("cls_tb_order");
@@ -20,7 +32,6 @@ $arr_product_material = $cls_tb_product->select_scalar("material",array("product
 /*Selec location */
 $v_product_excluded_location = $cls_tb_product->select_scalar('excluded_location', array('product_id'=>$v_product_id));
 if($v_product_excluded_location!='') $v_product_excluded_location .= ',';
-
 
 if($v_product_id==0){
     if(isset($_SESSION['ss_current_order'])){

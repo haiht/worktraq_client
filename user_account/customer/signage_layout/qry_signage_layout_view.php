@@ -4,7 +4,6 @@ $v_main_site_title = 'Anvyinc &copy;';
 $v_sub_site_title = 'Hot Spot';
 $v_product_images_id = isset($_GET['txt_image_id'])?$_GET['txt_image_id']:'0';
 settype($v_product_images_id, 'int');
-
 $v_dsp_map = '';
 $v_script='';
 $v_dsp_script='';

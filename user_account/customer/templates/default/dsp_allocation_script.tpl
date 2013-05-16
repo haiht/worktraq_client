@@ -135,7 +135,6 @@ function add_row_table_new(pos,loc)
                     var val=$(this).parent().parent().find('input[type="text"]').val();
                     val = parseInt(val, 10);
                     var s_location_id=$(this).attr('btn_allocation');
-                    //alert(s_location_id);
                     var p = find_location(s_location_id,loc);
                     if(p>=0 && val>1){
                         var c_remain = $('span#location_quanlity').html();

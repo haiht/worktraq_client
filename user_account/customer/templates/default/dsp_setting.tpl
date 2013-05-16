@@ -4,10 +4,8 @@
         $("a.tab").click(function () {
             $(".active").removeClass("active");
             $(this).addClass("active");
-            //$(".content_table").slideUp();
             $(".content_table").hide();
             var content_show = $(this).attr("title");
-            // $("#"+content_show).slideDown();
             $("#"+content_show).show();
         });
         $("#btn_change_infor").click(function(){
@@ -178,7 +176,6 @@
                                 </table>
                         </div>
                     </div>
-
             </div>
             <div class="clear"></div>
         </div>

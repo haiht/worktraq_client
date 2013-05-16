@@ -6,7 +6,6 @@ $v_order_id = isset($_POST['txt_order_id'])?$_POST['txt_order_id']:0;
 $v_image_id = isset($_POST['txt_image_id'])?$_POST['txt_image_id']:0;
 $v_image_url = isset($_POST['txt_image_url'])?$_POST['txt_image_url']:'';
 $v_order_item_id = isset($_POST['txt_order_item_id'])?$_POST['txt_order_item_id']:0;
-
 settype($v_product_id, 'int');
 settype($v_image_id, 'int');
 settype($v_order_id, 'int');
@@ -14,19 +13,14 @@ settype($v_order_item_id, 'int');
 if($v_product_id<0) $v_product_id = 0;
 if($v_order_id<0) $v_order_id = 0;
 if($v_order_item_id<0) $v_order_item_id = 0;
-
 $_SESSION['ss_upload_image_product'] = $v_product_id;
 if($v_order_id>0)
 {
-
     $v_row = 0;
-
     if($v_order_item_id>0){
         $v_row = $cls_tb_order_items->select_one(array('order_item_id'=>$v_order_item_id));
-
     }else{
         $v_row = $cls_tb_order_items->select_one(array('order_id'=>$v_order_id, 'product_id'=>$v_product_id));
-
     }
     if($v_row==1)
     {
@@ -56,8 +50,6 @@ if($v_order_id>0)
         ,'status'=>0
         ,'order'=>0
         );
-
-
         $v_product_extra = json_encode($arr_order_item);
         $v_product_extra = str_replace('{','&ldquo;', $v_product_extra);
         $v_product_extra = str_replace('}','&rdquo;', $v_product_extra);
@@ -65,8 +57,6 @@ if($v_order_id>0)
     }else
         $v_product_extra='';
 }else{
-    //Order in SESSION
-
     if(isset($_SESSION['ss_current_order'])){
         $v_current_order = $_SESSION['ss_current_order'];
         $arr_order = unserialize($v_current_order);
@@ -87,22 +77,16 @@ if($v_order_id>0)
         }
     }
 }
-
 require 'classes/cls_tb_product.php';
 require 'classes/cls_tb_product_images.php';
 require 'classes/cls_tb_material.php';
 $cls_product = new cls_tb_product($db, LOG_DIR);
 $cls_images = new cls_tb_product_images($db, LOG_DIR);
 $cls_material = new cls_tb_material($db, LOG_DIR);
-
 $arr = $cls_product->select_one_array($cls_material, array('product_id'=>$v_product_id));
-
-//die("{error=0}{message=@#$%###############: Array: ".is_array($arr)."}");
 $arr["graphic_id"] = $v_image_id;
-
 $arr_choose_image = array();
 $arr_choose_image[0] = array('value'=>0,'image'=>$arr['image_url'], 'file'=>$arr['image_file'], 'text'=>'Product Img', 'selected'=>$v_image_id==0?1:0);
-
 if($v_image_id>0){
     $arr["image_file"] = $cls_images->select_scalar('product_image', array('image_id'=>$v_image_id));
     $arr['image_url'] = $v_image_url;
@@ -119,17 +103,14 @@ if($cls_product->get_package_image_choose($cls_images, $v_product_id)){
         if(strrpos($v_saved_dir, '/')!==strlen($v_saved_dir)-1) $v_saved_dir .= '/';
         $v_image_url = $v_saved_dir.$v_image_low;
         $v_len = count($arr_choose_image);
-        //$arr_choose_image[$v_len] = array('value'=>$v_product_images_id,'image'=>$v_image_url, 'description'=>$v_image_code.' - '.$v_image_file, 'title'=>$v_image_code, 'text'=>$v_image_code.' - '.$v_image_file);
         $arr_choose_image[$v_len] = array('value'=>$v_product_images_id,'image'=>$v_image_url, 'file'=>$v_image_file, 'text'=>$v_image_code, 'selected'=>$v_image_selected?1:0);
     }
 }
-
 if(count($arr_choose_image)>1){
     $arr['image_change'] = 1;
 }else{
     $arr['image_change'] = 0;
 }
-
 if(is_array($arr)){
     $v_json = json_encode($arr);
     $v_json = str_replace('{','&ldquo;', $v_json);
@@ -137,7 +118,6 @@ if(is_array($arr)){
     $v_image = json_encode($arr_choose_image);
     $v_image = str_replace('{','&ldquo;', $v_image);
     $v_image = str_replace('}','&rdquo;', $v_image);
-    // die("{error=0}{message=".$v_json."}{product=".(isset($v_product_extra)?$v_product_extra:'')."}{image=".$v_image.'}');
     $arr_return = array(
         'error'=>0
     ,'message'=>'OK'
@@ -145,15 +125,9 @@ if(is_array($arr)){
     ,'item'=>isset($arr_order_item)?$arr_order_item:array()
     ,'image'=>$arr_choose_image
     );
-   // die(json_encode($arr_return));
-   // die(var_dump($arr_return));
     $temp_late = json_encode($arr_return);
-    //die($temp_late);
     echo $temp_late;
-
-    //echo (json_encode($arr_return));
 }else{
-    //die("{error=1}{message=Error: ".$v_product_id."}");
     die(json_encode(array('error'=>1, 'message'=>'Error: '.$v_product_id)));
 }
 ?>

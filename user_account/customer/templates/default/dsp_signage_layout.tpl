@@ -1,8 +1,6 @@
 <script type="text/javascript" language="javascript" src="[@URL]lib/js/fancybox/jquery.fancybox-1.3.1.js"></script>
 <link rel="stylesheet" href="[@URL]lib/js/fancybox/jquery.fancybox-1.3.1.css" type="text/css" media="screen" />
-
 <style type="text/css">
-
     .imgborder
     {
         text-align: center;
@@ -43,19 +41,9 @@
         padding: 5px;
     }
 </style>
-
 <script type="text/javascript">
     $(document).ready(function() {
         $("a[rel=signage_layout_image]").fancybox({
-			/*
-            'transitionIn'		: 'none',
-            'transitionOut'		: 'none',
-            'titlePosition' 	: 'over',
-
-            'titleFormat'       : function(title, currentArray, currentIndex, currentOpts) {
-                return '<span id="fancybox-title-over">Image ' +  (currentIndex + 1) + ' / ' + currentArray.length + ' ' + title + '</span>';
-            }
-			*/
 			'showNavArrows'         : false,
 			'width'                 : 820,
 			'height'                : 600,
@@ -64,7 +52,6 @@
 			'overlayShow'	        :	true,
 			'type'                 : 'iframe'
         });
-
     });
 </script>
 <div class="sub">

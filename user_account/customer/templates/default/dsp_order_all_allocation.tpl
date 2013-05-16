@@ -8,7 +8,6 @@
 </div>
 </div>
 </div>
-
 <div class="content">
     <input type="hidden" id="data-order-id" value="[@order_id]" />
     <input type="hidden" id="data-order-item-id" value="[@order_item_id]" />
@@ -19,7 +18,9 @@
             <div class="indent">
                 <div class="reate">
                     <div>
+
                         <p class="title_lef_dis2">Product Name: [@PRODUCT_NAME]</p>
+
                         <div class="float_right box4">
                             <div class="table5" id="table5">
                                 <div class="td_1">
