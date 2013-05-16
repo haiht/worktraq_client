@@ -142,11 +142,12 @@ function add_row_table_new(pos,loc)
                 type:'image',
                 src:'[@URL_TEMPLATE]/images/up.jpg',
                 style:"display:'block';cursor:'pointer';width:'12px';height:'10px'; margin-top:2px; ",
-                                id:'btn_up',
+                id:'btn_up',
+                'btn_allocation':location_id,
                 click:function(){
-                    var val=$(this).parent().parent().parent().parent().find('input[type="text"]').val();
+                    var val=$(this).parent().parent().find('input[type="text"]').val();
                     val = parseInt(val, 10);
-                    var s_location_id=$(this).parent().parent().parent().parent().find('input[type="text"]').attr('data-location');
+                    var s_location_id=$(this).attr('btn_allocation');
                     var p = find_location(s_location_id,loc);
                     if(p>=0 && val>0){
                         var c_remain = $('span#location_quanlity').html();
@@ -154,7 +155,7 @@ function add_row_table_new(pos,loc)
                         if(!isNaN(c_remain) && c_remain>0){
                             val = val + 1;
                             c_remain--;
-                            $(this).parent().parent().parent().parent().find('input[type="text"]').val(val);
+                            $(this).parent().parent().find('input[type="text"]').val(val);
                             loc[p].quantity = val;
                             $('span#location_quanlity').html(c_remain);
                         }
@@ -168,10 +169,11 @@ function add_row_table_new(pos,loc)
                 src:'[@URL_TEMPLATE]/images/down.jpg',
                 style:"display:'block';cursor:'pointer';width:'12px';height:'10px'; margin-top:4px; ",
                 id:'btn_down',
+                'btn_allocation':location_id,
                 click:function(){
-                    var val=$(this).parent().parent().parent().parent().find('input[type="text"]').val();
+                    var val=$(this).parent().parent().find('input[type="text"]').val();
                     val = parseInt(val, 10);
-                    var s_location_id=$(this).parent().parent().parent().parent().find('input[type="text"]').attr('data-location');
+                    var s_location_id=$(this).attr('btn_allocation');
                     //alert(s_location_id);
                     var p = find_location(s_location_id,loc);
                     if(p>=0 && val>1){
@@ -179,7 +181,7 @@ function add_row_table_new(pos,loc)
                         c_remain = parseInt(c_remain,10);
                         val = val - 1;
                         c_remain++;
-                        $(this).parent().parent().parent().parent().find('input[type="text"]').val(val);
+                        $(this).parent().parent().find('input[type="text"]').val(val);
                         loc[p].quantity = val;
                         $('span#location_quanlity').html(c_remain);
                     }
