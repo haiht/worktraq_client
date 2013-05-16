@@ -785,6 +785,16 @@ class cls_tb_order{
 	 * </code>
 	 * @return int
 	 */
+    public function check_order_own(array $arr_where = array()){
+        $v_check = false;
+        $rss = $this->collection->find($arr_where);
+        foreach($rss as $arr){
+            if(isset($arr['order_id'])){
+                $v_check = true;
+            }
+        }
+        return $v_check;
+    }
 	public function select_one(array $arr_where = array(), array $arr_order = array()){
 		if(is_null($arr_order) || count($arr_order)==0){
 			$arr_order = array('_id' => -1);//last insert show first

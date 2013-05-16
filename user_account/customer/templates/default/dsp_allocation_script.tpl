@@ -32,43 +32,6 @@
         $("#btn_save_allocation").click(function(){
             allocation_order(product, order, order_item,loc);
         });
-        /*
-        $(document).keyup(function(){
-            var val=  0;
-            $('input.quantity').each(function(){
-                val += parseInt($(this).val());
-            });
-            val = parseInt(val, 10);
-            var s_location_id=0;
-            $('input[rel=allocation]').each(function(){
-                s_location_id =$(this).attr('data-location');
-                var v_value = $(this).val();
-                var $input = $(this);
-
-                s_location_id = parseInt(s_location_id);
-                var p = find_location(s_location_id,loc);
-
-                if(p>=0 && val>0){
-                    var c_remain = $('span#location_quanlity').html();
-                    var total = $('span#product_quanlity').html();
-                    c_remain = parseInt(c_remain,10);
-                    if(!isNaN(c_remain) && c_remain>0)
-                    {
-                        var first = c_remain;
-                        c_remain = total - val;
-                        if(c_remain < 0){
-                            alert("Please insert a number from "+first +" to " +total);
-                            return false;
-                        }
-                        $($input).val(v_value);
-                    }
-                }
-            });
-            loc[p].quantity = val;
-            $('span#location_quanlity').html(c_remain);
-
-        });
-        */
     });
 </script>
 <script type="text/javascript">
@@ -173,7 +136,6 @@ function add_row_table_new(pos,loc)
                     var val=$(this).parent().parent().find('input[type="text"]').val();
                     val = parseInt(val, 10);
                     var s_location_id=$(this).attr('btn_allocation');
-                    //alert(s_location_id);
                     var p = find_location(s_location_id,loc);
                     if(p>=0 && val>1){
                         var c_remain = $('span#location_quanlity').html();

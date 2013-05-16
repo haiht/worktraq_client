@@ -17,7 +17,7 @@
 <script>
     $(document).ready(function(){
         $('#slider').nivoSlider({
-            effect: 'random', // Specify sets like: 'fold,fade,sliceDown'
+            effect: 'random',
             directionNav: true
         });
     });

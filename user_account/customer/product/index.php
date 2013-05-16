@@ -4,7 +4,6 @@ if (!isset($v_sval)) die();
 /*
  * Check user rules vs module rules
  */
-
 //If you want customers' rules affected only after that, they log out and log in again, remove following code
 $v_user_id = isset($arr_user['user_id'])?$arr_user['user_id']:0;
 settype($v_user_id, 'int');
@@ -28,12 +27,10 @@ $v_user_rule_order_reorder = isset($arr_user_rule[$v_order_module_menu_key]['reo
 $v_user_rule_order_approve = isset($arr_user_rule[$v_order_module_menu_key]['approve']);
 $v_user_rule_order_submit = isset($arr_user_rule[$v_order_module_menu_key]['submit']);
 $v_user_rule_order_allocate = isset($arr_user_rule[$v_order_module_menu_key]['allocate']);
-
 $v_user_rule_hide_price_all = $v_user_rule_hide_price_all || isset($arr_user_rule[$v_order_module_menu_key]['hide']);
 /*
  * End check user rules vs module rules
  */
-
 include $v_head.'header.php';
 include $v_head.'product/qry_product.php';
 include $v_head.'footer.php';

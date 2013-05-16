@@ -10,9 +10,7 @@
     <script type="text/javascript" src="[@URL]lib/js/jquery-ui-1.8.14.custom.min.js"></script>
     <script type="text/javascript" src="[@URL]lib/js/jquery.number.min.js"></script>
     <script type="text/javascript" src="[@URL]lib/js/common.js"></script>
-    <script type="text/javascript" src="[@URL]lib/js/.js"></script>
 </head>
-
 <body>
 <div id="top_page">
     <div id="page">
@@ -33,6 +31,3 @@
             <ul class="nav">
                 [@MENU]
             </ul>
-
-
-

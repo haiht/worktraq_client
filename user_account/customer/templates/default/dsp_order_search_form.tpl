@@ -34,12 +34,10 @@
             <div class="indent_form float_left create_h">
                 <label class="float_left create_cl">From :</label>
                 <input type="text" size="15" name="txt_date_from" id="txt_date_from" value="[@DATE_FROM]" style="width: 110px" />
-
             </div>
             <div class="indent_form float_left create_h">
                 <label class="float_left create_cl">To :</label>
                 <input type="text" size="15" name="txt_date_to" id="txt_date_to" value="[@DATE_TO]" style="width: 100px" />
-
             </div>
         </div>
     <div class="space">

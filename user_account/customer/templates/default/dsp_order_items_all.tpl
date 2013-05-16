@@ -9,11 +9,9 @@
                 var order_item = $(this).attr('data-order-item-id');
                 var type = $(this).attr('date-order-type');
                 var image_id = $(this).attr('data-image-id');
-
                 image_id = parseInt(image_id, 10);
                 if(isNaN(image_id) || image_id<0) image_id = 0;
                 var image_url = $(this).attr('data-image-url');
-
                 var that = this;
                 product = parseInt(product,10);
                 if(isNaN(product)||product<0) product = 0;
@@ -21,7 +19,6 @@
                 if(isNaN(order)||order<0) order = 0;
                 order_item = parseInt(order_item, 10);
                 if(isNaN(order_item)||order_item<0) order_item = 0;
-
                 switch(valueSelect){
                     case 'delete_item':
                             $('.popup-confirm').showPopup({
@@ -32,13 +29,11 @@
                                     var $parent = $(that).parents('div');
                                     control_popup = delete_item($parent, product, order, order_item);
                                 }
-
                             });
                         break;
                     case 'edit_item':
                         window.location = 'item/'+order_item
                         break;
-
                     case 'allocation':
                         window.location = 'allocation/'+order_item+'/'+product+'/'
                         break;
@@ -46,7 +41,6 @@
             });
         });
     });
-
 </script>
 <script>
     function delete_item($parent, pid, oid, otid){

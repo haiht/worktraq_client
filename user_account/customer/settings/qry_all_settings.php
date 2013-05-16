@@ -52,19 +52,16 @@ if(isset($_POST['btn_change_password']))
 $tpl_info->set('ALERT_INVAILD_PASSWORD',$cls_tb_message->select_value('invalid_input_password'));
 $tpl_info->set('ALERT_CORRECT_PASSWORD',$cls_tb_message->select_value('correct_the_password'));
 $tpl_info->set('ALERT_CONFIRM_USER',$cls_tb_message->select_value('confirm_change_password'));
-//=== getting data for tab information
 $tpl_info->set('USERNAME',$v_username);
 $tpl_info->set('FIRST_NAME',$cls_tb_contact->get_first_name());
 $tpl_info->set('MIDDLE_NAME',$cls_tb_contact->get_middle_name());
 $tpl_info->set('LAST_NAME',$cls_tb_contact->get_last_name());
 $tpl_info->set('EMAIL',$cls_tb_contact->get_email());
 $tpl_info->set('BIRTHDAY',fdate($cls_tb_contact->get_birth_date()));
-//==== getting data for contact information
 $tpl_info->set('DIRECT_PHONE',$cls_tb_contact->get_direct_phone());
 $tpl_info->set('MOBIE_PHONE',$cls_tb_contact->get_mobile_phone());
 $tpl_info->set('FAX_NUMBER',$cls_tb_contact->get_fax_number());
 $tpl_info->set('HOME_PHONE',$cls_tb_contact->get_home_phone());
-//=== getting data for company information
 $tpl_info->set('LOCATION_NAME',$v_location_name);
 $tpl_info->set('USER_ID',$v_user_id);
 $tpl_info->set('COMPANY_NAME',$v_company_name);

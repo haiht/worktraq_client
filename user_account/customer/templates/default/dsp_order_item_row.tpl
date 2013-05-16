@@ -3,7 +3,6 @@
         $("#product_quantity").change(function(){
             var quan = $(this).val();
             var unit = $("#txt_unit_price").val();
-
             var total = quan * unit;
            $("#total_price_span").text(total);
             $("#total_price").val(total);
@@ -17,7 +16,6 @@
             var total = quantity * price;
             $("#total_price_span").text(total);
         });
-
         $("#btn_down").click(function(){
             var quantity = $("#product_quantity").val();
             quantity = parseInt(quantity);
@@ -29,7 +27,6 @@
             var total = quantity * price;
             $("#total_price_span").text(total);
         });
-
     });
 </script>
 <script type="text/javascript">

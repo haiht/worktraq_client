@@ -27,24 +27,7 @@
                     case 'delete':
                          if(confirm("Do you want to delete this order ?")){
                              if(order>=0) document.location = '[@URL]'+ 'order/'+order+'/delete';
-
-                              /*
-                              if(confirm("Do you want to delete this order ?")){
-                              $.ajax({
-                              url	:	'[@URL]'+ 'order/' + order + '/delete' ,
-                              type	:	'POST',
-                              data	:	{txt_order_id:order, txt_session_id:'[@SESSION_ID]'},
-                              beforeSend: function(){
-                              },
-                              success	: function(data, type){
-                              },
-                              error : function(err){
-                              }
-                              });
-                              }
-                              */
                          }
-
                         break;
                     case 'edit':
                         if(!isNaN(order)){

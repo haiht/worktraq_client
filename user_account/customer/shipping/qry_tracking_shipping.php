@@ -3,7 +3,6 @@ if (!isset($v_sval)) die();
 ?>
 <?php
 $v_tracking_number = isset($_GET['txt_tracking_number'])?$_GET['txt_tracking_number']:'';
-//settype($v_shipping_id, 'int');
 require 'classes/cls_tb_allocation.php';
 require 'classes/cls_tb_order.php';
 require 'classes/cls_tb_order_items.php';
@@ -11,9 +10,6 @@ $cls_tb_shipping = new cls_tb_allocation($db, LOG_DIR);
 $cls_tb_order = new cls_tb_order($db, LOG_DIR);
 $cls_tb_order_items = new cls_tb_order_items($db, LOG_DIR);
 $v_row = $cls_tb_shipping->select_one(array('tracking_number'=>$v_tracking_number, 'company_id'=>$v_company_id));
-
-
-//die('R: '.$v_row);
 if($v_row==1){
     $v_shipping_tracking_number = $cls_tb_shipping->get_tracking_number();
     $v_shipping_date_ship = $cls_tb_shipping->get_date_shipping();
@@ -35,7 +31,6 @@ if($v_row==1){
         $v_tracking_number = $arr['tracking_number'];
         $v_order_id = $arr['order_id'];
         $v_order_item_id = $arr['order_items_id'];
-
         $v_row = $cls_tb_order_items->select_one(array('order_item_id'=>$v_order_item_id));
         $v_product_id = 0;
         if($v_row == 1){
@@ -53,9 +48,7 @@ if($v_row==1){
             $v_material_color = $cls_tb_order_items->get_material_color();
             $v_material_thickness_value = $cls_tb_order_items->get_material_thickness_value();
             $v_material_thickness_unit = $cls_tb_order_items->get_material_thickness_unit();
-
         }
-
         $v_index = 0;
         if(isset($arr_allocation[$v_location_id])){
             $v_index = count($arr_allocation[$v_location_id]);
@@ -116,7 +109,6 @@ if($v_row==1){
         $tpl_ship_items->set('PRODUCT_ID', $v_product_id);
         $tpl_ship_items->set('ORDER_ID', $arr['order_id']);
         $tpl_ship_items->set('ORDER_ITEM_ID', $arr['order_item_id']);
-
         $v_material_color = $arr['material_color'];
         $v_material_name = $arr['material_name'];
         $v_material_value = $arr['material_thickness_value'];
@@ -132,17 +124,13 @@ if($v_row==1){
         $tpl_ship_items->set('PRODUCT_PRICE', format_currency($arr['price']));
         $tpl_ship_items->set('PRODUCT_AMOUNT', format_currency($arr['amount']));
         $tpl_ship_items->set('SELECT_DISABLED', 'disabled="disabled"');
-
         $arr_tpl_shipping_item[] = $tpl_ship_items;
         $v_shipping_total += $arr['amount'];
     }
-
-    //$v_company_product_url = RESOURCE_URL.$v_company_code.'/products/';
     $v_tmp_location_id = 0;
     $arr_tpl_shipping_allocation = array();
     foreach($arr_allocation as $v_location_id=>$arr){
         $tpl_ship_items = new Template('dsp_shipping_items_all.tpl',$v_dir_templates);
-
         $arr_tpl_ship_allocation_items = array();
         $v_shipping_location_total = 0;
         if(count($arr)>0){
@@ -152,9 +140,7 @@ if($v_row==1){
             $v_tracking_number = $arr[0]['tracking_number'];
             $v_shipping_status_name = $cls_settings->get_option_name_by_id('ship_status', $v_shipping_status);
             for($i=0;$i<count($arr);$i++){
-
                 $tpl_ship_allocation_items = new Template('dsp_shipping_allocation_items.tpl', $v_dir_templates);
-
                 $v_material_color = $arr[$i]['material_color'];
                 $v_material_name = $arr[$i]['material_name'];
                 $v_product_code = $arr[$i]['product_code'];
@@ -164,11 +150,9 @@ if($v_row==1){
                 $v_material_unit = $arr[$i]['material_thickness_unit'];
                 $v_material_value = $arr[$i]['material_thickness_value'];
                 $v_product_material = '<span style="color:'.$v_material_color.'">'.$v_product_code .' '.$v_width.' &times; '.$v_height.' '.$v_unit.' - '.$v_material_name. ' '.$v_material_unit. ' '.$v_material_value.'</span>';
-
                 $tpl_ship_allocation_items->set('PRODUCT_ID', $arr[$i]['product_id']);
                 $tpl_ship_allocation_items->set('ORDER_ID', $arr[$i]['order_id']);
                 $tpl_ship_allocation_items->set('PRODUCT_MATERIAL', $v_product_material);
-                //$tpl_order_allocation_items->set('PRODUCT_IMAGE', URL.'images/products/'.$arr[$i]['product_id'].'/'.$arr[$i]['product_image']);
                 $v_graphic_file = $arr[$i]['graphic_file'];
                 if($v_graphic_file!='' && strpos($v_graphic_file,'/')===false) $v_graphic_file = $v_company_product_url.$v_graphic_file;
                 $tpl_ship_allocation_items->set('PRODUCT_IMAGE', $v_graphic_file);
@@ -179,7 +163,6 @@ if($v_row==1){
                 $v_shipping_location_total += $arr[$i]['amount'];
                 $arr_tpl_ship_allocation_items[] = $tpl_ship_allocation_items;
             }
-
             $v_dsp_ship_allocations = Template::merge($arr_tpl_ship_allocation_items);
             $tpl_ship_items_allocation = new Template('dsp_shipping_allocation.tpl',$v_dir_templates);
             $tpl_ship_items_allocation->set('SHIPPING_ROW_ITEM_ALLOCATION', $v_dsp_ship_allocations);
@@ -188,7 +171,6 @@ if($v_row==1){
             $tpl_ship_items_allocation->set('LOCATION_ADDRESS', $v_location_address);
             $tpl_ship_items_allocation->set('SHIPPING_STATUS', $v_shipping_status_name);
             $tpl_ship_items_allocation->set('TRACKING_NUMBER', $v_tracking_number);
-
             $arr_tpl_shipping_allocation[] = $tpl_ship_items_allocation;
         }
     }
@@ -199,7 +181,6 @@ if($v_row==1){
     $tpl_shipping_view->set('SHIPPING_DETAIL_ITEMS', $v_dsp_shipping_items);
     $tpl_shipping_view->set('SHIPPING_DETAIL_ALLOCATION', $v_dsp_shipping_allocations);
     $tpl_shipping_view->set('TOTAL_AMOUNT', format_currency($v_shipping_total));
-
     $v_shipping_information = '<li>Tracking number: '.$v_shipping_tracking_number.'</li>';
     if(is_valid_url($v_shipping_tracking_url))
         $v_shipping_information .= '<li>Shipper: <a href="'.$v_shipping_tracking_url.'" target="_blank">'.$v_shipping_shipper.'</a></li>';
@@ -210,8 +191,5 @@ if($v_row==1){
     $tpl_shipping_view->set('SHIP_INFO', '<ul>'.$v_shipping_information.'</ul>');
 
     echo $tpl_shipping_view->output();
-}else{
-    //redir(URL.'shipping');
 }
-
 ?>

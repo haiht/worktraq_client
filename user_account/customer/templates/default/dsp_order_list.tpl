@@ -3,11 +3,9 @@
 <script type="text/javascript" src="[@URL]lib/js/date.js"> </script>
 <script type="text/javascript" src="[@URL]lib/js/yahoo-min.js"></script>
 <script type="text/javascript" src="[@URL]lib/js/json-min.js"></script>
-
 <link href="[@URL]lib/ajaxupload/css/listTheme/style.css" rel="stylesheet" type="text/css" />
 <link href="[@URL]lib/css/jquery_ui/cupertino/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 <link href="[@URL]lib/scrollbars/jquery.scrollbars.css" rel="stylesheet" type="text/css" />
-
 <script>
     $(document).ready(function() {
         $("input#txt_date_required").datepicker({
@@ -182,7 +180,6 @@ function check_save_order(order_status){
     var order_desc = $.trim($('textarea#txt_order_description').val());
     var order_allocated = $.trim($('input#txt_order_allocated').val());
     var order_threshold = $.trim($('input#txt_order_threshold').val());
-
     order_allocated = parseInt(order_allocated, 10);
     order_threshold = parseInt(order_threshold, 10);
     if(isNaN(order_allocated) || order_allocated!=1) order_allocated = 0;

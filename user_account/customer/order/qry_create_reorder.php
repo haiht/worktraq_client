@@ -33,7 +33,6 @@ if(isset($_SESSION['order_id'])) unset($_SESSION['order_id']);
 if($v_default_location>0){
     $v_row = $cls_tb_location->select_one(array('location_id'=>$v_default_location));
     if($v_row==1){
-
         $arr_order = array();
         $v_order_index = 0;
         $arr_order_item = $cls_tb_order_items->select(array('order_id'=>$v_selected_order_id));
@@ -46,20 +45,17 @@ if($v_default_location>0){
             $v_product_code = isset($arr['product_code'])?$arr['product_code']:'';
             $v_graphic_id = isset($arr['graphic_id'])?$arr['graphic_id']:0;
             $v_product_description = isset($arr['product_description'])?$arr['product_description']:'';
-
             $v_quantity = isset($arr['quantity'])?$arr['quantity']:1;
             $v_width = isset($arr['width'])?$arr['width']:0;
             $v_length = isset($arr['length'])?$arr['length']:0;
             $v_unit = isset($arr['unit'])?$arr['unit']:'';
             $v_price = isset($arr['current_price'])?$arr['current_price']:0;
             $v_graphic_file = isset($arr['graphic_file'])?$arr['graphic_file']:'';
-
             $v_material_name = isset($arr['material_name'])?$arr['material_name']:'';
             $v_material_id = isset($arr['material_id'])?$arr['material_id']:0;
             $v_material_thickness_value = isset($arr['material_thickness_value'])?$arr['material_thickness_value']:0;
             $v_material_thickness_unit = isset($arr['material_thickness_unit'])?$arr['material_thickness_unit']:'';
             $v_material_color = isset($arr['material_color'])?$arr['material_color']:'White';
-
             $v_product_image_option = isset($arr['product_image_option'])?$arr['product_image_option']:0;
             $v_product_size_option = isset($arr['product_size_option'])?$arr['product_size_option']:0;
             $v_product_text_option = isset($arr['product_text_option'])?$arr['product_text_option']:0;
@@ -67,7 +63,6 @@ if($v_default_location>0){
             $v_current_image_option = isset($arr['current_image_option'])?$arr['current_image_option']:0;
             $v_current_size_option = isset($arr['current_size_option'])?$arr['current_size_option']:0;
             $v_custom_image_path = isset($arr['custom_image_path'])?$arr['custom_image_path']:'';
-
             $arr_text = isset($arr['text'])?$arr['text']:array();
             //$v_row = $cls_tb_product->select_one(array('product_id'=>$v_product_id, '$or'=>array(array('status'=>2), array('status'=>3))));
             $v_row = $cls_tb_product->select_one(array('product_id'=>$v_product_id));
@@ -80,18 +75,14 @@ if($v_default_location>0){
                 $v_product_text_option = $cls_tb_product->get_text_option();
                 $v_product_size_option = $cls_tb_product->get_size_option();
                 $v_product_status = $cls_tb_product->get_product_status();
-                //$arr_product_size = $cls_tb_product->get_size();
                 $arr_product_text = $cls_tb_product->get_text();
-                //$arr_size = $cls_tb_product->get_size();
                 $arr_material = $cls_tb_product->get_material();
-
                 $arr_product_size = array();
                 $arr_size = array();
                 for($i=0; $i<count($arr_material); $i++){
                     $arr_product_size[$i] = array('width'=>$arr_material[$i]['width'], 'length'=>$arr_material[$i]['length'], 'unit'=>$arr_material[$i]['usize']);
                     $arr_size[$i] = array('width'=>$arr_material[$i]['width'], 'length'=>$arr_material[$i]['length'], 'unit'=>$arr_material[$i]['usize']);
                 }
-
                 if(!in_array($v_product_status, array(2,3))){
                     $v_status = 1;
                     $v_have_trouble = 1;
@@ -175,9 +166,7 @@ if($v_default_location>0){
                         $v_description .= 'increases '.$v_sign_money.abs($v_product_price-$v_price);
                     $v_price = $v_product_price;
                 }
-
             }
-
             $arr_allocation = array();
             $arr_allocation[] = array('location_id'=>$v_default_location,
                 'location_name'=>$cls_tb_location->get_location_name(),
@@ -193,7 +182,6 @@ if($v_default_location>0){
                 'date_shipping'=> new MongoDate(time()),
                 'delete'=>0
             );
-
             $arr_order[$v_order_index++] = array(
                 'product_id'=>$v_product_id
             ,'package_type'=>$v_package_type
@@ -228,10 +216,7 @@ if($v_default_location>0){
             ,'description'=>'Not allocated'//$v_description
             );
         }
-
-
         $_SESSION['ss_current_order'] = serialize($arr_order);
-
         $v_order_information = 'Current orders have been created from order <a style="color:#0088CC" href="'.URL.'order/'.$v_selected_order_id.'/view" target="_blank">#';
         $v_order_information .= $cls_tb_order->get_po_number().'</a>, which had created at '.date('d-M-Y H:i:s',$cls_tb_order->get_date_created());
         $v_order_information .= '<br />All items have been allocated to default location. You need to allocate every item if it is necessary.';

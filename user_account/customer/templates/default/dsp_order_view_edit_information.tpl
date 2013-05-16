@@ -36,7 +36,6 @@
         <input type="hidden" name="txt_order_threshold" id="txt_order_threshold" value="[@ORDER_THRESHOLD]" />
         <input type="hidden" name="txt_order_message" id="txt_order_message" value="[@ORDER_MESSAGE]" />
         <div>
-
         </div>
     </form>
 

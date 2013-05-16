@@ -1,6 +1,5 @@
 <?php
 if (!isset($v_sval)) die();
-
 $v_request_order_id = isset($_GET['txt_order'])?$_GET['txt_order']:'0';
 if(settype($v_request_order_id, 'int')==false)
     redir($link);
@@ -38,7 +37,5 @@ if(settype($v_request_order_id, 'int')==false)
         if(isset($_SESSION['ss_current_order'])) unset($_SESSION['ss_current_order']);
         if(isset($_SESSION['ss_new_order_info'])) unset($_SESSION['ss_new_order_info']);
     }
-//$v_user_id = get_unserialize_user('user_id');
-//
 redir(URL.'order/');
 ?>

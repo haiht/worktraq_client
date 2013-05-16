@@ -3,13 +3,10 @@
 require 'classes/cls_tb_area.php';
 require 'classes/cls_tb_product_images.php';
 require 'classes/cls_tb_product.php';
-
 $cls_tb_area  = new cls_tb_area($db, LOG_DIR);
 $cls_tb_product  = new cls_tb_product($db, LOG_DIR);
 $cls_tb_product_images  = new cls_tb_product_images($db, LOG_DIR);
 $v_sign = isset($_REQUEST['sign'])?$_REQUEST['sign']:'';
-
-
 switch($v_sign)
 {
     case "V":

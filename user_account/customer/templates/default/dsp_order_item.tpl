@@ -1,4 +1,3 @@
-
 <div class="[@ORDER_TABLE_CLASS_NAME] td_4"><!-- td_2-->
     <div class="table_no float_left">[@ORDER_ORDER_NUMBER]</div>
     <div class="table_date float_left">[@ORDER_DATE]</div>

@@ -27,13 +27,14 @@ $(document).ready(function(){
         }
         var order_id = $("#data-order-id").val();
         order_id = parseInt(order_id, 10);
-        //alert(order_id);
         var idx =$("#data-material-idx").val();
         var v_product_quantity = $("#product_quantity").val();
+        var arr = $("#data-product-text").val();
         $.ajax({
             url	:	'[@AJAX_ADD_ORDER_URL]',
             type	:	'POST',
-            data	:	{session_id:'[@SESSION_ID]',txt_product_id:product_id, txt_order_id:order_id,txt_product_quantity:v_product_quantity, txt_material_idx : idx, txt_order_ajax:101 },
+            data	:	{session_id:'[@SESSION_ID]',txt_product_id:product_id, txt_order_id:order_id,
+                txt_product_quantity:v_product_quantity, txt_material_idx : idx,txt_text:arr, txt_order_ajax:101 },
             beforeSend: function(){
                 $('input#btn_add_order').attr('disabled',true);
             },
@@ -55,7 +56,6 @@ $(document).ready(function(){
         return true;
     });
     var material = [@MATERIAL_OPTION];
-
     $('select#txt_product_size').change(function(e){
         var idx = $(this).val();
         idx = parseInt(idx, 10);
@@ -96,15 +96,12 @@ $(document).ready(function(){
         }
         if(list_thick!='') $sel_thick.trigger("change");
     });
-
-
     $('select#txt_material_thickness').change(function(e){
         var idx = $(this).val();
         idx = parseInt(idx, 10);
         var size = '('+material[idx].width+' &times; '+material[idx].length+ ' '+material[idx].usize+')';
         var mat = material[idx].name;
         var thick = material[idx].thick+' '+material[idx].uthick;
-
         var $sel_color = $('select#txt_material_color');
         $('select#txt_material_color option').remove();
         var list_color = '';
@@ -121,17 +118,13 @@ $(document).ready(function(){
         }
         if(list_color!='') $sel_color.trigger("change");
     });
-
     $('select#txt_material_thickness').change(function(e){
         var idx = $(this).val();
         idx = parseInt(idx, 10);
         $("#spn_unit_price").html(material[idx].price);
         $("#txt_unit_price").val(material[idx].price);
-
     });
-
 });
-
 </SCRIPT>
 <div class="sub" [@DSP_HIDDEN]>
     <a href="[@URL]">HOME</a>
@@ -149,7 +142,6 @@ $(document).ready(function(){
         <input type="hidden" id="date-order-type" value="order_edit" />
         <input type="hidden" id="data-material-idx" value="[@MATERIAL_IDX]" />
         <input type="hidden" id="data-order-status" value="[@ORDER_STATUS]" />
-
         <div class="float_right"  >
             <div class="right_ct_pro_lates" [@DSP_HIDDEN] >
                 <br>
@@ -163,7 +155,6 @@ $(document).ready(function(){
                             <p class="up float_left">Print Image:</p>
                             <p class="up_lates">This product uses a standard image already provided.</p>
                         </div>
-
                         <div class="clear indent_lates2">
                             <p class="up float_left">Description :</p>
                             <p class="up_lates2 clear"></p>
@@ -176,7 +167,6 @@ $(document).ready(function(){
                     </div>
                 </div>
             </div>
-
             <div class="right_ct_pro_lates">
                 <div class="indents">
                         <div class="indent">
@@ -195,10 +185,10 @@ $(document).ready(function(){
                                 </div>
                                 <div class="clear"></div>
                             </div>
-                            <!--  tab con o day -->
                             <div class="tab-image content_table_item reate text_3"  style="display: none" id="IMAGES">
                                     <div class="clear">
-                                        <textarea id="image_text" name="image_text" rows="4" cols="130" style="padding: 10px; width: 98%;">- Printing file: Anvy has printing file for this product. If you want to print with new printing file, please upload to ftp and paste the path here.-  Note for this product:
+                                        <textarea id="image_text" name="image_text" rows="4" cols="130" style="padding: 10px; width: 98%;">
+                                            - Printing file: Anvy has printing file for this product. If you want to print with new printing file, please upload to ftp and paste the path here.-  Note for this product:
                                         </textarea>
                                     </div>
                             </div>
@@ -208,9 +198,7 @@ $(document).ready(function(){
                                                 Please select size for item only :
                                             </p>
                                             <p class="float_left">
-
                                                 <select id="txt_product_size" clas="box_icon2" >
-                                                    <!--option selected="">Select...</option-->
                                                     [@OPTION_SIZE]
                                                 </select>
 
@@ -227,21 +215,17 @@ $(document).ready(function(){
                                             </p>
                                             <p class="float_left">
 
-                                                <select class="box_icon2 text_color" id="txt_product_material"><!-- onchange="setup_thickness(this); setup_color(this); setup_price(this);" -->
-                                                    <!--option >Select...</option-->
+                                                <select class="box_icon2 text_color" id="txt_product_material">
                                                     [@OPTION_MATERIAL]
                                                 </select>
-
                                             </p>
                                         </div>
                                         <div class="clear">
                                             <p class="float_left text2 bold">
-                                                Please select a Meterial thickness for this item
-                                            </p>
+                                                Please select a Meterial thickness for this item</p>
                                             <p class="float_left">
 
-                                                <select class="box_icon2 text_color" name="txt_material_thickness" id="txt_material_thickness" ><!-- onchange="setup_color(this);setup_price(this);" -->
-                                                    <!-- option selected="">Select...</option-->
+                                                <select class="box_icon2 text_color" name="txt_material_thickness" id="txt_material_thickness" >
                                                     [@OPTION_THICKNESS]
                                                 </select>
 
@@ -252,8 +236,7 @@ $(document).ready(function(){
                                                 Please select a Meterial color for this item
                                             </p>
                                             <p class="float_left">
-                                                <select class="box_icon2 text_color" id="txt_material_color" > <!-- onchange="setup_price(this)" -->
-                                                    <!--option selected="">Select...</option-->
+                                                <select class="box_icon2 text_color" id="txt_material_color" >
                                                     [@OPTION_COLOR]
                                                 </select>
                                             </p>
@@ -262,7 +245,6 @@ $(document).ready(function(){
                                     <p class="clear"></p>
                                 </div>
                             </div>
-
                             <div class="tab-image content_table_item reate text_3"  style="display: none" id="TEXT">
                                 <div class="clear" style="text-align: center">
                                         [@OPTION_TEXT]
@@ -273,7 +255,6 @@ $(document).ready(function(){
                 </div>
             </div>
         </div>
-
         <div class="table2">
             <div class="td_1">
                 <div class="table_qua float_left">
@@ -291,5 +272,4 @@ $(document).ready(function(){
         <div class="line" style="[@STYLE]">
             <input id="btn_add_cart" class="btn_create" type="button" value="[@BTN_NAME_DISPLAY]" id="btn_save_order" >
          </div>
-
     </div>

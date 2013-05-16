@@ -1,9 +1,7 @@
 <?php if(!isset($v_sval)) die(); ?>
 <?php
 $v_company_product_url = RESOURCE_URL.$_SESSION['company_code'].'/products/';
-
 $v_ship = isset($_GET['ship'])?$_GET['ship']:'';
-
 switch($v_ship){
     case 'VIEW':
         include $v_head.'header.php';
@@ -20,5 +18,4 @@ switch($v_ship){
         include $v_head.'shipping/qry_shipping.php';
         include $v_head.'footer.php';
 }
-
 ?>

@@ -8,7 +8,6 @@
 </div>
 </div>
 </div>
-
 <div class="content">
     <input type="hidden" id="data-order-id" value="[@order_id]" />
     <input type="hidden" id="data-order-item-id" value="[@order_item_id]" />
@@ -26,7 +25,6 @@
 
                             </select>
                         </div>
-
                         <input type="button" id="btn_right" class="button float_left" />
                         <div class="float_right box4">
                             <p class="title_lef_dis3">allocated locations</p>
@@ -38,7 +36,6 @@
                                     <div class="table_extended float_left">Action</div>
                                 </div>
                                 <p class="clear"></p>
-
                             </div>
                         </div>
                         <p class="clear"></p>

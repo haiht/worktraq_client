@@ -1,6 +1,5 @@
 <div class="distribution_item">
     <div class="distribution_header" btn-location-id="[@LOCATION_ID]" > Location: [@LOCATION_NAME] <span class="color_r">Total price:  [@TOTAL_PRICE] </span> </div>
-
     <div class="table3 "  rel="location_[@LOCATION_ID]">
         <span class="float_left tab_5">
             <p><span class="capital">Address: </span><span class="normal">[@LOCATION_ADDRESS]</span></p>
