@@ -12,6 +12,7 @@ $v_order_id = isset($_POST['txt_order_id'])?$_POST['txt_order_id']:0;
 $v_order_item_id = isset($_POST['txt_order_item_id'])?$_POST['txt_order_item_id']:0;
 $v_material_idx = isset($_POST['txt_material_idx'])?$_POST['txt_material_idx']:0;
 $arr_text = isset($_POST['txt_text'])?$_POST['txt_text']:0;
+
 settype($v_product_id, 'int');
 settype($v_package_type, 'int');
 settype($v_order_id, 'int');
@@ -83,7 +84,7 @@ if($v_order_id>0){
         $v_order_user_name = $cls_tb_order->get_user_name();
         $v_order_location = $cls_tb_order->get_location_id();
         $v_order_company = $cls_tb_order->get_company_id();
-        $arr_tmp_product_text = $cls_tb_product->select_scalar('product_text', array('product_id'=>$v_product_id));
+        $arr_tmp_product_text = $cls_tb_product->select_scalar('text', array('product_id'=>$v_product_id));
         if(!is_array($arr_tmp_product_text)) $arr_tmp_product_text = array();
         for($i=0; $i<count($arr_tmp_product_text); $i++){
             if(isset($arr_product_text[$i]))
@@ -270,7 +271,6 @@ if($v_order_id>0){
                     $cls_tb_order_items->set_current_size_option($v_size_option);
                     $cls_tb_order_items->set_custom_image_path($v_custom_image_path);
                     $cls_tb_order_items->set_allocation($arr_tmp_allocation);
-
                     $v_result = $cls_tb_order_items->update();
                 }
             }else{
@@ -448,6 +448,14 @@ if($v_order_id>0){
         die('{error=2}{message=Cannot found order!}');
     }
 }else{
+    $arr_text_temp = array();
+    $i=0;
+    foreach($arr_text as $arr_template){
+        if(isset($arr_template[$i])){
+            $i++;
+            $arr_text_temp[$i]['text']=$arr_template['text'];
+        }
+    }
     $v_session_order = '';
     if(isset($_SESSION['ss_current_order'])) $v_session_order = $_SESSION['ss_current_order'];
     if($v_session_order!='')
@@ -517,6 +525,7 @@ if($v_order_id>0){
         'product_id'=>$v_product_id
         ,'package_type'=>$v_package_type
         ,'order_id'=>$v_order_id
+        ,'text'=>$arr_text_temp
         ,'product_sku'=>$v_product_sku
         ,'product_description'=>$v_product_description
         ,'product_image'=>$v_product_image

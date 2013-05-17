@@ -42,6 +42,7 @@ $v_error_approve = '';
 $v_all_price=0;
 //$v_all_quantity=0;// chi lay so luong da allocate
 $v_all_quantity = $cls_tb_order_items->get_all_quantity_by_id(array('order_id'=>$v_order_id));//lay sach ko can bik da allocate chua
+$arr_text = $cls_tb_order_items->select_scalar('text',array('order_id'=>$v_order_id));
 if($v_row==1){
     $_SESSION['order_id'] = $v_order_id;
     $v_po_number = $cls_tb_order->get_po_number();
@@ -270,11 +271,10 @@ if($v_row==1){
                     $tpl_order_allocation_items->set('PRODUCT_MATERIAL', $arr[$i]['product_name']);
                     $v_graphic_file = $arr[$i]['product_image'];
                     if(strpos($v_graphic_file,'/')===false) $v_graphic_file = $v_company_product_url.$v_graphic_file;
-
                     if (!preg_match("~^(?:f|ht)tps?://~i", $v_graphic_file)) {
                         $v_graphic_file = URL.$v_graphic_file;
                     }
-                    $tpl_order_allocation_items->set('PRODUCT_IMAGE', $v_graphic_file);
+                    $tpl_order_allocation_items->set('PRODUCT_IMAGE', $v_image_url);
                     $tpl_order_allocation_items->set('PRODUCT_QUANTITY', $arr[$i]['location_quantity']);
                     $tpl_order_allocation_items->set('PRODUCT_PRICE', $v_user_rule_hide_price_all?NO_PRICE:format_currency($arr[$i]['location_price']));
                     $v_tmp_location_price = $arr[$i]['location_price']*$arr[$i]['location_quantity'];

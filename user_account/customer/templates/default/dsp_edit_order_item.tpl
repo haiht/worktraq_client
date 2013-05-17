@@ -29,7 +29,7 @@ $(document).ready(function(){
         order_id = parseInt(order_id, 10);
         var idx =$("#data-material-idx").val();
         var v_product_quantity = $("#product_quantity").val();
-        var arr = $("#data-product-text").val();
+        var arr =[@TEXT_CONTAINT] ;
         $.ajax({
             url	:	'[@AJAX_ADD_ORDER_URL]',
             type	:	'POST',
@@ -142,6 +142,7 @@ $(document).ready(function(){
         <input type="hidden" id="date-order-type" value="order_edit" />
         <input type="hidden" id="data-material-idx" value="[@MATERIAL_IDX]" />
         <input type="hidden" id="data-order-status" value="[@ORDER_STATUS]" />
+
         <div class="float_right"  >
             <div class="right_ct_pro_lates" [@DSP_HIDDEN] >
                 <br>

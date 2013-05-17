@@ -59,7 +59,7 @@ $v_company_product_url = RESOURCE_URL.$v_company_code.'/products/';
 $v_owner = $cls_tb_order->check_order_own(array("order_id"=>(int)$v_order_id),$v_check_order_user);
 if($v_order_ajax==0){
     switch($v_order){
-        case 'UPL'://upload image //========== chua xu ly
+        case 'UPL':
             include $v_head.'order/act_upload_image_order.php';
             break;
         case 'DE':

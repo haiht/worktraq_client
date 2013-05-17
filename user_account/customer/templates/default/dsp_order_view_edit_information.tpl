@@ -9,7 +9,6 @@
             <input class="float_left" name="txt_po_number" id="txt_po_number" type="text" value="[@PO_NUMBER]" [@READONLY] >
             <span class="color_r float_left"> (*)</span>
         </div>
-
         <div class="indent_form clear create_h">
             <label class="float_left create_cl">ORDER REF</label>
             <input class="float_left"  name="txt_order_ref" id="txt_order_ref" type="text" value="[@ORDER_REF]"[@READONLY]>

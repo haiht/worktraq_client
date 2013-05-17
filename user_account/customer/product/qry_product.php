@@ -48,9 +48,20 @@ $v_product_detail = $cls_tb_product->get_product_detail();
 $arr_option_text = $cls_tb_product->get_text();
 if(count($arr_option_text)>0)
     $v_option_text='';
+$v_text_contain = '';
+$arr_text = '';
 foreach($arr_option_text as $arr){
-    $v_option_text.="<span color= ".$arr['color']." font-family= ".$arr['font-name']." font-size= ".$arr['font-size']. ">".$arr['text']."</span><br>";
+    $v_temp = $arr['text'].'-'.$arr['color'].'-'.$arr['font-name'].'-'.$arr['font-size'].'-'.$arr['font-bold'].'-'.$arr['font-italic'].'-'.$arr['left'].'-'.$arr['top'];
+    //$v_text_contain .= '<input name="arr_product_text[]" type="hidden" value="' .$v_temp. '">';
+    $arr_text[] = $arr;
+    $v_bold = $arr['font-bold']==1?";font-weight:bold":"";
+    $v_italic = $arr['font-italic']==1?";font-style:italic":"";
+    $v_option_text.="<span style=' ";
+    $v_option_text.=" color: ".$arr['color']." ;font-family: ".$arr['font-name']." ;font-size: ".$arr['font-size']." ".$v_bold. " ". $v_italic;
+    $v_option_text.="'>".$arr['text']."</span><br>";
 }
+//===== disable this funtion this time
+$v_option_text="THERE NO OPTION FOR THIS PRODUCT";
 $v_product_sku = $cls_tb_product->get_product_sku();
 $v_short_description = $cls_tb_product->get_short_description();
 $v_long_description = $cls_tb_product->get_long_description();
@@ -324,6 +335,8 @@ $tpl_edit_order_item->set('OPTION_COLOR',$v_dsp_option_color);
 $tpl_edit_order_item->set('OPTION_TEXT',$v_option_text);
 $tpl_edit_order_item->set('PRODUCT_IMAGE',$v_image_url);
 $tpl_edit_order_item->set('PRODUCT_ID',$v_selected_product_id);
+//$tpl_edit_order_item->set('HIDDEN_TEXT', $v_text_contain);
+$tpl_edit_order_item->set('TEXT_CONTAINT', json_encode($arr_text));
 $tpl_order_item_row = new Template('dsp_order_item_row.tpl', $v_dir_templates);
 $tpl_order_item_row->set('PRODUCT_ADD_ORDER_CLASS',$v_order_item_count%2==0?'td_2':'td_3');
 $tpl_order_item_row->set('UNIT_PRICE',$v_unit_price);
@@ -333,9 +346,9 @@ $tpl_order_item_row->set('URL_TEMPLATE',$v_templates);
 $tpl_product_info_main->set('PRODUCT_INFO_TITLE', $v_product_name);
 $tpl_product_info_main->set('INFO_PRODUCT_IMAGE_1', URL.$v_image_url);
 $tpl_product_info_main->set('INFO_PRODUCT_IMAGE_2', URL.$v_image_url);
-$tpl_product_info_main->set('PRODUCT_SIZE', $v_product_size);//$v_product_price_view PRODUCT_MATERIAL
-$tpl_product_info_main->set('PRODUCT_MATERIAL', $v_material);//
-$tpl_product_info_main->set('PRODUCT_COLOR', $v_color);//$v_color
+$tpl_product_info_main->set('PRODUCT_SIZE', $v_product_size);
+$tpl_product_info_main->set('PRODUCT_MATERIAL', $v_material);
+$tpl_product_info_main->set('PRODUCT_COLOR', $v_color);
 $v_size =isset($v_size)?$v_size:'';
 $tpl_product_info_main->set('PRODUCT_SIZE_2', $v_size);//
 if($v_long_description=='' || $v_long_description=='.')
