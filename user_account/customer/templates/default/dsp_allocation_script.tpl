@@ -7,6 +7,7 @@
         var order_item = $("#data-order-item-id").val();
         var loc = new Array();
         loc = load_allocation(product, order, order_item);
+
         $("#btn_caner").click(function(){
             window.location = '[@URL]'+'order/'+order+'/edit';
         });
@@ -28,6 +29,25 @@
         $("#btn_save_allocation").click(function(){
             allocation_order(product, order, order_item,loc);
         });
+        $("input[rel=allocation]").keyup(function(event) {
+            if ( event.keyCode == 46 || event.keyCode == 110 || event.keyCode == 188 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                    (event.keyCode == 65 && event.ctrlKey === true) ||
+                    (event.keyCode >= 35 && event.keyCode <= 39)) {
+                return;
+            }
+            else {
+                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+                    event.preventDefault();
+                }
+            }
+
+
+
+
+
+
+        });
+
     });
 </script>
 <script type="text/javascript">
@@ -42,26 +62,33 @@ function find_location(location_id,loc){
     }
     return pos;
 }
-function keyPhone(e)
-{
-    var keyword=null;
-    if(window.event)
-    {
-        keyword=window.event.keyCode;
-    }else
-    {
-        keyword= e.which; //NON IE;
-    }
 
-    if(keyword<48 || keyword>57)
-    {
-        if(keyword==48 || keyword==127)
-        {
-            return ;
-        }
-        return false;
+function calculator_allocation(p_value,p_location_id){
+    var v_total_products = $("span#product_quanlity").html();
+    var v_item_was_allocation = 0;
+    v_item_was_allocation =parseInt(v_item_was_allocation,10);
+    p_value = parseInt(p_value,10);
+    var v_reamning_item =  $("input#total_reamning_items").html();
+    v_reamning_item =parseInt(v_reamning_item,10);
+    if((v_reamning_item - p_value)<=-1){
+        return -2;
     }
+    $("input[rel=allocation]").each(function(){
+        var v_items = $(this).val();
+        v_items =  parseInt(v_items,10);
+        v_item_was_allocation = v_item_was_allocation + v_items;
+    });
+    v_total_products  =parseInt(v_total_products,10);
+    alert(v_item_was_allocation +'---'+v_total_products );
+    if(v_item_was_allocation > v_total_products)
+        return -1;
+    else
+        return v_total_products - v_item_was_allocation;
 }
+
+
+
+
 function add_row_table_new(pos,loc)
 {
     var remain = $('span#location_quanlity').html();
@@ -84,12 +111,11 @@ function add_row_table_new(pos,loc)
     var ck =  document.createElement('input');
     ck.type ='checkbox';
 
-    var table_name = remain%2==0?'td_2':'td_3';
+    var table_name = (remain%2==0?'td_2':'td_3');
     var $tr = $('<div class='+table_name+'></div>');
     var $c2 = $('<div class="table_yourpro float_left">'+location_number+'</div>');
     var $c3 = $('<div class="table_quali1 float_left">'+location_name+'</div>');
     var $c_3 = $('<div class="table_quali1 float_left">'+location_name+'</div>');
-
 
     $tr.append($c2);
     $tr.append($c3);
@@ -195,6 +221,7 @@ function add_row_table_new(pos,loc)
     remain-=quantity;
 
     $('span#location_quanlity').html(remain);
+    $('input#total_reamning_items').val(remain);
 
     var $c5 = $('<div class="table_extended float_left"></div>');
     var $b = $('<input />',
@@ -305,6 +332,7 @@ function load_allocation(pid, oid, otid){
                 //$('table tr#tr_row').remove();
                 product_id = location.product_id;
                 $('span#product_quanlity').html(total);
+
 
                 for(var i=0;i<allocation.length;i++){
                     location_id = allocation[i].location_id;

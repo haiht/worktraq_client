@@ -1267,11 +1267,11 @@ ul.nav li a:hover, ul.nav li a.active_item{
 }
 #page .content .table5 div.table_unitprice input.bg{
     border:1px solid #ccdade;
-    font:normal 12px Arial, Helvetica, sans-serif;
+    font:bold 12px Arial, Helvetica, sans-serif;
     color:#666;
     padding:3px;
     width:95px;
-    text-align: center;
+    text-align: right;
 }
 #page .content .table5 div.table_unitprice .dent{
     margin:1px 5px 0px;
@@ -1316,7 +1316,6 @@ ul.nav li a:hover, ul.nav li a.active_item{
     text-align:left;
     font:bold 16px Arial, Helvetica, sans-serif;
     color:#423824;
-    text-transform:uppercase;
     padding:15px 10px 10px;
     height:40px;
 }
