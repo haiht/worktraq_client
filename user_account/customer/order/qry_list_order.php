@@ -240,11 +240,8 @@ foreach($arr_order as $a){
         {
             if($v_tmp_order_status < 30){
                 if($v_tmp_order_status==20){
-                    if($v_user_rule_approve && $cls_user->check_user_rule('user_location_approve', $v_tmp_order_location, $arr_user['user_name'])==1){
+                    if(($v_user_rule_approve && $cls_user->check_user_rule('user_location_approve', $v_tmp_order_location, $arr_user['user_name'])==1) || $v_user_rule_cancel!=''){
                         $v_dsp_option_order .= '<option class="text_color" value="edit">Approve</option>';
-                    }
-                    if($v_user_rule_cancel!=''){
-                        $v_dsp_option_order .= '<option class="text_color" value="edit">Cancel</option>';
                     }
                 }else{
                     if($v_user_rule_edit)

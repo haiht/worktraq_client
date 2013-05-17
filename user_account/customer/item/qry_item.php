@@ -23,7 +23,7 @@ $v_dsp_option_size = '';
 $v_dsp_option_material = '';
 $v_dsp_option_thick = '';
 $v_dsp_option_color = '';
-$v_dsp_text = '';//"THERE NO OPTION AVAILABLE FOR THIS ITEM";
+$v_dsp_text ='';// "THERE NO OPTION AVAILABLE FOR THIS ITEM";
 add_class('cls_tb_order_items') ;
 $cls_tb_order_items = new cls_tb_order_items ($db,LOG_DIR);
 add_class('cls_tb_product');
@@ -49,8 +49,14 @@ if($v_count==1){
     $v_graphic_file = $cls_tb_order_items->get_graphic_file();
     $arr_text = $cls_tb_order_items->get_text();
     foreach($arr_text as $arr){
-        $v_dsp_text.=$arr['text'];
+        $v_bold = $arr['font-bold']==1?";font-weight:bold":"";
+        $v_italic = $arr['font-italic']==1?";font-style:italic":"";
+        $v_dsp_text.="<span style=' ";
+        $v_dsp_text.=" color: ".$arr['color']." ;font-family: ".$arr['font-name']." ;font-size: ".$arr['font-size']." ".$v_bold. " ". $v_italic;
+        $v_dsp_text.="'>".$arr['text']."</span><br>";
     }
+    //disable this function this time
+    $v_option_text = "THERE NO OPTION FOR THIS PRODUCT";
     $v_graphic_id = $cls_tb_order_items->get_graphic_id();
     $v_current_price =  $cls_tb_order_items->get_current_price();
     $v_material_id = $cls_tb_order_items->get_material_id();
@@ -229,6 +235,7 @@ $tpl_item_edit->set('OPTION_MATERIAL',  $v_dsp_option_material);
 $tpl_item_edit->set('OPTION_THICKNESS',$v_dsp_option_thick);
 $tpl_item_edit->set('OPTION_COLOR',$v_dsp_option_color);
 $tpl_item_edit->set('OPTION_TEXT',$v_dsp_text);
+$tpl_item_edit->set('TEXT_CONTAINT',isset($arr_text)? json_encode($arr_text):$v_dsp_text);
 $tpl_item_edit->set('GRAPHIC_ID',$v_graphic_id);
 $tpl_item_edit->set('PRODUCT_IMAGE',$v_image_url);
 $tpl_item_edit->set('PRODUCT_ID',$v_product_id);

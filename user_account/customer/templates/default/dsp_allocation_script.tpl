@@ -186,14 +186,12 @@ function add_row_table_new(pos,loc)
         var s_location_id =$(this).attr('data-location');
         var v_value = $(this).val();
         var $input = $(this);
-
         s_location_id = parseInt(s_location_id);
         var p = find_location(s_location_id,loc);
-
         if(p>=0 && val>0){
             var c_remain = $('span#location_quanlity').html();
             var total = $('span#product_quanlity').html();
-            c_remain = parseInt(c_remain,10);
+            c_remain = parseInt(c_remain);
             if(!isNaN(c_remain) && c_remain>0)
             {
                 var first = c_remain;
@@ -206,6 +204,10 @@ function add_row_table_new(pos,loc)
                 $($input).val(v_value);
                 loc[p].quantity = v_value;
                 $('span#location_quanlity').html(c_remain);
+            }
+            else if(c_remain==0){
+                alert("there no item left to ship");
+                window.location.reload();
             }
         }
     });
