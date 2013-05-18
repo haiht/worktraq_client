@@ -57,9 +57,9 @@ function delete_image_info($p_sid, $p_image_id, $p_root_dir = USER_UPLOAD_DIR, $
             }
         }
         if($v_return_id>-1){
-            $arr_info = $arr_cont[$p_sid][$v_return_id];
+            $arr_info = $arr_cont[$v_return_id];
             $arr_info['delete'] = 1;
-            $arr_cont[$p_sid][$v_return_id] = $arr_info;
+            $arr_cont[$v_return_id] = $arr_info;
             $v_cont = serialize($arr_cont);
             $fp = fopen($v_file, 'w');
             fwrite($fp, $v_cont, strlen($v_cont));

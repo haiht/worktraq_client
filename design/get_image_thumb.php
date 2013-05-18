@@ -16,7 +16,7 @@ $arr_info = get_image_info(session_id(), $v_image_id, $v_upload_dir);
 if(count($arr_info)>0){
     $v_name = isset($arr_info['name'])?$arr_info['name']:'';
     if($v_name!=''){
-        $v_file = $v_upload_dir.DS.$v_name;
+        $v_file = $v_upload_dir.DS_DS.$v_name;
         if(file_exists($v_file)){
             list($width, $height, $type, $attr) = @getimagesize($v_file);
             $v_type = isset($arr_info['type'])?$arr_info['type']:'0';

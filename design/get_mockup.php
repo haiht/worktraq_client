@@ -46,19 +46,19 @@ switch($v_type){
 if($v_rotation!=0) $im = imagerotate($im, $v_rotation,0);
 switch($v_type){
     case 1;//Gif
-        header("Content-Type: image/gif");
+        //header("Content-Type: image/gif");
         imagegif($im);
         break;
     case 2;//Jpg
-        header("Content-Type: image/jpeg");
+        //header("Content-Type: image/jpeg");
         imagejpeg($im);
         break;
     case 3;//Png
-        header("Content-Type: image/png");
+        //header("Content-Type: image/png");
         imagepng($im,null,9);
         break;
     default ;
-        header("Content-Type: image/jpeg");
+        //header("Content-Type: image/jpeg");
         imagejpeg($im);
         break;
 }

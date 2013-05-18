@@ -485,7 +485,6 @@ $(document).on('click' , '.image-delete-button' , function(){
         dataType: 'json' ,
         data: {"image_id" : $(_this).closest('.image-item').attr('id').split('_').pop(), sid: '<?php echo session_id();?>' } ,
         success: function(data){
-            alert(data.success);
             $(_this).closest('.image-item').fadeOut(300);
         }
 
@@ -604,7 +603,6 @@ function useImageInParent(data){
     window.parent.useImage(data);
 }
 function deleteUserImage(image_id){
-
     $.ajax({	url:"delete_image.php" ,
         dataType: 'json' ,
         data: {"image_id" : image_id, "sid": '<?php echo session_id();?>' } ,

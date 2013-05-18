@@ -23,7 +23,7 @@ $v_error = 10;
 
     if($up->get_error_number()==0){
         $v_file_name = $up->get_filename();
-        list($v_width, $v_height, $v_type) = getimagesize($v_upload_dir.DS.$up->get_filename());
+        list($v_width, $v_height, $v_type) = getimagesize($v_upload_dir.DS_DS.$up->get_filename());
         $arr_info = array(
             'name'=>$up->get_filename()
             ,'height'=>$v_height
@@ -32,7 +32,7 @@ $v_error = 10;
             ,'type'=>$v_type
             ,'delete'=>0
             ,'session'=>session_id()
-            ,'size'=>filesize($v_upload_dir.DS.$up->get_filename())
+            ,'size'=>filesize($v_upload_dir.DS_DS.$up->get_filename())
         );
         $v_image_id = save_image_info($arr_info, USER_UPLOAD_DIR);
 
