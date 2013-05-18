@@ -771,7 +771,22 @@ class cls_tb_order{
 		}
 	}
 
-	
+    /**
+     * @param array $arr_where
+     * @param $p_value
+     * @return bool
+     */
+    public function check_order_own(array $arr_where = array(),$p_value){
+        $v_check = false;
+        $rss = $this->collection->find($arr_where);
+        foreach($rss as $arr){
+            if(isset($arr['order_id']) && isset($arr['user_name'])){
+                if($arr['user_name']==$p_value) $v_check = true;
+            }
+        }
+        return $v_check;
+    }
+
 	/**
 	 * function select_one_record
 	 * @param $arr_where = array(), example: array('field'=>3), that equal to: WHERE field=3
@@ -785,16 +800,7 @@ class cls_tb_order{
 	 * </code>
 	 * @return int
 	 */
-    public function check_order_own(array $arr_where = array(),$p_value){
-        $v_check = false;
-        $rss = $this->collection->find($arr_where);
-        foreach($rss as $arr){
-            if(isset($arr['order_id']) && $arr['user_name']==$p_value){
-                $v_check = true;
-            }
-        }
-        return $v_check;
-    }
+
 	public function select_one(array $arr_where = array(), array $arr_order = array()){
 		if(is_null($arr_order) || count($arr_order)==0){
 			$arr_order = array('_id' => -1);//last insert show first

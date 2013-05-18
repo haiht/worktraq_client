@@ -22,11 +22,11 @@ body{
 	padding-left:20px;
 }
 #top_page ul li.setting{
-	background:url(../images/icon_top.png) no-repeat 0px -17px;
+	background:url(../images/icon_top.png) no-repeat 0px -18px;
 	padding-left:20px;
 }
 #top_page ul li.logout{
-	background:url(../images/icon_top.png) no-repeat 0px -34px;
+	background:url(../images/icon_top.png) no-repeat 0px -36px;
 	padding-left:15px;
 }
 #top_page ul li a{
@@ -1150,7 +1150,6 @@ ul.nav li a:hover, ul.nav li a.active_item{
 #page .content .float_right .title_lef_dis2{
     font:bold 16px Arial, Helvetica, sans-serif;
     color:#423824;
-    text-transform:uppercase;
     text-align:left;
     padding:0 10px;
 }
@@ -1194,7 +1193,6 @@ ul.nav li a:hover, ul.nav li a.active_item{
     color:#4a5e64;
     display:block;
     padding:10px 0;
-    text-transform:uppercase;
     text-align:right;
 }
 /*table5*/
@@ -1707,6 +1705,93 @@ a:hover{
     text-align: left;
 }
 
+#page .content .float_right .reate .box4{
+    width:648px;
+    margin-right:10px;
+}
+#page .content .float_right .reate .box3 {
+    background: none repeat scroll 0 0 #7E9298;
+    color: white;
+    margin-left: 10px;
+    margin-top: 34px;
+    width: 240px;
+}
+#page .content .float_right .reate .box4 .title_lef_dis3 {
+    color: #4A5E64;
+    display: block;
+    font: bold 15px Arial,Helvetica,sans-serif;
+    padding: 0px 0 10px;
+    text-align: right;
+    text-transform: uppercase;
+    margin-top: -22px;
+}
+/**/
+#order_ref {
+    float: left;
+    margin-top: 15px;
+    width: 675px;
+}
+.p_right {
+    display: block;
+    margin-left: 261px;
+    text-align: left;
+    width:auto;
+}
+.p_color {
+    display: block;
+    font-size: 13px;
+    padding:2px 0;
+    margin-left: 166px;
+}
+.p_left {
+    display: block;
+    font: bold 13px Arial,Helvetica,sans-serif;
+    margin-right: 10px;
+    margin-top: 1px;
+    text-align: left;
+    width: 155px;
+}
+/*table*/
+#page .content .table5 div.table_yourpro{
+    width:80px;
+}
+#page .content .table5 div.table_quali {
+    border-left: 1px solid #E8EEF2;
+    width: 260px;
+}
+#page .content .table5 div.table_quali1 {
+    border-left: 1px solid #E8EEF2;
+    width: 260px;
+}
+#page .content .table5 div.table_extended {
+    border-left: 1px solid #E8EEF2;
+    width: 68px;
+}
+/*Insert for table*/
+#page .content .table5 div.table_allow {
+    border-left: 1px solid #E8EEF2;
+    font: bold 12px/12px Arial,Helvetica,sans-serif;
+    padding: 3px 0;
+    width: 78px;
+}
+#page .content .table5 div.table_allow2{
+    border-left: 1px solid #E8EEF2;
+    font: bold 12px/12px Arial,Helvetica,sans-serif;
+    width: 78px;
+}
+.thresdsadsa{
+    display:block;
+    margin-top:-17px;
+}
+/*Insert CSS*/
+.descript{
+    margin-top:15px;
+}
+.des_img img{
+    min-height:105px;
+    max-height:105px;
+    min-width:105px;
+}
 
 
 
