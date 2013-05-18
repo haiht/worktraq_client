@@ -904,6 +904,8 @@ ul.nav li a:hover, ul.nav li a.active_item{
     height: 75px;
     text-align: center;
     vertical-align: middle;
+    padding-top:5px;
+    padding-bottom:5px;
 }
 #page .content .table4 .td_2{
 }
