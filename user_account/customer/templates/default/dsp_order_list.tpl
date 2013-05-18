@@ -8,6 +8,48 @@
 <link href="[@URL]lib/scrollbars/jquery.scrollbars.css" rel="stylesheet" type="text/css" />
 <script>
     $(document).ready(function() {
+
+        var control_popup = false;
+        $('.td_5').find('.select_edit').each(function(){
+            $(this).find('select').change(function(event){
+                var valueSelect = $(this).find('option:selected').val();
+                var product = $(this).attr('data-product-id');
+                var order = $(this).attr('data-order-id');
+                var order_item = $(this).attr('data-order-item-id');
+                var type = $(this).attr('date-order-type');
+                var image_id = $(this).attr('data-image-id');
+                image_id = parseInt(image_id, 10);
+                if(isNaN(image_id) || image_id<0) image_id = 0;
+                var image_url = $(this).attr('data-image-url');
+                var that = this;
+                product = parseInt(product,10);
+                if(isNaN(product)||product<0) product = 0;
+                order = parseInt(order, 10);
+                if(isNaN(order)||order<0) order = 0;
+                order_item = parseInt(order_item, 10);
+                if(isNaN(order_item)||order_item<0) order_item = 0;
+                switch(valueSelect){
+                    case 'delete_item':
+                        $('.popup-confirm').showPopup({
+                            onHide: function(){
+                                //$('.td_5').find('.select_edit').find('select').find('option').eq(0).attr('selected', 'selected');
+                            },
+                            onConfirm:function(){
+                                var $parent = $(that).parents('div');
+                                control_popup = delete_item($parent, product, order, order_item);
+                            }
+                        });
+                        break;
+                    case 'edit_item':
+                        window.location = 'item/'+order_item
+                        break;
+                    case 'allocation':
+                        window.location = 'allocation/'+order_item+'/'+product+'/'
+                        break;
+                }
+            });
+        });
+
         $("input#txt_date_required").datepicker({
             dateFormat: 'dd-M-yy',
             changeMonth:true,
@@ -130,9 +172,10 @@
 
             switch(v_act){
                 case 'edit_item':
+                        alert("!");
                     window.location = 'item/'+v_order_item_id
                     break;
-                case 'delete_item':
+                case 'delete_item_order':
                     if(confirm('Do you want to delete this item ')){
                         $.ajax({
                             url	:   '[@AJAX_LOAD_ORDER_ALLOCATION_URL]',
@@ -162,6 +205,23 @@
     });
 </script>
 <script type="text/javascript">
+    function delete_item($parent, pid, oid, otid){
+        $.ajax({
+            url	:   '[@AJAX_LOAD_ORDER_ALLOCATION_URL]',
+            type	:	'POST',
+            data	:	{txt_product_id: pid, txt_order_id:oid, txt_order_item_id:otid, txt_session_id:'[@SESSION_ID]', txt_order_ajax:104},
+            beforeSend: function(){
+            },
+            success	: function(data, type){
+                alert("delete item success");
+                window.location.reload();
+            },
+            error: function(xhr, status, error){
+                alert("Error!" +'[@AJAX_LOAD_ORDER_ALLOCATION_URL]');
+            }
+        });
+        return true;
+    }
 function save_order_info(key, value, order){
     $.ajax({
         url	:	'[@AJAX_LOAD_ORDER_ALLOCATION_URL]',

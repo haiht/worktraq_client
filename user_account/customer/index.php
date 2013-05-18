@@ -27,7 +27,7 @@ if(!isset($_SESSION['templates']) || (isset($_SESSION['templates']) && $_SESSION
         $v_templates_name = $cls_tb_template->select_scalar('template_name',array('template_id'=>(int)$v_customer_template_id));
     $_SESSION['templates'] = $v_templates_name;
 }
-$v_templates_name = 'sky';//$_SESSION['templates'];
+$v_templates_name = 'default';//$_SESSION['templates'];
 $v_templates = URL.'user_account/customer/templates/'.$v_templates_name;
 $v_dir_templates = 'user_account/customer/templates/'.$v_templates_name;
 $v_url = URL;

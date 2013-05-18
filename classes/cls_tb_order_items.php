@@ -1,6 +1,5 @@
 <?php
 class cls_tb_order_items{
-
 	private $v_order_item_id = 0;
 	private $v_order_id = 0;
 	private $v_product_id = 0;

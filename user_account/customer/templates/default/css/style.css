@@ -900,9 +900,11 @@ ul.nav li a:hover, ul.nav li a.active_item{
     color: #747474;
     display: table-cell;
     font: bold 13px Arial,Helvetica,sans-serif;
-    height: 75px;
+    min-height: 75px;
     text-align: center;
     vertical-align: middle;
+    padding-top:5px;
+    padding-bottom:5px;
 }
 #page .content .table4 .td_2{
 }

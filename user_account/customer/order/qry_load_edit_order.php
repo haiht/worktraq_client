@@ -142,7 +142,7 @@ if($v_row==1){
             }else{
                 $tpl_order_items->set('SELECT_DISABLED', '');
                 if($v_user_rule_edit || ($v_order_user_name==$arr_user['user_name']))
-                    $v_dsp_order_option .= '<option class="text_color" value="delete_item">Delete</option><option value="edit_item">Edit</option>';
+                    $v_dsp_order_option .= '<option class="text_color" value="delete_item_order">Delete</option><option value="edit_item">Edit</option>';
                 if($v_user_rule_allocate)
                     $v_dsp_order_option .= '<option class="text_color" value="allocation">Allocate</option>';
             }
