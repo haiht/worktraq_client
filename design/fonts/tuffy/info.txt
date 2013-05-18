@@ -1,0 +1,9 @@
+Tuffy font is licenced under GPL.
+
+Original version by Thatcher Ulrich
+http://www.dafont.com/thatcher-ulrich.d1388
+http://tulrich.com/
+
+Improved version by Károly Barta (corrected the glyphs and added more characters)
+http://www.dafont.com/karoly-barta.d2118
+http://brtkr.blogspot.com/

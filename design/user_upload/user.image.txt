@@ -1,0 +1,1 @@
+a:1:{i:0;a:8:{s:4:"name";s:7:"561.jpg";s:6:"height";i:900;s:5:"width";i:662;s:9:"extension";s:3:"jpg";s:4:"type";i:2;s:6:"delete";i:0;s:7:"session";s:3:"xyz";s:4:"size";i:212125;}}

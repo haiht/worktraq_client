@@ -1,0 +1,500 @@
+*{
+	font-family:Arial, Helvetica, sans-serif;
+
+	outline:none;
+
+	-moz-box-sizing : border-box;
+	-ms-box-sizing: border-box;
+	-webkit-box-sizing: border-box !important ;
+	box-sizing: border-box;
+
+	padding: 0;
+	margin: 0;
+
+}
+body , html{
+	height:100%;
+}
+
+#wrapper{
+	position:absolute;
+	top:20px;
+	bottom:20px;
+	left:20px;
+	right:20px;
+	background:#fff;
+	border-radius: 5px;
+	box-shadow: 4px 4px 5px 2px rgba(0, 0, 0, 0.3);
+}
+#top_section{
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	z-index:10;
+	font-size: 18px;
+	line-height: 50px;
+	color: #000;
+	font-weight:bold;
+	padding: 0 25px;
+}
+#image_panel_left_section{
+	position:absolute;
+	top:50px;
+	left:25px;
+	right:25px;
+	height:40px;
+	border: 1px solid #bbb;
+	border-bottom: 1px solid #ddd;
+	background-color:#eee;
+}
+#image_panel_right_section{
+	position:absolute;
+	bottom: 60px;
+	left: 25px;
+	right: 25px;
+	top: 90px;
+	border: 1px solid #bbb;
+	border-top: none;
+}
+#bottom_section{
+	position:absolute;
+	bottom: 0;
+	height: 50px;
+	left: 0;
+	right: 25px;
+	text-align:right;
+}
+.left-tab{
+	display:inline-block;
+	padding: 0 15px;
+	font-size: 13px;
+	color: #444;
+	text-align:right;
+	cursor:default;
+	font-weight: bold;
+	line-height: 40px;
+	border-right: 1px solid transparent;
+	border-left: 1px solid transparent;
+}
+.left-tab.on{
+	background-color:#fff;
+	color: #000;
+	font-weight:bold;
+	border-color: #ddd;
+}
+.left-tab:first-of-type{
+	border-left: none;
+}
+
+.right-panel{
+	position:absolute;
+	overflow:auto;
+	left:0px;
+	right:0px;
+	top:0;
+	padding: 10px 20px;
+	display:none;
+	background-color:#fff;
+	width: 100%;
+	min-height: 200px;
+	height: 100%;
+}
+h5{
+	border-bottom: 1px solid #bbb ;
+	margin: 20px 15px 15px 15px ;
+	padding: 2px;
+	Color: #555 ;
+	font-size: 12px;
+
+}
+.image-cont{
+	margin: 10px;
+}
+.image-item , .upload-item{
+	position:relative;
+	display:inline-block;
+	vertical-align:bottom;
+	margin: 5px 2px;
+	border: 3px solid #fff;
+	height:auto;
+	padding: 4px;
+}
+.image-item:hover{
+	border-color: #eaeaea;
+}
+
+.image-item.selected{
+	border-color: #86BA1C;
+}
+.image-delete-button{
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	background-image: url(../../images/toolbar.png) ;
+	background-position: -400px 0px	;
+	background-color: rgba(255,255,255, 1) ;
+	width:16px;
+	height:16px;
+	border-radius: 2px;
+	display:none;
+	z-index:10;
+}
+.image-item.selected:hover .image-delete-button{
+	display:block;
+}
+.image-item img{
+	display:block;
+}
+.please-wait{
+	position:absolute;
+	display:none;
+	top: 40px;
+	left:0px;
+	bottom:0px;
+	right:0px;
+	z-index:1000;
+}
+.please-wait div{
+	position:absolute;
+	margin:auto;
+	background-color: #fdfdfd;
+	text-align:center;
+	font-size: 14px;
+	font-weight:bold;
+	width:200px;
+	height:65px;
+	line-height:65px;
+	top:0;
+	left:0;
+	bottom:0;
+	right:0;
+	text-align:center;
+	color: #444;
+	border-radius: 3px;
+	border:2px solid #999;
+	box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.1)
+}
+
+#upload_control{
+	margin: auto;	
+}
+.centered{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	height: 200px;
+	text-align:center;
+	margin:auto;
+}
+.upload-hint{
+	padding: 2px;
+	font-size: 14px;
+	color: #444;
+	font-weight:bold;
+}
+.upload-sub-hint{
+	padding: 5px 0 10px 0;
+	color: #999;
+	font-size: 12px;
+}
+#stock_search_bar{
+	padding: 10px 0px;
+}
+#stock_search_term{
+	height: 29px;
+	border: 1px solid #ccc;
+	width: 400px;
+	padding: 0 4px;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset ;
+	color: #444;
+	border-radius: 2px;
+	
+}
+#stock_search_term:focus{
+	border-color: #39F;
+	
+}
+.fotolia-result{
+	margin-top: 20px;
+}
+.stock-price{
+	display:none;
+	font-size: 11px;
+	color: #999;
+	position:absolute;
+	top: -18px;
+}
+.fotolia-result.selected .stock-price{
+	color: #555;
+	font-weight:bold;
+}
+.fotolia-result:hover .stock-price, .fotolia-result.selected .stock-price{
+	display:block;
+}
+#login_hint{
+	font-family:Verdana, Geneva, sans-serif;
+	background-color:#f5f5f5;
+	padding: 10px;
+	text-align:center;
+	font-size: 12px;
+	color: #666;
+	width: 300px;
+	margin: 50px auto 0 auto ; 
+	border: 1px solid #bbb;
+	border-radius: 4px;
+	line-height: 20px;
+}
+.fake-link{
+	color:#36F;
+	cursor: pointer;
+}
+.fake-link:hover{
+	text-decoration:underline;
+}
+.fb-album-item, .fb-photo-item{
+	display:inline-block;
+	margin: 15px;
+	vertical-align:top;
+	cursor:pointer;
+}
+.fb-photo-item{
+	margin:7px;
+}
+.fb-album-item:hover .div1 , .fb-album-item:hover .div2 {
+	border-color: #3B5998;
+	
+}
+.div1 {
+	height: 100px;
+	width: 130px;
+	position:relative;
+	border: 1px solid #ccc;
+	background-color:#fff;
+}
+
+.div2 {
+	left:4px;
+	top:4px;
+	height: 100px;
+	width: 130px;
+	position:absolute;
+	border: 1px solid #ccc;
+	background-color:#fff;
+}
+.div3 {
+	position:absolute;
+	overflow:hidden;
+	left:4px;
+	right:4px;
+	top:4px;
+	bottom:4px;
+}
+
+.div3 img{
+	display:block;
+	position:absolute;
+	left:0;
+	top:0;
+	right:0;
+	bottom:0;
+	margin:auto;
+}
+
+.caption{
+	color: #3B5998;
+	font-weight:bold;
+	font-size:11px;
+	width: 130px;
+	margin-top:8px;
+}
+.caption:hover{
+	text-decoration:underline;
+}
+
+.facebook-link{
+	display:inline-block;
+	color: #3B5998;
+	margin: 10px 20px;
+	font-size: 14px;
+	cursor:pointer;
+	font-weight:bold;
+}
+.facebook-link:hover{
+	text-decoration:underline;
+}
+
+.facebook-header{
+	color: #3B5998;
+	margin: 10px 20px;
+	font-size: 14px;
+	font-weight:bold;
+}
+
+.fb-icon{
+	position:relative;
+	display:inline-block;
+	vertical-align:middle;
+	width:16px;
+	height:16px;
+	background-image:url(../../images/toolbar.png);
+	background-repeat:no-repeat;
+	background-position: -1088px 0 ;
+	margin-right: 5px;
+}
+#close_link{
+	position:absolute;
+	width:36px;
+	height:36px;
+	top:-18px;
+	right:-18px;
+	cursor:pointer;
+	background-image:url(../../images/close_black.png);
+	background-repeat:no-repeat;
+	z-index:100;
+}
+#close_link:hover{
+	text-decoration:underline;
+}
+
+#stock_image_hint{
+	font-family:Verdana, Geneva, sans-serif;
+	margin: 10px 0 6px 2px; 
+	font-size: 12px;
+	color: #444;	
+}
+#fb_logout_section{
+	text-align:right;
+	margin: 10px 20px 5px 0 ;
+}
+#upload_overlay{
+    background-color: #FFFFFF;
+    height: 32px;
+    left: 296px;
+    position: absolute;
+    width: 124px;
+    z-index: 100;
+}
+.styled-upload{
+	bottom: 0;
+	cursor: inherit;
+	font-size: 1000px;
+	height: 300px;
+	margin: 0;
+	opacity: 0;
+	padding: 0;
+	position: absolute;
+	right: 0;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+}
+#image_drop_zone{
+	border: 3px dashed #cedeee;
+	padding: 25px 20px;
+	text-align:center;
+}
+#image_drop_zone.over{
+	background-color:#ffebc7;
+}
+#image_drop_zone .upload-guide{
+	display: inline-block;
+	margin: 5px 20px 0 0 ;
+	vertical-align:top;
+	text-align:left;
+}
+#image_drop_zone .upload-drag{
+	font-family: Neucha,Tahoma,Geneva,sans-serif;
+	font-size:18px;
+	color: #86BA1C;
+	opacity:1;
+}
+#image_drop_zone .upload-format{
+	color: #999;
+	font-size: 12px;
+	font-weight:bold;
+}
+#image_drop_zone .upload-or{
+	display: inline-block;
+	font-family: Neucha,Tahoma,Geneva,sans-serif;
+	margin: 15px 20px 0 0px ;
+	color: #ccc;
+	font-weight:bold;
+	vertical-align:top;
+}
+.sign-in-guide{
+	position:absolute;
+	right:30px;
+	top: 15px;
+	color: #888;
+	font-size: 11px;
+	z-index:100;
+}
+#btn_upload{
+	position: relative;
+	overflow:hidden;
+}
+.upload-item .image-ph{
+	width:120px;
+	height:100px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	position:relative;
+}
+.upload-item.error .image-ph{
+	background-color:#FCC;
+	border-color:#F99;
+}
+.upload-item-progress-ph{
+	position:absolute;
+	border: 1px solid #aaa;
+	background-color:#fff;
+	height: 12px;
+	bottom: 10px;
+	left: 10px;
+	right:10px;
+	overflow:hidden;
+	padding:1px;
+}
+.upload-item.error .upload-item-progress-ph{
+	display:none;
+}
+
+.upload-item-progress{
+	height:8px;
+	background-color:#6951A9;
+	width:0;
+}
+.upload-item-status{
+	color:#777;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+	margin: 20px 10px 0 10px ;
+}
+.upload-item-name{
+	color:#777;
+	font-size:11px;
+	text-align:center;
+	margin: 10px 10px 0 10px ;
+	overflow:hidden;
+}
+#image_divider , #fotolia_divider{
+	width:1px ;
+	height:80px;
+	display:inline-block;
+	vertical-align:top;
+}
+
+.dollar {
+	width:16px;
+	height:16px;
+	background-image:url(../../images/dollar.png);
+	position: absolute;
+	top:4px;
+	right:4px;
+}
+
+#yp_feedback_box{
+	display:none !important;
+}
