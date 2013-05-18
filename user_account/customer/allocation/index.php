@@ -11,16 +11,7 @@ if($v_row==1){
 }else{
     $arr_user_rule = array();
 }
-//list orders rules for users
-$v_user_rule_create = isset($arr_user_rule[$v_module_menu_key]['create']);
-$v_user_rule_view = isset($arr_user_rule[$v_module_menu_key]['view']);
-$v_user_rule_edit = isset($arr_user_rule[$v_module_menu_key]['edit']);
-$v_user_rule_delete = isset($arr_user_rule[$v_module_menu_key]['delete']);
-$v_user_rule_reorder = isset($arr_user_rule[$v_module_menu_key]['reorder']);
-$v_user_rule_approve = isset($arr_user_rule[$v_module_menu_key]['approve']);
-$v_user_rule_submit = isset($arr_user_rule[$v_module_menu_key]['submit']);
 $v_user_rule_allocate = isset($arr_user_rule[$v_module_menu_key]['allocate']);
-$v_user_rule_hide_price_all = $v_user_rule_hide_price_all || isset($arr_user_rule[$v_module_menu_key]['hide']);
 
 include $v_head.'header.php';
 include $v_head.'allocation/qry_allocation.php';
