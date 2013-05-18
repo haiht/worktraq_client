@@ -2,8 +2,8 @@
 if(!isset($v_sval)) die();
 ?>
 <?php
-
 if(isset($v_user_rule_approve) && $v_user_rule_approve!='' && isset($_POST['txt_order_status']) && isset($_POST['txt_order_id']) ){
+
     $cls_tb_order_2 = new $cls_tb_order($db);
     $v_order_id = isset($_POST['txt_order_id'])?$_POST['txt_order_id']:'0';
     settype($v_order_id,"int");

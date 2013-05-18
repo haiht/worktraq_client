@@ -47,12 +47,12 @@
                     </div>
                     <div class="indent_form clear">
                         <label  style="float:left">Subject :</label>
-                        <input type="text" class="text_1 clear" name="support_title" />
+                        <input type="text" class="text_1 clear" name="txt_support_title" />
                         <span class="color_r" style="float:right; line-height: 0px">*</span>
                     </div>
                     <div class="indent_form clear">
                         <label>Your Comments:</label>
-                        <textarea class="tex" name="support_content"></textarea>
+                        <textarea class="tex" name="txt_support_description"></textarea>
                     </div>
                     <p class="required clear" style="text-align: left">* Madatory.</p>
                     <input type="submit" value="Send" name="btn_submit_support" class="btn_sup float_left" />

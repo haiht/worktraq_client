@@ -6,7 +6,7 @@
     <div class="table_to float_left">[@PRODUCT_AMOUNT]</div>
     <div class="table_to float_left">
         <form class="field">
-            <select [@SELECT_DISABLED] data-product-id="[@PRODUCT_ID]" data-order-id="[@ORDER_ID]" data-order-item-id="[@ORDER_ITEM_ID]" date-order-type="order_edit" data-image-id="[@GRAPHIC_ID]" data-image-url="[@PRODUCT_IMAGE]">
+            <select rel="act_order_item_id" [@SELECT_DISABLED] data-product-id="[@PRODUCT_ID]" data-order-id="[@ORDER_ID]" data-order-item-id="[@ORDER_ITEM_ID]" date-order-type="order_edit" data-image-id="[@GRAPHIC_ID]" data-image-url="[@PRODUCT_IMAGE]">
                 <option value="" selected>Select...</option>
                 [@ORDER_OPTION_ACTION]
             </select>

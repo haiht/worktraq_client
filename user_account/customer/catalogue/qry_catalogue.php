@@ -18,11 +18,18 @@ $arr_tag  = $cls_tb_tag->select(array("company_id"=>$v_company_id));
 $v_tag = '';
 $v_tag_all='';
 $arr_tag_id=array();
+$v_check_dis = '';
 ?>
 <?php
 if(isset($_POST['btn_product_search']) || isset($_POST['txt_product_search']) )
 {
     $v_product_tag_all = isset($_POST['txt_product_tag_all'])?1:0;
+    if($v_product_tag_all==1){
+        $v_check_dis = 'disabled="disabled"';
+    }
+    else{
+        $v_check_dis = '';
+    }
     $v_product_search = isset($_POST['txt_product_search_input'])?$_POST['txt_product_search_input']:'';
     $arr_product = array();
     if($v_product_search!=''){
@@ -34,7 +41,7 @@ if(isset($_POST['btn_product_search']) || isset($_POST['txt_product_search']) )
         }
     }
     if($v_product_tag_all!=1){
-        $arr_product_tag = isset($_POST['rd_search_tags'])?$_POST['rd_search_tags']:array();
+        $arr_product_tag = isset($_POST['txt_product_tag'])?$_POST['txt_product_tag']:array();
         if(!is_array($arr_product_tag)) $arr_product_tag = array();
         for($i=0; $i<count($arr_product_tag); $i++){
             $arr_product[] = (int) $arr_product_tag[$i];
@@ -92,7 +99,8 @@ foreach($arr_tag as $arr){
     }
     $tpl_content_tag->set('TAG_ID',$v_tag_id);
     $tpl_content_tag->set('TAG_NAME',$v_tag_name);
-    $tpl_content_tag->set('SELECT',$v_checked_tag);
+    $tpl_content_tag->set('TAG_CHECK',$v_checked_tag);
+    $tpl_content_tag->set('TAG_DISIABLE',$v_check_dis);
     $arr_tag_list [] = $tpl_content_tag;
 }
 $v_page = isset($_REQUEST['txt_page'])?$_REQUEST['txt_page']:'1';
@@ -168,11 +176,11 @@ for ($index = $v_offset; $index < $v_offset+$v_num_row && $index < count($arr_tb
 }
 $v_content_product_list = (isset($arr_list_set)&&is_array($arr_list_set))?Template::merge($arr_list_set):'';
 $v_content_tag_list= (isset($arr_tag_list)&&is_array($arr_tag_list))?Template::merge($arr_tag_list):'';
-$tpl_content->set('TAG_FIELD',  $v_content_tag_list);
-$tpl_content->set('TAG_CLEAR_TAB',$v_content_product_list);
+$tpl_content->set('TAG_LIST',  $v_content_tag_list);
+$tpl_content->set('PRODUCT_LIST',$v_content_product_list);
 $v_product_pagination = pagination($v_total_pages, $v_page, URL.'catalogue');
-$tpl_content->set('DEVICE_PAGE', $v_product_pagination);
-$tpl_content->set('SELECT', $v_tag_all);
+$tpl_content->set('CATALOGUE_PAGING', $v_product_pagination);
+$tpl_content->set('CHECK_ALL', $v_tag_all);
 $tpl_content->set('TAG_ALL', $v_tag_all==1?1:0);
 $tpl_content->set('URL',URL);
 echo $tpl_content->output();

@@ -263,6 +263,7 @@ if($v_row==1){
             {
                 for($i=0; $i<count($arr); $i++)
                 {
+                    $v_graphic_file='';
                     $tpl_order_allocation_items = new Template('dsp_order_view_edit_distribution.tpl',$v_dir_templates);
                     $tpl_order_allocation_items->set('PRODUCT_ID', $arr[$i]['product_id']);
                     $tpl_order_allocation_items->set('URL', URL);
@@ -270,11 +271,11 @@ if($v_row==1){
                     $tpl_order_allocation_items->set('ORDER_ID', isset($v_order_id)?$v_order_id:0);
                     $tpl_order_allocation_items->set('PRODUCT_MATERIAL', $arr[$i]['product_name']);
                     $v_graphic_file = $arr[$i]['product_image'];
-                    if(strpos($v_graphic_file,'/')===false) $v_graphic_file = $v_company_product_url.$v_graphic_file;
+                    if(strpos($v_graphic_file,'/')===false) $v_graphic_file = $v_company_product_url.'/'.$v_graphic_file;
                     if (!preg_match("~^(?:f|ht)tps?://~i", $v_graphic_file)) {
                         $v_graphic_file = URL.$v_graphic_file;
                     }
-                    $tpl_order_allocation_items->set('PRODUCT_IMAGE', $v_image_url);
+                    $tpl_order_allocation_items->set('PRODUCT_IMAGE', $v_graphic_file);
                     $tpl_order_allocation_items->set('PRODUCT_QUANTITY', $arr[$i]['location_quantity']);
                     $tpl_order_allocation_items->set('PRODUCT_PRICE', $v_user_rule_hide_price_all?NO_PRICE:format_currency($arr[$i]['location_price']));
                     $v_tmp_location_price = $arr[$i]['location_price']*$arr[$i]['location_quantity'];
@@ -533,7 +534,7 @@ if($v_row==1){
     else
         $v_dsp_order_information ='';
     $tpl_order->set('ORDER_INFORMATION', $v_dsp_order_information);
-    $tpl_order->set('TABLE_ORDER_ITEM', $v_dsp_order_details);
+    $tpl_order->set('ORDER_DETAIL_ITEMS', $v_dsp_order_details);
     $tpl_order->set('PO_NUMBER', $v_po_number);
     $tpl_order->set('PO_REF', $v_order_ref);
     $tpl_order->set('ORDER_STATUS', $v_order_status_message);

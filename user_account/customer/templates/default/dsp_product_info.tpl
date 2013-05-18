@@ -34,7 +34,7 @@
             </div>
             <div class="main_lates clear">
                 <div class="float_left">
-                    <span class="box_img"><img class="img_1" src="[@INFO_PRODUCT_IMAGE_1]"/></span>
+                    <span class="box_img"><img class="img_1" src="[@INFO_PRODUCT_IMAGE_1]" /></span>
                     <span class="box_img2">
                         <img class="img_2" src="[@INFO_PRODUCT_IMAGE_2]"/>
                         <img class="img_2" src="[@INFO_PRODUCT_IMAGE_2]" />

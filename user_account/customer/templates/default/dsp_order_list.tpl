@@ -283,7 +283,7 @@ function check_save_order(order_status){
                                         ACTION
                                     </div>
                                 </div>
-                                [@TABLE_ORDER_ITEM]
+                                [@ORDER_DETAIL_ITEMS]
                             </div>
                         </div>
                         <div class="content_table" id="distribution" style="display: none" >

@@ -1,5 +1,5 @@
     </div>
-
+    <div class="indent_footer"></div>
 <div id="footer">
     <div id="page">
         <p>Powered by WorkTraq</p>

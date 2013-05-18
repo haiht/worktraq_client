@@ -22,8 +22,8 @@
             <img class="img_1" src="[@INFO_PRODUCT_IMAGE_1]" [@STYLE_IMAGE_1] />
             <p class="clear:both"></p>
             <div class="indent float_right">
-                <a href="add-to-order.html"><input type="button" class="btn_3" value="Add to order" /></a>
-                <a href="order-history.html"><input type="button" class="btn_3" value="Orders history" /></a>
+                <input type="button" class="btn_3" value="Add to order" />
+                <a href="[@URL]/order"><input type="button" class="btn_3" value="Orders history" /></a>
             </div>
         </div>
         <div class="right_lates float_right">
@@ -46,5 +46,4 @@
             </div>
         </div>
     </div>
-
 </div>

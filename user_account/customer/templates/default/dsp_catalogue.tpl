@@ -31,9 +31,9 @@
             </div>
             <div class="clear">
                 <!--input class="float_right" type="radio" value=0 name="rd_search_tags" rel="search_tag" checked="checked"  />All-->
-                <input rel="search_tag" class="float_right" type="checkbox" id="txt_product_tag_all" name="txt_product_tag_all" value=1 [@SELECT] />All
+                <input rel="search_tag" class="float_right" type="checkbox" id="txt_product_tag_all" name="txt_product_tag_all" value=1 [@CHECK_ALL] />All
             </div>
-            [@TAG_FIELD]
+            [@TAG_LIST]
             <input style="display:none" type="submit" value="Filter" id="btn_product_search" name="btn_product_search" class="btn btn-primary" />
         </form>
     </div>
@@ -43,11 +43,11 @@
         </div>
         <div class="notice" style="display:none">Searching product in catalogue!.....</div>
         <div class="right_ct">
-            <div class="clear_tab">             [@TAG_CLEAR_TAB]          </div>
+            <div class="clear_tab">             [@PRODUCT_LIST]          </div>
         </div>
         <div class="device_page">
             <div class="indent">
-                [@DEVICE_PAGE]
+                [@CATALOGUE_PAGING]
             </div>
         </div>
     </div>

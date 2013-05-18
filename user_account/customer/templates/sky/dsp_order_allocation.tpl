@@ -21,8 +21,8 @@
             <div class="table_po float_left">Quantity</div>
             <div class="table_lo float_left">Unit Price</div>
             <div class="table_to float_left">Extended Price</div>
-            <div class="table_ac float_left">Action</div>
         </div>
+        [@TABLE_DISTRIBUTION_ITEM]
     </div>
     <div class="text_dis">
         <p class="label_price float_left">Location Price</p>

@@ -14,7 +14,6 @@
                 }
             });
         });
-
         $("div[rel=allocation]").click(function(){
             var location_id = $(this).attr('data-id');
             $("div[rel=location_"+location_id+"]").slideToggle();
@@ -23,6 +22,41 @@
             var val = $(this).val();
             var order_id = $('input#txt_order_id').val();
             save_order_info('po_number', val, order_id);
+        });
+        $("select[rel=act_order_item_id]").change(function(){
+            var v_product_id = $(this).attr('data-product-id');
+            var v_order_id = $(this).attr('data-order-id');
+            var v_order_item_id = $(this).attr('data-order-item-id');
+            var v_act = $(this).val();
+            switch(v_act){
+                case 'edit_item':
+                    window.location = 'item/'+v_order_item_id
+                    break;
+                case 'delete_item':
+                    if(confirm('Do you want to delete this item ')){
+                        $.ajax({
+                            url	:   '[@AJAX_LOAD_ORDER_ALLOCATION_URL]',
+                            type	:	'POST',
+                            data	:	{txt_product_id: v_product_id, txt_order_id:v_order_id, txt_order_item_id:v_order_item_id, txt_session_id:'[@SESSION_ID]', txt_order_ajax:104},
+                            beforeSend: function(){
+                            },
+                            success	: function(data){
+                                var ret = $.parseJSON(data);
+                                if(ret.error==0)
+                                    location.reload();
+                                else
+                                    alert(ret.message);
+                            },
+                            error: function(xhr, status, error){
+                                alert("Error!" +'[@AJAX_LOAD_ORDER_ALLOCATION_URL]');
+                            }
+                        });
+                    }
+                    break;
+                case 'allocation':
+                    window.location = 'allocation/'+v_order_item_id+'/'+v_product_id+'/'
+                    break;
+            }
         });
         $('input#txt_order_ref').change(function(e) {
             var val = $(this).val();
@@ -47,6 +81,7 @@
             check_save_order(1);
         });
         $('input#btn_disapprove_order').click(function(){
+            $('form#frm_disapprove_order').submit();
         });
         $('form#frm_order_information').submit(function(e) {
         });
@@ -79,7 +114,6 @@
 
             }
         });
-
     });
     function save_order_info(key, value, order){
         $.ajax({
@@ -131,6 +165,7 @@
         $('input#txt_order_status').val(order_status);
         $('form#frm_order_information').submit();
     }
+
 </script>
 
 <div id="content">
@@ -149,13 +184,20 @@
         <input rel="tab_order" tab="tab_items" class="tab_order" type="button" value="ITEMS" >
         <input rel="tab_order" tab="tab_distribution" class="tab_order" type="button" value="DISTRIBUTION" >
 
-        <div class="float_right">
-            <input id="btn_save_order" type="button" value="SAVE YOUR ORDER" class="btn_new_order" />
-            <input id="btn_submit_order" type="button" value="submit your order" class="btn_new_order" />
+        <div class="float_right" [@STYLE]>
+            <input class="btn_new_order" type="button" value="Save Your Order" id="btn_save_order" [@SAVE_BUTTON_DISPLAY]>
+            <input id="btn_disapprove_order" type="button" class="btn_new_order btn btn-large btn-success" value="Disapprove Your Order" [@DIS_BUTTON_DISPLAY] />
+            <input class="btn_new_order" name="btn_submit_order" id="btn_submit_order" type="button" value="[@SUBMIT_BUTTON_TITLE] Your Order"  [@SUBMIT_BUTTON_DISPLAY]>
         </div>
     </div>
     <div id="tab_infomation">
-        [@ORDER_INFORMATION]
+        <div class="div_bo">
+            <div class="reate">
+                <div class="right_ct_sup noborder">
+                    [@ORDER_INFORMATION]
+                </div>
+            </div>
+        </div>
     </div>
     <div id="tab_items" style="display: none">
         <div class="div_bo">

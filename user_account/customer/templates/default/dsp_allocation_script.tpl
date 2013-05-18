@@ -40,12 +40,6 @@
                     event.preventDefault();
                 }
             }
-
-
-
-
-
-
         });
 
     });
@@ -115,12 +109,9 @@ function add_row_table_new(pos,loc)
     var $tr = $('<div class='+table_name+'></div>');
     var $c2 = $('<div class="table_yourpro float_left">'+location_number+'</div>');
     var $c3 = $('<div class="table_quali1 float_left">'+location_name+'</div>');
-    var $c_3 = $('<div class="table_quali1 float_left">'+location_name+'</div>');
 
     $tr.append($c2);
     $tr.append($c3);
-    $tr.append($c_3);
-
     var $d1 = $('<div class="table_unitprice float_left"></div>');
     var $d11 = $('<div class="dent float_right"></div>');
 
@@ -176,7 +167,7 @@ function add_row_table_new(pos,loc)
     );
 
     var $t = $('<input type="text" rel="allocation"  class="quantity bg float_left" data-location="'+location_id+'"  value="'+quantity+'" />');
-    $t.keypress(function(){
+    $t.keyup(function(){
         var val = 0;
         $.each($('input.quantity'), function(index, element){
             var one = $(this).val();

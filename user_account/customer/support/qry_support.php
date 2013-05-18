@@ -8,8 +8,8 @@ $v_email_support = $cls_settings->get_option_name_by_key('email','support_email'
 $v_email_orgin = $cls_settings->get_option_name_by_key('email','email_orgin');
 if(isset($_POST['btn_submit_support']))
 {
-    $v_support_title = isset($_POST['support_title'])?$_POST['support_title']:'';
-    $v_support_description = isset($_POST['support_content'])?$_POST['support_content']:'';
+    $v_support_title = isset($_POST['txt_support_description'])?$_POST['txt_support_description']:'';
+    $v_support_description = isset($_POST['txt_support_description'])?$_POST['txt_support_description']:'';
     $v_support_name = isset($_POST['support_name'])?$_POST['support_name']:'';
     if(trim($v_support_title)=='' && trim($v_support_description)=='')
         $v_error = "<h4 align='center' style='color:red;'>". " Please input title or description on support.... </h4> ";

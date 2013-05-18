@@ -475,12 +475,14 @@ body{
 #page #content .table3 .td_3, #page #content .table4 .td_3{
     clear:both;
     background:#eeeeee;
-    height:35px;
+    height:75px;
     color:#747474;
-    font:bold 13px Arial, Helvetica, sans-serif;
-    line-height:35px;
+    display: table-cell;
+    font: bold 13px Arial,Helvetica,sans-serif;
     text-align:center;
+    vertical-align: middle;
 }
+
 #page #content .table3 .td_3{
 }
 #page #content .table3 div.table_no{
@@ -1124,8 +1126,14 @@ body{
     border-left:1px solid #e8eef2;
 }
 #page #content .table4 div.table_date{
-    width:200px;
+    width:365px;
     border-left:1px solid #e8eef2;
+}
+#page #content .table4 div.table_date2{
+    width:355px;
+    border-left:1px solid #e8eef2;
+    padding: 0 5px;
+    text-align: left;
 }
 #page #content .table4 div.table_ac{
     width:165px;
@@ -1204,4 +1212,14 @@ ul.order_infomation li{
 }
 .bold{
     font-weight: bold;
+}
+
+
+#page #content .table3 .td_2, #page #content .table4 .td_2 {
+    background: none repeat scroll 0 0 #F7F7F7;
+    clear: both;
+    color: #747474;
+    font: bold 13px/35px Arial,Helvetica,sans-serif;
+    height: 35px;
+    text-align: center;
 }
