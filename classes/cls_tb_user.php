@@ -833,6 +833,7 @@ class cls_tb_user{
                 }
             }
         }
+        var_dump($arr_role_return);
         return $arr_role_return;
     }
 

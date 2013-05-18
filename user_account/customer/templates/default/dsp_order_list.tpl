@@ -238,8 +238,8 @@ function check_save_order(order_status){
                 <p class="clear"><span class="p_left float_left">Your Order Status :</span><span class="p_color">[@ORDER_STATUS]</span></p>
                 <p class="clear"><span class="p_left float_left">Total Quantity :</span><span class="p_color">[@TOTAL_QUANTITY]</span></p>
                 <p class="clear"><span class="p_left float_left">Total Money :</span><span class="p_color">[@ALL_PRICE]</span></p>
-
             </div>
+            <p class="clear"></p>
                 <div class="indent">
                     <div class="box_2 tabs" id="tabs">
                         <div class="infor float_left" id="tab_item">

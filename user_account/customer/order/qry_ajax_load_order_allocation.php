@@ -12,7 +12,9 @@ if($v_request_order_id<0) $v_request_order_id = 0;
 if($v_request_order_item_id<0) $v_request_order_item_id = 0;
 if($v_request_product_id<0) $v_request_product_id=0;
 add_class('cls_tb_product');
+add_class('cls_tb_location_threshold');
 $cls_tb_product = new cls_tb_product($db, LOG_DIR);
+$cls_tb_location_threshold = new cls_tb_location_threshold($db, LOG_DIR);
 
 $v_product_excluded_location = $cls_tb_product->select_scalar('excluded_location', array('product_id'=>$v_request_product_id));
 if($v_product_excluded_location!='') $v_product_excluded_location .= ',';
@@ -42,18 +44,20 @@ if($v_request_order_id==0){
         for($i=0;$i<count($arr_location);$i++){
             $arr_allocation[] = array(
                 'location_id'=>$arr_location[$i]['location_id']
-            ,'location_name'=>$arr_location[$i]['location_name']
-            ,'location_number'=>$arr_tmp_location[$arr_location[$i]['location_id']]
-            ,'quantity'=>$arr_location[$i]['location_quantity']
+                ,'location_name'=>$arr_location[$i]['location_name']
+                ,'location_number'=>$arr_tmp_location[$arr_location[$i]['location_id']]
+                ,'quantity'=>$arr_location[$i]['location_quantity']
+                ,'location_threshold'=> $cls_tb_location_threshold->select_scalar(array('location_id'=>(int)$arr_location[$i]['location_id'],'product_id'=>$v_request_product_id))
+                ,'location_threshold_over'=> $cls_tb_location_threshold->select_scalar(array('is_overflow'=>(int)$arr_location[$i]['location_id'],'product_id'=>$v_request_product_id))
             );
         }
         $arr_allocation = record_sort($arr_allocation, 'location_number');
         $arr_location = array(
             'product_id'=>$v_product_id
-        ,'product_name'=>$v_product_name
-        ,'product_quantity'=>$v_product_quantity
-        ,'product_price'=>$v_product_price
-        ,'allocation'=>$arr_allocation
+            ,'product_name'=>$v_product_name
+            ,'product_quantity'=>$v_product_quantity
+            ,'product_price'=>$v_product_price
+            ,'allocation'=>$arr_allocation
         );
         $v_json = json_encode($arr_location);
         $v_json = str_replace('{','&ldquo;', $v_json);
@@ -126,16 +130,18 @@ if($v_request_order_id==0){
                     if($arr_tmp_allocation[$j]['location_id']==$v_location_id){
                         $v_found = true;
                         $arr_tmp_allocation[$j]['quantity'] = $v_location_quantity;
+                        $arr_tmp_allocation[$j]['location_threshold']= $cls_tb_location_threshold->select_scalar(array('location_id'=>(int)$v_location_id,'product_id'=>$v_request_product_id));
+                        $arr_tmp_allocation[$j]['location_threshold_over']= $cls_tb_location_threshold->select_scalar(array('is_overflow'=>(int)$v_location_id,'product_id'=>$v_request_product_id));
                     }
                 }
             }
             $arr_tmp_allocation = record_sort($arr_tmp_allocation, 'location_number');
             $arr_location = array(
                 'product_id'=>$v_product_id
-            ,'product_name'=>$v_product_name
-            ,'product_quantity'=>$v_product_quantity
-            ,'product_price'=>$v_product_price
-            ,'allocation'=>$arr_tmp_allocation
+                ,'product_name'=>$v_product_name
+                ,'product_quantity'=>$v_product_quantity
+                ,'product_price'=>$v_product_price
+                ,'allocation'=>$arr_tmp_allocation
             );
             $v_json = json_encode($arr_location);
             $v_json = str_replace('{','&ldquo;', $v_json);
