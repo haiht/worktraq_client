@@ -5,6 +5,7 @@ $v_order_item_id = isset($_REQUEST['txt_item']) ? $_REQUEST['txt_item'] : 0;
 $v_product_id = isset($_REQUEST['txt_product_id']) ? $_REQUEST['txt_product_id'] : 0;
 $v_company_code = isset($_SESSION['company_code'])?$_SESSION['company_code']:'';
 
+$v_user_rule_allocate = isset($arr_user_rule[$v_module_menu_key]['allocate']);
 if(isset($v_user_rule_allocate)== false || $v_user_rule_allocate==''){
     $_SESSION['ss_error_title'] = 'Access denied';
     $_SESSION['ss_error_info'] = 'You do not have right to allocate order.';
